@@ -17,3 +17,26 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n' 
 IGNORE 1 ROWS 
 (kindergarten_id, phone, mail, description);
+
+
+
+-- insert into littleexplorer.parent 
+LOAD DATA LOCAL INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\parent.csv' 
+INTO TABLE littleexplorer.parent 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n' 
+IGNORE 1 ROWS 
+(parent_id, username, password, name, home_address, home_region, work_address, work_region);
+
+
+
+-- insert into littleexplorer.comment
+--date didn't converted successfully
+LOAD DATA LOCAL INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\comments.csv' 
+INTO TABLE littleexplorer.comment 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n' 
+IGNORE 1 ROWS 
+(comment_id, kindergarten_id, parent_id, comment, grade, date);

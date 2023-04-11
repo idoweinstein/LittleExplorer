@@ -16,6 +16,175 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `auth_group`
+--
+
+DROP TABLE IF EXISTS `auth_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_group` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group`
+--
+
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_group_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_group_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_group_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
+  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group_permissions`
+--
+
+LOCK TABLES `auth_group_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_permission`
+--
+
+DROP TABLE IF EXISTS `auth_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_permission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `content_type_id` int NOT NULL,
+  `codename` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
+  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_permission`
+--
+
+LOCK TABLES `auth_permission` WRITE;
+/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add comment',7,'add_comment'),(26,'Can change comment',7,'change_comment'),(27,'Can delete comment',7,'delete_comment'),(28,'Can view comment',7,'view_comment'),(29,'Can add kindergarten',8,'add_kindergarten'),(30,'Can change kindergarten',8,'change_kindergarten'),(31,'Can delete kindergarten',8,'delete_kindergarten'),(32,'Can view kindergarten',8,'view_kindergarten'),(33,'Can add parent',9,'add_parent'),(34,'Can change parent',9,'change_parent'),(35,'Can delete parent',9,'delete_parent'),(36,'Can view parent',9,'view_parent'),(37,'Can add kindergartenadditionalinfo',10,'add_kindergartenadditionalinfo'),(38,'Can change kindergartenadditionalinfo',10,'change_kindergartenadditionalinfo'),(39,'Can delete kindergartenadditionalinfo',10,'delete_kindergartenadditionalinfo'),(40,'Can view kindergartenadditionalinfo',10,'view_kindergartenadditionalinfo');
+/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user`
+--
+
+DROP TABLE IF EXISTS `auth_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) NOT NULL,
+  `last_login` datetime(6) DEFAULT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `username` varchar(150) NOT NULL,
+  `first_name` varchar(150) NOT NULL,
+  `last_name` varchar(150) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `date_joined` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user`
+--
+
+LOCK TABLES `auth_user` WRITE;
+/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_groups`
+--
+
+DROP TABLE IF EXISTS `auth_user_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_user_groups` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
+  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
+  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_groups`
+--
+
+LOCK TABLES `auth_user_groups` WRITE;
+/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_user_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_user_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_user_user_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
+  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_user_permissions`
+--
+
+LOCK TABLES `auth_user_user_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `comment`
 --
 
@@ -28,13 +197,13 @@ CREATE TABLE `comment` (
   `parent_id` int unsigned NOT NULL,
   `comment` varchar(1500) NOT NULL,
   `grade` tinyint unsigned DEFAULT NULL,
-  `date` datetime(6) NOT NULL,
+  `date` date NOT NULL,
   PRIMARY KEY (`comment_id`),
-  KEY `FK_parent_id_idx` (`parent_id`),
   KEY `FK_kindergarten_id_idx` (`kindergarten_id`),
+  KEY `FK_parent_id_idx` (`parent_id`),
   CONSTRAINT `FK_comment_kindergarten_id` FOREIGN KEY (`kindergarten_id`) REFERENCES `kindergarten` (`kindergarten_id`),
   CONSTRAINT `FK_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `parent` (`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +212,119 @@ CREATE TABLE `comment` (
 
 LOCK TABLES `comment` WRITE;
 /*!40000 ALTER TABLE `comment` DISABLE KEYS */;
+INSERT INTO `comment` VALUES (1,1,1,'פעוטון משפחתי עם צוות חם ואוהב, מטפלות מסורות והכי חשוב הילד מגיע ויוצא עם חיוך מהגן!',5,'0000-00-00'),(2,1,2,'הבת שלי שם מגיל 4 חודשים ותהיה עד גיל 3 לפחות! גן מושלם, נקי ומסודר, צוות מדהים, רך וקשוב לצרכי הפעוטות',5,'0000-00-00'),(3,1,3,'זכינו להכיר צוות חם אוהב ומקבל, עם המון סבלנות ומתן יחס אישי וקרוב. אין ספק שעשינו את הבחירה הנכונה!',5,'0000-00-00'),(4,2,4,'עומר שלנו נמצא בגן כבר יותר משנה ואנחנו מאוד מאוד מרוצים! מהרגע הראשון שנכנסנו לגן הרגשנו כמו משפחה.',5,'0000-00-00'),(5,2,5,'איזה כיף זה לשלוח את הבת שלנו לגן כשאת פניה מקבל צוות חייכן ונעים שרואים שאוהב את העבודה שלו בזמנים כאלה זה מאוד מרגיע לקבל תחושה של ביטחון וחום אנחנו מרוצים מאוד מהבחירה שלנו וממליצים',5,'0000-00-00'),(6,3,6,'אחרי ״מסע חיפושים״ אחר הגן הנכון , אני יודע ומרגיש שזו הייתה הבחירה הנכונה ביותר עבורנו ועבור אלי. כשאלי פוגשת בבוקר את הגננת והצוות היא מתמלאת באושר ולא מפסיקה לחייך וכך גם כשאנחנו באים לקחת אותה. אלי נמצאת בפיקוח מקצועי ובהשגחה מתמדת לאורך כל היום, הגן מספק עבורה פעילות מלאה בגירוי התפתחותי, הצוות תמיד מחייך. יש תקשורת עם הגן לאורך כל היום. הגן מחוסן. מומלץ בחום.',5,'0000-00-00'),(7,3,7,'גן נעים מאוד וצבעוני, עם צוות מדהים, מסור ומקצועי שנותן יחס חם ועושה הכל כדי שלילדים יהיה טוב. מעדכנים אותנו בכל פרט קטן ומקבלים המון תמונות ועדכונים על הנעשה בגן. הצוות מקסים, אכפתי, ואוהב. מומלץ מאוד',5,'0000-00-00'),(8,5,8,'גן מהמם ביופי, נקי ומסודר עם המון משחקים מושקעים, אוכל בריא, צוות מקצועי אכפתי ורגיש. אנחנו שנה ראשונה בגן ולמרות ההסתגלות והלחץ של אמא טרייה מאד מרוצה מהגן.',5,'0000-00-00'),(9,5,9,'התאומים שלי היו בו וכעת נמצא אחיהם הקטן. בגן הזה יש רמה של איכפתיות, טיפול, חום מדהימה. הילדים הולכים עם חיוך וחוזרים עם חיוך. יש השקעה בהפעלות בהתאם לקבוצות הגיל, מזון טעים שמבושל מדי יום, ותמונות יומיות כדי לחוות ביחד עם הילדים את הכל ביחד.',5,'0000-00-00'),(10,5,10,'לגן יש יחס חם ואוהב לכל ילד. יש מגוון רחב של פעילויות מלאות בהשקעה בילדים וההשקעה ניכרת בהתפתחות הילדים (אנחנו מוצאים את עצמנו מופתעים המון ממשהו חדש שהילדה למדה ולא מאיתנו). הגן תמיד נקי והילדים מתוקתקים, האוכל ברמה גבוהה ויש אירועים מושקעים',5,'0000-00-00'),(11,6,11,'אני מאוד מרוצה מהגן. היחס לילדים מעולה, הגן מפתח עצמאות אצל הילדים. הפעילויות מאוד מאוד מגוונות, האוכל טעים ומזין. כל האירועים בגן מושקעים מאוד. כל ילד מקבל יחס אישי. מאוד מקפידים בגן על ניקיון. אני אמשיך לשלוח את בני לגן הזה גם בשנה הבאה.',5,'0000-00-00'),(12,6,12,'הכנסנו את אביב לגן בחששות, בכל זאת ילד ראשון ומאוד דאגנו. לאחר כמה ימים כבר נוכחנו לדעת שהילד בידיים מעולות, הצוות משקיע, אוהב וחם ואין מאושרים מאיתנו שהוא שם.',4,'0000-00-00'),(13,6,13,' הגן נקי, הכל צבעוני, צוות מספר 1, אוכל טרי כל יום, ילדים מאושרים , מגוון פעילויות מעשירות לילדים, חום ואהבה אף פעם היה חסר. דאגה לילדים במקום הראשון. פשוט גן מהמם . ממליצה בחום לכולם',5,'0000-00-00'),(14,7,14,'הילד שלי נכנס לגן בגיל 11 חודשים והיה לו ממש קשה בהתחלה אבל עם הזמן הוא התרגל לגן ולצוות המדהים שעטפו אותו בחום ובאהבה. הילד חוזר כל יום נקי ושמח ואני מאוד מרוצה מהצוות על הדאגה והטיפול בילד שלי, ממליצה בחום!',4,'0000-00-00'),(15,8,15,'אתה יודע שעשית את הבחירה הנכונה של הגן, כשאתה שם את הילד שלך בבוקר בגן, והוא לא מפסיק לחייך לצוות ושמח להגיע. וכמובן כשאתה מגיע לאסוף אותו בסוף היום והוא כולו מלא חיוכים, ואתה רואה שהיה לו יום מקסים. עם זאת, המבנה של הגן הוא ישן,  אם את/ה מחפש מקום סופר נקי שהילד יכול ללקק את הרצפות, זה פחות בשבילך.',3,'0000-00-00'),(16,9,16,'גן עם צוות מדהים וחם. משקיעות בילדים. דואגות, מטפחות , אכפתיות ומחבקות. נעימות ותמיד עם חיוך. הקטנה שלנו אהבה להגיע כל בוקר. הלכתי שקטה לעבודה בידיעה שהילדה שלי נמצאת בידיים הכי טובות שיש. ממליצה בחום לכל הורה :)',5,'0000-00-00'),(17,10,17,'וות מלא באהבה , צוות שמשקיע בלימוד תכנים ,הילד ככ שמח להגיע לגן כל פעם מחדש גם אחרי חגים גם אחרי חופש גדול פשוט הלך בשמחה ',5,'0000-00-00'),(18,11,18,'הגן הזה הוא פשוט משפחה. כאמא \"לחוצה\" אני ככ רגועה כשהילדה נכנסת בדלת הגן',5,'0000-00-00'),(19,12,19,'גן מעולה! הילדה שלי מגיעה כל בוקר לגן בחיוך וקופצת בשמחה על הצוות! צוות מכיל מחבק וחם.. המון תכנים לימודיים והשקעה בילדים. אוכל טרי ומזין. מקום שהוא בית! מומלץ בחום!',5,'0000-00-00'),(20,12,20,'ההתנהלות מול ההורים הינה בשקיפות ומתוך שיתוף פעולה וכהורים אנו נהנים ממערכת יחסים של אמון ובטחון בצוות הגן. הן עובדות עם הילדים בקבוצות, מעבירות תכנים ומקפידות לקדם כל ילד וילד לפי צרכיו וגילו. הילדים חוזרים מאושרים, עם אוצר מילים רחב, שירים וריקודים.',5,'0000-00-00'),(21,13,21,'הגן נהדר והצוות חם ואוהב, ממליצה באהבה גדולה',5,'0000-00-00'),(22,14,22,'אין לי מילים לתאר כמה אני מרוצה מהגן. הצוות שנבחר בקפידה והוא קבוע. צוות מסור ומדהים חם ואוהב האוכל מושקע, טרי ומגוון כל יום שפע של פעילויות מהנות יש חצר גדולה מאובזרת ומוצלת גן שהוא משפחה אחת גדולה ומאושרת וזה מורגש על הילדים. מומלץ מנסיון ובהרבה אהבה',5,'0000-00-00'),(23,14,23,'גן מושלם!! צוות אוהב מנוסה ומכיל. מגוון פעילויות חינוכיות מעשירות, חוויתיות של צוות הגן ומפעילים חיצוניים. אוכל בריא, טרי מגוון וטעים!!!',5,'0000-00-00'),(24,14,24,'הגן הטוב ביותר בהרצליה ללא צל של ספק. צוות חם ואוהב שמעניק לילדים בית שני, יחס חם, מחבק ומכבד, מעדכן את ההורים ומסייע הרבה מעבר לתפקיד, ניכר שהצוות אוהב את הילדים ואת העבודה',5,'0000-00-00'),(25,15,25,'הצוות מקסים הילדים נכנסים בריצה לגן.אני רגועה שב9-10 שעות שהילד שלי נמצא בגן יש לי על מי לסמוך! רק חבל שהאוכל אינו איכותי ומזין ',4,'0000-00-00'),(26,16,26,'צוות חם,מחבק ואוהב. אוכל טרי מושקע וטעים,גן נקי. תכנים חינוכיים מושקעים מלמדים ומפתחים. הילד פורח,שמח ומתפתח - רק מילים טובות',5,'0000-00-00'),(27,17,27,'צוות מדהים ואוהב, ניהול מתוקתק ומסודר ע\"י גננת אסרטיבית ואוהבת אשר משקיעה בגן ובכל ילד בצורה יוצאת דופן. מומלץ בחום',5,'0000-00-00'),(28,18,28,'גן שהוא בית! מושלם מכל הבחינות! הצוות החם והאוהב, הנתינה והאהבה לילדים, השקעה וחשיבה על הפרט האחרון',5,'0000-00-00'),(29,20,29,'בתור אמא שעובדת משרה מלאה חיפשתי את המקום הכי טוב ששם אוכל להשאיר את הילדים שלי. ידעתי שאני לא אוכל להיות רגועה ב 100% אבל רציתי להיות הכי רגועה שאפשר. הצוות הראו לי שיש דבר כזה גן מושלם, יש דבר כזה ללכת לעבודה בעיניים עצומות ולדעת שהילדים שלך מקבלים את הכי טוב שיש. גן מלא אהבה ששם את בטיחות הילדים במקום הראשון תוך כדי קניית משחקים מורשים בלבד ועד אוכל איכותי ובייתי שמוכן יום יום',5,'0000-00-00'),(30,22,30,'בחרנו לא להמשיך בגן בגלל ההנהלות של מנהלת הגן. אישה שבהיכרות ראשונית מקסימה אותך וכשנרשמים לגן, מתברר שהיא קצת אגרסיבית, לא נעימה ולא מוכנה לשמוע ביקורת או לשמוע הורים שיש על ליבם משהו',2,'0000-00-00'),(31,24,31,'צוות קבוע, מסור ואחראי, אוכל טרי ותשומת לב לכל ילד. מבנה מרווח ובטיחותי + מרפסת שמש עם מתקנים, חוג חיות, שירים ופעילויות',5,'0000-00-00'),(32,25,32,'הגן נקי ומתוקתק (תמיד) והצוות מקצועי ועוטף את הילדים בהרבה חום ואהבה. יש פעילויות מגוונות כמו חוג חיות ומוסיקה והילדים נהנו מהם מאוד. היתה לנו שנה מדהימה, הבת שלי שמחה ללכת לגן והתפתחה מוטורית ורגישית וזה המבחן האמיתי בעיני! 100% אמון, חום, אהבה ומקצועיות!',5,'0000-00-00'),(33,28,33,'הבת שלי כבר שנה שנייה בגן ואין ספק שזכינו!! צוות חם ואוהב, גן רחב ידיים ונקי והכי חשוב חום ואהבה ללא הפסקה! מומלץ בחום ובאהבה',5,'0000-00-00'),(34,30,34,'הרגע הראשון שהבת שלנו נכנסה לגן הרגשנו את החום והאהבה לילדים. האווירה תמיד שמחה ונעימה וכיף לראות שהילדה באה עם חיוך כל בוקר. מומלץ!!',5,'0000-00-00'),(35,31,35,'אווירה חמה וביתית, יחס חם ואוהב . אמה שלנו מאוד נקשרה לשולי ולצוןת מהרגע הראשון. ממליץ בחום',5,'0000-00-00'),(36,32,36,'לצאת לעבודה עם ראש שקט ולהיות בטוח שהילד יקבל את כל מה שצריך!!! למידה כיפית, פעילויות מגוונות, יציאה לחוגים, אוכל מאודדדדד טעים , ממליצה מאוד !',5,'0000-00-00'),(37,33,37,'גן מקסים, עם יחס אישי ורגיש לכל ילד וילדה. הבן שלנו חוזר רגוע ושמח, נותן לנו הרבה שקט נפשי לדעת שהוא במקום שמתייחס בצורה מכבדת ואוהבת לצרכים שלו',5,'0000-00-00'),(38,35,38,'גן משפחתי אינטמי שלומד להכיר כל פרט הכי קטן על הילד. גישה חינוכית יחודית ויוצאת דופן המאפשרת לילד(ה) להתפתח בקצב שלו',5,'0000-00-00'),(39,37,39,' באווירה משפחתית ועם המון סבלנות, אהבה, מחשבה ורגישות- גולי ואייל מעבירים את זמנם עם הילדים- ברחבי הפארק או בתוך הגן. עם המון הקשבה לצורך של הילדים, לתחומי העניין שלהם, עם המון רגישות לנפשם- הימים בגן הם מלאכת מחשבת של אהבה לתקופה המיוחדת הזו- הילדות. כאמא, אני באמת ובתמים שקטה כל כך ושמחה כל כך שביתי זוכה לכל הטוב הזה',5,'0000-00-00'),(40,39,40,'גן נפלא, בכמה רמות מעל שאר האלטרנטיבות בסביבה, וגם אלה שלא בסביבה... 1. צוות נהדר. אמין, שקוף ואוהב. 2. אוכל ברמה גבוהה. 3. גישה לילדים - מחבקת ותומכת',5,'0000-00-00'),(41,41,41,' זו הבחירה הכי טובה שיכולתי לעשות עבור הבן שלי.הגן באוירה של משפחה, עם טיפול מסור, הקשבה מרובה, השקעה רוך והרבה אהבה. הבן שלי שמח ללכת לגן ונחשף לנגינה, ריקודים, יצירה, טיולים יומיים ואוכל בריא. אני ממליצה בחום על הגן ועל גולי ואייל שהם לא פחות ממדהימים!!',5,'0000-00-00'),(42,50,42,'בכל בוקר ביתי הולכת לגן בשמחה והתרגשות. בשבתות היא מדברת על כך שרוצה ללכת לגן. מרגיש לנו שהגן והבית מחוברים בסינרגיה מושלמת. יש לי ביטחון מלא שביתי מקבלת בגן את כל התשומת לב והאהבה להם זקוקה. בזכות הצוות המסור היא מתפתחת, גדלה ומתעצבת כאינדיוידואל. בלב שלם אוכל להגיד שלא יכולנו למצוא עבורה מסגרת יותר טובה מאשר גן פלא. לא נתקלתי בשום מסגרת ברמת מסירות, אהבה, מקצועיות,קשב ורצון טוב כמו בגן פלא. ממליצה בחום ובלב שלם.',5,'0000-00-00'),(43,50,43,'צוות מדהים, אוהב, אכפתי ומחבק! אך אני חושבת שהיה נחמד אם הפעילויות היו יותר מגוונת',4,'0000-00-00'),(44,50,44,'גן מקסים, צוות חם, אוהב מאוד משקיעים בכל ילד, משקיעים בהעשרה, למידה וחווית הילד. הדבר היחיד שלדעתי צריך להשתפר הוא המזון. אם את מחפשת מזון בריא ומזין זה פחות המקום בשביל הילד שלך',3,'0000-00-00'),(45,52,45,'לפני שרשמנו את יאיר שלנו, בדקנו וקיבלנו הרבה המלצות על הגן והצוות. לא יכולה להגיד שאנחנו לא מרוצים אך מעט מאוכזבים מהתקשרות עם ההורים ומהפעילויות שיש בגן. יאיר שלנו ילד פיקח אך בתקופה שלו בגן אינו התפתח ולמד ',2,'0000-00-00'),(46,53,46,'יש הרגשת משפחתיות עצומה שאין אותה במקומות אחרים. היחס לכל ילד וילדה הוא הכי אישי, הכי דואג , הכי משפחתי! אם זאת יש לשים לב כי המבנה ישן והתחזוקה אינה טובה',4,'0000-00-00'),(47,53,47,'הילדה  חוזרת שמחה , ושמחה לחזור כל בוקר לגן בהתלהבות! אנחנו מאוד מרוצים רגועים ושמחים עם הבחירה בגן. רק צריך לשים לב כי אין חניה כלל באיזור ויש המון פקקים בבוקר כך שאנחנו מוצאים את עצמנו נאבקים בכל בוקר כדי להגיע לעבודה אחרי ההורדה בגן',4,'0000-00-00'),(48,55,48,' צוות הגן חם ואוהב ומפזר המון אהבה וחום על הילדים, הגננת אישה מופלאה עם לב רחב ואוהב. תמיד נקי ומסודר,מבנה הגן בעייתי מעט כי ישנו רק תא שירותים אחד לכל הילדים הגמולים והחצר קטנה וצרה. הפעילויות בגן יכולות להיות יותר מגוונות',4,'0000-00-00'),(49,57,49,'הגן הוא הגן הראשון שתיכנסי אליו תרגישי נורמליות לא נקי מידי לא מלוכלך מידי רמת חינוך מצויינת רכישת מיומנויות חברתיות אין דברים כאלה דאגה והכלה של הילדים . כל אחת מצוות הגן באמצעות אוהבת ילדים בקיצור אם תרצו עוד מידע אתם/ן מוזמנות לפנות אלי',4,'0000-00-00'),(50,60,50,'הגננות מאוד לא סובלניות, מפטרים גננת שעבדה שם כבר 17 שנים בגלל משהו קטן, גננת חדשה צועקת על ילדים. מבחינת התפתחות, הגננות כמעט לא נמצאות עם ילדים, הילדים משחקים לבד כל הזמן בחצר. יש רק 1-2 חוגים כל שבוע. כל הרגליים ננשכות על ידי יתושים או פרעושים. אין מיטה או מזרונים לילדים, יש רק ספות מוזרות. לא מומלץ.',1,'0000-00-00'),(51,61,51,'גן ישן ודי מוזנח. הן מבחינת החצר, הריהוט, המבנה עצמו והן מבחינת הצעצועים והמשחקים. ניהול הגן לקוי- מודיעים הכל ברגע האחרון, ממש בערב לפני, לא נותנים מענה לשאלות. הילדים כל הזמן בחוץ ובקושי יש להם פעילויות. גננות מתעסקות בעיקר בבישול והילדים נמצאים עם הסעיות בלבד..',1,'0000-00-00'),(52,63,52,'הצוות מצוין. דואג, אכפתי, לבבי. המשחקים מעט ישנים אבל לילדים לא אכפת. מנהל הגן טיפה מנותק...',3,'0000-00-00'),(53,65,53,'הגן הכי טוב שיש. שני הילדים שלי היו בו. הצוות הכי משקיע שיש הן בפן הפדגוגי והן בתזונה, הכלה, חום ואהבה. ממליצה בחום!!!',5,'0000-00-00'),(54,67,54,'שלושת ילדי גדלו בגן הזה, הגן הזה משפחה. אין צורה אחרת לתאר את זה, גלינה מנהלת הגן חמה אוהבת, עם ניסיון של שנים. בוחרת את הצוות שלה בפינצטה, יש העשרה, אוכל ביתי, אירועים. הצוות חם ומתחשב, מקבל תמיד בחיוך את הילדים רגישים לכל נושא וזמינים כל הילדים תמיד הלכו בחיוך וחזרו עם חיוך ניקיון מאוד חשוב בגן. אם אתם מחפשים משפחה זה המקום .',5,'0000-00-00'),(55,68,55,'ממליצה בחום! הצוות נהדר, אוהב ואכפתי. הילד למד הרבה בגן וזה בזכות הגננות המדהימות',4,'0000-00-00'),(56,68,56,'הגן הוא ממש בית רחוק מהבית. הצוות נפלא, מאוד חם, סבלני ומחבק, מורגש שנבחר בקפידה . הרבה העשרה - גם בחוגים וגם בפעילות במהלך היום, הילדה התפתחה בצורה מדהימה',4,'0000-00-00'),(57,90,57,'צוות מעולה, ילדים הולכים בכייף ולא רוצים ללכת הביתה בסוף היום. אוירה חמה, הרבה פעילויות. כל הילדים של חברים גם היו או נמצאים בגן. ממליצה מאד.',4,'0000-00-00'),(58,90,58,'גן ביתי וחם, צוות מדהים. הרבה פעילויות והפעלות. מאוד מרוצה מהגן.',4,'0000-00-00'),(59,91,59,'הילדה שלי מאושרת ללכת לגן מדיי יום. הצוות מעולה ומעניק הרבה חום ואהבה. הגן תמיד פתוח להורים. הכל שקוף. כיף אמיתי להיות חלק מהגן המשפחתי הזה',5,'0000-00-00'),(60,93,60,'צוות הגן מובילות את הגן ביד רמה, הן דואגות לילדים מכל הלב, מעשירה אותם בתוכן חינוכי ונמצאת שם לכל בעיה ושאלה. אני ממליצה בחום!',4,'0000-00-00'),(61,93,61,'גננת משכמה ומעלה . צוות הסייעות סבלני ואכפתי. אמנם הבן שלי מאוד נהנה בגן אך הייתי שמחה שיחס הצוות-ילדים יהיה קטן יותר',3,'0000-00-00'),(62,101,62,'גן גדול וחצר ענקית ומושקעת, צוות מעולה תוכן לימודי עשיר, וגננת מושלמת שאין עליה. הדאגה לפרטים הכי קטנים, ארוחות מגוונות וביתיות פשוט אין דאגות וראש שקט.תעשו לעצמכם טובה ולכו תראו אתם כבר תבינו לבד .',4,'0000-00-00'),(63,102,63,'הילדה שלי חוזרת מאושרת הביתה.לפי הרוגע והשמחה שלה אני בטוחה שהיא בידיים טובות. הצוות חם ואוהב, והגן נקי ומסודר, אבל האוכל מגיע בקייטרינג ואינו טרי ובריא',3,'0000-00-00'),(64,106,64,'גן מדהים , גננת בעלת ותק עם אכפתיות , נתינה , אהבה, דאגה והקשבה לילדים וכן צוות הגן מקסים ואכפתי. גן נקי ומסודר עם אוכל ביתי וחוגים רבים לילדים .ניכר המון השקעה ומחשבה בהתאמה בין גיל הילד לפעיליות',4,'0000-00-00'),(65,109,65,'גן מדהים! הגננת הכי מקצועית, איכפתית ומדהימה שיש! צוות מעולה! אוכל ביתיי ! גן נקי ומסודר! הבחירה הכי טובה לילדים ולהורים! מומלץ בחום ואהבה!',5,'0000-00-00'),(66,110,66,'האוכל מזין ויש לנו תפריט שאנו רואים מה אוכלים כל יום. הילדה באה לגן עם חיוך יש חוגים הילדה חוזרת נקיה ומסודרת',4,'0000-00-00'),(67,112,67,'קודם כל ובעיניי הכי חשוב החום ואהבה שהילדים מקבלים בגן שווה את הכל! אחר כך הניקיון, האוכל המעולה והטעים והצוות המהמם שאפשר לסמוך בעיניים עצומות שהילד בידיים הכי טובות שיש! נותר רק לפרגן שיצליחו',4,'0000-00-00'),(68,114,68,'גן מעולה רמה גננת מדהימה עם צוות מושלם אוהב דואג ומכיל.הילדים פשוט רצים לגן.',4,'0000-00-00'),(69,115,69,'הורים יקרים, אם הינכם מתלבטים האם לרשום את ילדכם למשפחתון של כייף.. אל תתלבטו.  הגננת מהממת בזכות ולא בחסד, נותנת לילדים חום ואהבה, מלמדת ערכים ברכות ובשמחה. כל בוקר בכניסה לגן ריח הבישולים המדהימים שלה עולה באויר',5,'0000-00-00'),(70,117,70,' צוות מקצועי, נאמן, אוהב, מחבק ומחנך אמיתי. הפעילויות עשירות ומגוונות, התכנים מותאמים לגיל ולתקופה בשנה, סדר היום מצוין ומוקפד, אוכל ביתי ומזין והכי חשוב- הצוות!! האהבה אמיתית ללא תנאים לילדים.',5,'0000-00-00'),(71,121,71,'צוות הגן מקסים ,מעניק חום ואהבה . הילדה אפילו לא נפרדת בבוקר ,רצה לצוות וכל סופש מחכה לחזור כבר לגן . אין ספק שהילד השני גם יהיה בגן הזה למרות שעברנו לעיר אחרת .',5,'0000-00-00'),(72,126,72,'צוות מדהים, מקצועי, חם ואוהב. ניהול טוב ואיכותי. גן מדהים ומומלץ מאוד! הבן שלי חוזר מאושר מהגן ומגיע כל בוקר עם חיוך. אין ספק שכל הקטנטנים שם בידיים טובות.',5,'0000-00-00'),(73,129,73,'גן נהדר כייפי סופר-מקצועי מתוקתק , המון ותק ונסיון ,אוזן קשבת, תענוג גם לילדים וגם להורים. תקופת הקורונה לא הצליחה להפחית מהחוויה הטובה ,רמת החינוך והטיפול ואפילו להיפך, ממליצה בחום ושומרת פינה חמה בלב לגן המקסים ולצוות המנצח',5,'0000-00-00'),(74,130,74,'אנחנו לא מרוצים מהחינוך שהילד שלנו מקבל בגן.',2,'0000-00-00'),(75,130,75,'אני מאוכזבים מחוסר התקשורת של הגננות והסייעות בגן. דרשנו מספר פעמים שיקוף של מצב הילד שלנו ולא זכינו למענה שלא ציפינו',1,'0000-00-00');
 /*!40000 ALTER TABLE `comment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_admin_log`
+--
+
+DROP TABLE IF EXISTS `django_admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_admin_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action_time` datetime(6) NOT NULL,
+  `object_id` longtext,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint unsigned NOT NULL,
+  `change_message` longtext NOT NULL,
+  `content_type_id` int DEFAULT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
+  KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
+  CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_admin_log`
+--
+
+LOCK TABLES `django_admin_log` WRITE;
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_content_type`
+--
+
+DROP TABLE IF EXISTS `django_content_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_content_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_content_type`
+--
+
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(7,'app','comment'),(8,'app','kindergarten'),(10,'app','kindergartenadditionalinfo'),(9,'app','parent'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(6,'sessions','session');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_migrations`
+--
+
+DROP TABLE IF EXISTS `django_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_migrations` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `app` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `applied` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_migrations`
+--
+
+LOCK TABLES `django_migrations` WRITE;
+/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2023-04-11 14:31:56.720914'),(2,'auth','0001_initial','2023-04-11 14:31:57.196336'),(3,'admin','0001_initial','2023-04-11 14:31:57.301103'),(4,'admin','0002_logentry_remove_auto_add','2023-04-11 14:31:57.309100'),(5,'admin','0003_logentry_add_action_flag_choices','2023-04-11 14:31:57.316610'),(6,'app','0001_initial','2023-04-11 14:31:57.323039'),(7,'contenttypes','0002_remove_content_type_name','2023-04-11 14:31:57.392498'),(8,'auth','0002_alter_permission_name_max_length','2023-04-11 14:31:57.447561'),(9,'auth','0003_alter_user_email_max_length','2023-04-11 14:31:57.471919'),(10,'auth','0004_alter_user_username_opts','2023-04-11 14:31:57.483384'),(11,'auth','0005_alter_user_last_login_null','2023-04-11 14:31:57.529188'),(12,'auth','0006_require_contenttypes_0002','2023-04-11 14:31:57.534121'),(13,'auth','0007_alter_validators_add_error_messages','2023-04-11 14:31:57.543118'),(14,'auth','0008_alter_user_username_max_length','2023-04-11 14:31:57.587089'),(15,'auth','0009_alter_user_last_name_max_length','2023-04-11 14:31:57.663544'),(16,'auth','0010_alter_group_name_max_length','2023-04-11 14:31:57.694866'),(17,'auth','0011_update_proxy_permissions','2023-04-11 14:31:57.711262'),(18,'auth','0012_alter_user_first_name_max_length','2023-04-11 14:31:57.766650'),(19,'sessions','0001_initial','2023-04-11 14:31:57.793649');
+/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_session`
+--
+
+DROP TABLE IF EXISTS `django_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime(6) NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_expire_date_a5c62663` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_session`
+--
+
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -126,7 +407,7 @@ CREATE TABLE `parent` (
   `work_address` varchar(1000) DEFAULT NULL,
   `work_region` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,6 +416,7 @@ CREATE TABLE `parent` (
 
 LOCK TABLES `parent` WRITE;
 /*!40000 ALTER TABLE `parent` DISABLE KEYS */;
+INSERT INTO `parent` VALUES (1,'nudo-gemubu14@hotmail.com','dXg+9/Y!','לירון מועלם','ורמייזה 9','תל אביב','אחד העם 41','הרצליה'),(2,'robe_rehisi41@hotmail.com','U5{5_s]h','מזל מנשה','ג’ורג’ וייז 20','תל אביב','הבנים 50','הרצליה'),(3,'pilefo-yazo85@outlook.com','6APk)w/)','נועה ימיני','הופיין 10','תל אביב','מוהליבר 16','הרצליה'),(4,'yiva-wususo30@hotmail.com','X5xxGp?D','רועי כהן','קיציס 20','תל אביב','הינצנים 3','הרצליה'),(5,'bogidu_lotu44@hotmail.com','9@{fEvG]','קארין אלטמן','ישעיהו אברך 5','תל אביב','בר כוכבא 48','הרצליה'),(6,'yuran-ojusu56@mail.com','sZ@PSFb7','עידו לוי','וייצמן 30','גבעתיים','המקובלים 38','הרצליה'),(7,'nisul-agijo92@yahoo.com','2L@zhGs/','טל שמש','הצנחנים 4','גבעתיים','שקד 33','תל אביב'),(8,'sebur-ahoka24@outlook.com','qq4Fct6=','מיכל שוורץ','ביאליק 10','גבעתיים','חריף אייזיק 21','תל אביב'),(9,'fizu_namadi2@outlook.com','q]Jh>Y6M','הדס גרינברג','גולומב 8','גבעתיים','הרטוב 8','תל אביב'),(10,'vatapa-pawo16@gmail.com','Grx!.!3P','מור כהן','ריינס 36','גבעתיים','עירית 15','תל אביב'),(11,'wivub_amore52@outlook.com','m*bVZg9!','יובל צרויה','שביל האספרגוס 30','גבעתיים','כפר יונה 15','תל אביב'),(12,'hoser-isenu57@mail.com','jw^3&r4G','דניאל יפה','שנקין 15','גבעתיים','גבירטיג מרדכי 5','תל אביב'),(13,'neves-obegi6@gmail.com','5d]vdeJz','עינבר בלומנטל','משמר הירדן 18','גבעתיים','המצביאים 28','תל אביב'),(14,'nebim_ahoyu21@hotmail.com','Pm9$%E=]','אביטל אלטמן','שדרות הצנחנים 2','רמת גן','קהילת בריסק 10','תל אביב'),(15,'pak_agameda87@mail.com','Vq)$ncM9','עידו ווינשטיין','שדה בוקר 8','גבעתיים','החשמונאים 96','תל אביב'),(16,'yugigo-donu83@gmail.com','>J(gbx4&','יסמין שיף','הרא\"ה 5','רמת גן','זינגר בשביס יצחק 7','תל אביב'),(17,'jufuv-orifi98@mail.com','S6(@uqgU','אדל בן חמו','המעין 1','גבעתיים','בר כוכבא 26','תל אביב'),(18,'dumu_xesunu26@aol.com','j?_)f6K{','דנה סילברשטיין','אהרון שר 5','גבעתיים','בירנית 4','תל אביב'),(19,'veb_eboxete56@mail.com','HLQDG)2x','שקד לוין','ריינס 4','גבעתיים','חירותנו 1','תל אביב'),(20,'radej_eguhi57@gmail.com','^>}!Yc88','מירב בנימין','רותם 4','גבעתיים','התקוה 70','תל אביב'),(21,'votoyoj_uhi12@gmail.com','kzJv2z/h','שירה בוכבוכט','ז\'בוטינסקי 22','גבעתיים','פעמונית 7','תל אביב'),(22,'tarida_sobi13@mail.com','4S+AV(td','תום גסר','הצנחנים 11','גבעתיים','המלך ג\'ורג\' 35','תל אביב'),(23,'susug_acadu77@gmail.com','6y8$p>eR','מיכל לולו','שדה בוקר 8','גבעתיים','קיפניס לוין 6','תל אביב'),(24,'ledoli_bave43@yahoo.com','b5Xu>ZUq','ענת קופמן','הל\"ה 58','גבעתיים','ויצמן 7','תל אביב'),(25,'curiyi_cavo61@gmail.com','FM(=8bBe','ליטל מזרחי','אילת 8','גבעתיים','נגבה 33','תל אביב'),(26,'hahazu_zula31@hotmail.com','[/4qg+ZM','הילה גולדברג','ישראל טרייבר 59','גבעתיים','מגן אברהם 25','תל אביב'),(27,'sodu-tofubo51@outlook.com','GrmgR(64','תמר סבן','צהל 28','גבעתיים','סלע יעקב 22','תל אביב'),(28,'piwon-acadi36@outlook.com','[G9T@5y^','לינוי קורן','דויד אלעזר 6','כפר סבא','דרך ההגנה 118','תל אביב'),(29,'min_upivode38@outlook.com','vC[L_N7b','לימור חזן','סוקולוב 15','כפר סבא','ברון עקיבא 8','תל אביב'),(30,'sugiya_fawi51@aol.com','[4s4&X4C','זיו טלמור','הדר 1','כפר סבא','פיינשטיין מאיר 20','תל אביב'),(31,'laviw_okute94@outlook.com','Ubg%C=4f','נוגה קדארי','גולומב 5','כפר סבא','ליוויק 7','תל אביב'),(32,'bawob_imitu70@hotmail.com','f&8daCNB','עדי וייס','סירני 2','כפר סבא','ארלוזורוב 95','תל אביב'),(33,'bigilu_hulu32@hotmail.com','ahU2(/+6','דור שרון','משעול הקלע 8','כפר סבא','דם המכבים 21','תל אביב'),(34,'cagu-gegodo71@outlook.com','^_Neru7(','צור לוי','רחוב ל\"ה 16','כפר סבא','בורלא יהודה 2','תל אביב'),(35,'guge-pobazi61@aol.com','Y8]KJk@*','אבי דגני','אוסטשינסקי 23','כפר סבא','ישראל מסלנט 22','תל אביב'),(36,'sulozo_fico2@gmail.com','kq2ga@Z%','שרה לנדסמן','השחר 6','כפר סבא','וייז ג\'ורג\' ד\"ר 1','תל אביב'),(37,'zuf_oxipubi55@aol.com','t&d3eP5P','דבורה גיל','רחל המשוררת 6','כפר סבא','קובנר אבא 16','תל אביב'),(38,'gepew-ayini21@aol.com','}Z_L4Rjz','אריאל מנדנבליט','גאולה 31','כפר סבא','דפנה 7','תל אביב'),(39,'yerijaj_ogo30@yahoo.com','RHj>3Y9!','תמר פיירמן','הגליל 56','כפר סבא','פרנקל ידידיה 17','תל אביב'),(40,'gisetuj-esu26@aol.com','j7Y6zh*d','רן נסינג','רופין 30','כפר סבא','שלומציון המלכה 38','תל אביב'),(41,'yamo-joseza63@yahoo.com','gKHDY9f]','קרן שחר','רפפורט 3','כפר סבא','סלע יעקב 22','תל אביב'),(42,'rac_akemipo4@hotmail.com','%>Qx-C5P','ליהי רז','התאנה 3','כפר סבא','הרטוב 25','תל אביב'),(43,'zuti-cesetu91@gmail.com','YD69x/mU','סיוון לוי','שאול המלך 5','כפר סבא','ירושלמי 16','תל אביב'),(44,'berun_azaje98@aol.com','Pt9-5?e}','דנה בר','יגאל ידין 2','כפר סבא','אריסטו 18','תל אביב'),(45,'sekorof-ude24@yahoo.com','_rU_4N_n','יעל בק','המעפילים 18','כפר סבא','חוני המעגל 5','תל אביב'),(46,'sesuvoy_abu93@outlook.com','38?Qp5U&','זיו הרוש','ניצנים 11','כפר סבא','חיננית 5','תל אביב'),(47,'yuco_xokupi28@hotmail.com','Sc4+jW5h','אורי מנחם','בן יהודה 23','כפר סבא','לאה גולדברג 6','תל אביב'),(48,'hukexo-mota36@outlook.com','nU2)*zhV','מיטל הורביץ','העמק 28','כפר סבא','סנפיר 9','תל אביב'),(49,'miputoz_aho15@hotmail.com','5j5Nt@n5','נעומי זוהר','האילנות 20','כפר סבא','ארבר מנחם 26','תל אביב'),(50,'jiza-rubahu71@mail.com','ncb)d5EY','אור שמש','יאנוש קורצ\'ק 10','כפר סבא','שדרות גורי ישראל 23','תל אביב'),(51,'nizivof-ere13@yahoo.com','!dwn&C]4','עדי מזרחי','ישראל ישעיהו 5','כפר סבא','פן אלכסנדר 1','תל אביב'),(52,'rewi_sageja67@hotmail.com','9h+)ykrU','אנה דויד','חבצלת השרון 13','כפר סבא','פילדלפיה 3','תל אביב'),(53,'humu-milegi1@gmail.com','}9v-8Dfa','ליה שלום','אהרונוביץ\' 15','כפר סבא','דיזנגוף 221','תל אביב'),(54,'lasuc_owucu55@yahoo.com','YHd>)2r5','יעל מירון','טשרניחובסקי 4','כפר סבא','מאור עינים 4','תל אביב'),(55,'kum-oweteha75@outlook.com','^yuC5B=g','קטי יעקב','אביבים 10','כפר סבא','ברלין אליהו 4','תל אביב'),(56,'buji-monuka54@hotmail.com','AhvWV&8M','ענת סגל','פשוש 6','כפר סבא','בן סירא 4','תל אביב'),(57,'wor_imulove50@aol.com','PeX[^8UK','עדי קפלן','רש\"י 9','כפר סבא','לובטקין צביה 15','תל אביב'),(58,'hiday-uvufe93@yahoo.com','Zks^Ztu2','שמעון לבייב','שדרות צנחנים 18','רמת גן','זרובבל 3','רמת השרון'),(59,'vov_anohomo25@yahoo.com','s]7)=gH]','קארין מזור','שדרות צנחנים 11','רמת גן','זרובבל 3','רמת השרון'),(60,'zuhuh-owoza91@mail.com','FedMHV]9','טליה נגבי','שמעוני 10','רמת גן','זרובבל 3','רמת השרון'),(61,'hedu-cuhetu30@mail.com','VWC^]+s2','רעות עמית','תל חי 36','רמת גן','הרב קוק 43','רמת השרון'),(62,'mekoci_yiho46@gmail.com','4PH6a_ef','נופר לביא','תל חי 68','רמת גן','הנוטע 4','רמת השרון'),(63,'wexevep_ana64@hotmail.com','*hJEgg3}','קרין לוי','תל חי 47','רמת גן','הפרחים 4','רמת השרון'),(64,'doho_kepake58@mail.com','g8gz!KrF','ורד אטיאס','משה דיין 13','רמת גן','השופטים 56','רמת השרון'),(65,'darulul_ize43@gmail.com','5X7gSLv@','לירן יחזקאל','התפוצות 40','רמת גן','אברבוך 14','רמת השרון'),(66,'sasawej_ijo50@yahoo.com','P^V5HQu@','חן זגורי','אחד העם 34','רמת גן','הירדן 25','רמת השרון'),(67,'pabaheh_idi57@aol.com','$Cctky2*','איילה אגם','גרנדוס 35','רמת גן','מוהליבר 1','רמת השרון'),(68,'gegub-ecuji67@aol.com','BN?&4hXD','הדס אליאס','עוזיאל 103','רמת גן','הראשונים 14','רמת השרון'),(69,'rup_eloniwu55@aol.com','+d2>5Jwy','נועם כץ','עוזיאל 103','רמת גן','המלאכה 16','רמת השרון'),(70,'bapa_xaxexa61@aol.com','Mn&w28n2','תום גולדמן','בת שוע 9','רמת גן','הפלמ\"ח 8','רמת השרון'),(71,'fobim-evohi80@yahoo.com','V$%hQx_7','מריה ויטקין','החי\"ל 38','רמת גן','אברבוך 14','רמת השרון'),(72,'pali-kopewi95@gmail.com','A6YVbYJ>','מעיין הרצוג','שדרות צנחנים 20','רמת גן','רות 6','רמת השרון'),(73,'celided-eyu48@outlook.com','W*r(]A8*','יובל כהן','המלאכה 14','רמת גן','לילך 3','רמת השרון'),(74,'','','','','','',''),(75,'','','','','','',''),(76,'','','','','','',''),(77,'','','','','','',''),(78,'','','','','','',''),(79,'','','','','','',''),(80,'','','','','','',''),(81,'','','','','','',''),(82,'','','','','','',''),(83,'','','','','','',''),(84,'','','','','','',''),(85,'','','','','','',''),(86,'','','','','','',''),(87,'','','','','','',''),(88,'','','','','','',''),(89,'','','','','','',''),(90,'','','','','','',''),(91,'','','','','','',''),(92,'','','','','','',''),(93,'','','','','','',''),(94,'','','','','','',''),(95,'','','','','','',''),(96,'','','','','','',''),(97,'','','','','','',''),(98,'','','','','','',''),(99,'','','','','','',''),(100,'','','','','','',''),(101,'','','','','','',''),(102,'','','','','','',''),(103,'','','','','','',''),(104,'','','','','','',''),(105,'','','','','','',''),(106,'','','','','','',''),(107,'','','','','','',''),(108,'','','','','','',''),(109,'','','','','','',''),(110,'','','','','','',''),(111,'','','','','','',''),(112,'','','','','','',''),(113,'','','','','','',''),(114,'','','','','','',''),(115,'','','','','','',''),(116,'','','','','','',''),(117,'','','','','','',''),(118,'','','','','','',''),(119,'','','','','','',''),(120,'','','','','','',''),(121,'','','','','','',''),(122,'','','','','','',''),(123,'','','','','','',''),(124,'','','','','','',''),(125,'','','','','','',''),(126,'','','','','','',''),(127,'','','','','','',''),(128,'','','','','','',''),(129,'','','','','','',''),(130,'','','','','','',''),(131,'','','','','','',''),(132,'','','','','','',''),(133,'','','','','','',''),(134,'','','','','','',''),(135,'','','','','','',''),(136,'','','','','','',''),(137,'','','','','','',''),(138,'','','','','','',''),(139,'','','','','','',''),(140,'','','','','','',''),(141,'','','','','','',''),(142,'','','','','','',''),(143,'','','','','','',''),(144,'','','','','','',''),(145,'','','','','','',''),(146,'','','','','','',''),(147,'','','','','','',''),(148,'','','','','','',''),(149,'','','','','','',''),(150,'','','','','','',''),(151,'','','','','','',''),(152,'','','','','','',''),(153,'','','','','','',''),(154,'','','','','','',''),(155,'','','','','','',''),(156,'','','','','','',''),(157,'','','','','','',''),(158,'','','','','','',''),(159,'','','','','','',''),(160,'','','','','','',''),(161,'','','','','','',''),(162,'','','','','','',''),(163,'','','','','','',''),(164,'','','','','','',''),(165,'','','','','','',''),(166,'','','','','','',''),(167,'','','','','','',''),(168,'','','','','','',''),(169,'','','','','','',''),(170,'','','','','','',''),(171,'','','','','','',''),(172,'','','','','','',''),(173,'','','','','','',''),(174,'','','','','','',''),(175,'','','','','','',''),(176,'','','','','','',''),(177,'','','','','','','');
 /*!40000 ALTER TABLE `parent` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -147,4 +429,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-11 16:37:08
+-- Dump completed on 2023-04-11 21:53:29
