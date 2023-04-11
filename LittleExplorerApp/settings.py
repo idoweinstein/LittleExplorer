@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'LittleExplorerApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'littleexplorer',
+        'NAME': 'LittleExplorer',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',

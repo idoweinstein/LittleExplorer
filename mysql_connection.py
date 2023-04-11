@@ -5,7 +5,7 @@ dataBase = mysql.connector.connect(
     port=3306,
     user="root",
     passwd="root",
-    database="littleexplorer"
+    database="LittleExplorer"
 )
 cursor = dataBase.cursor()
 
