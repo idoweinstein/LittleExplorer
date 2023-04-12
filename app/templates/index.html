@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Basic Web Page</title>
-    </head>
-    <body>
-Hello World!
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<button onclick="location.href = ''">Search by name</button>
+<button onclick="location.href = ''">Search by location</button>
+<button onclick="location.href = '/register'">Sign Up</button>
+
+{% endblock content%}
