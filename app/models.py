@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -46,15 +47,17 @@ class Kindergartenadditionalinfo(models.Model):
         db_table = 'kindergartenadditionalinfo'
 
 
-class Parent(models.Model):
+class Parent(AbstractUser):
     parent_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=200)
+    username = models.CharField(max_length=200, unique=True)
     password = models.CharField(max_length=16)
     name = models.CharField(max_length=100)
     home_address = models.CharField(max_length=1000, blank=True, null=True)
     home_region = models.CharField(max_length=100, blank=True, null=True)
     work_address = models.CharField(max_length=1000, blank=True, null=True)
     work_region = models.CharField(max_length=100, blank=True, null=True)
+
+    USERNAME_FIELD = "username"
 
     class Meta:
         managed = False
