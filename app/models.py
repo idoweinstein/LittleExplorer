@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
+
 
 # Create your models here.
 
@@ -49,7 +51,7 @@ class Kindergartenadditionalinfo(models.Model):
 
 class Parent(AbstractUser):
     parent_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=200, unique=True)
+    email = models.EmailField(_('email address'), unique=True)
     password = models.CharField(max_length=16)
     name = models.CharField(max_length=100)
     home_address = models.CharField(max_length=1000, blank=True, null=True)
@@ -57,7 +59,9 @@ class Parent(AbstractUser):
     work_address = models.CharField(max_length=1000, blank=True, null=True)
     work_region = models.CharField(max_length=100, blank=True, null=True)
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
+
+    REQUIRED_FIELDS = []
 
     class Meta:
         managed = False
