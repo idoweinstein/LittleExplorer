@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html dir="rtl">
+    <head>
+        <title>{{ kindergarten.name }} - פרטים</title>
+    </head>
+
+    <body>
+        <h1>{{ kindergarten.name }}</h1>
+
+        כתובת: {{ kindergarten.address }}, {{ kindergarten.region }}
+        <p>מידע ליצירת קשר:
+            <br>טלפון: {{ kindergarten_info.phone }}
+            <br>מייל: {{ kindergarten_info.mail }}
+        </p>
+        <br>תיאור קצר על הגן: {{ kindergarten_info.description }}
+
+        <p>
+            <br> הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.min_age}}
+            <br>הגיל המקסימלי של ילדים בגן זה הוא {{ kindergarten.max_age}}
+            <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
+            <br>וכמו כן, מובטח שיש יחס של  {{ kindergarten.ratio_teacher_children }} גננות לילדים במקרה שבו הגן מלא!
+        </p>
+
+        <p>שעות הפתיחה של הגן:
+            <br>שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
+            <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
+        </p>
+
+        <p>{% if kindergarten.has_parking == 1 %}
+            לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
+        {% else %}
+            לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
+        {% endif %}
+        </p>
+
+    </body>
+</html>
+

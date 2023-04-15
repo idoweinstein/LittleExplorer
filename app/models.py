@@ -38,6 +38,10 @@ class Kindergarten(models.Model):
         db_table = 'kindergarten'
 
 
+    def ratio_teacher_children(self):
+        return round(self.num_of_teachers / self.capacity, 2)
+
+
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
     phone = models.CharField(max_length=45, blank=True, null=True)

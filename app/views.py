@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from .models import Kindergarten
-from django.shortcuts import render, redirect
+from .models import Kindergarten, Kindergartenadditionalinfo
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterUserForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
@@ -45,7 +45,7 @@ def sign_up(request):
     })
 
 
-def get_kindergarten(request):
-    kindergartens = Kindergarten.objects.all()[:5]
-    output = '<br>'.join([c.name for c in kindergartens])
-    return HttpResponse(output)
+def get_kindergarten_details(request, kindergarten_id):
+    kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
+    kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
+    return render(request, 'kindergarten.html',{'kindergarten': kindergarten, 'kindergarten_info' : kindergarten_info})
