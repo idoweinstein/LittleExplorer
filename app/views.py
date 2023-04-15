@@ -1,47 +1,18 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Kindergarten
 from django.shortcuts import render, redirect
-from .forms import SignupForm
-from django.http import HttpResponseRedirect
+from .forms import RegisterUserForm
 from django.contrib import messages
-from django.utils import timezone
-from django.contrib.auth import login, authenticate, logout
-from .models import Parent
+from django.contrib.auth import login, authenticate
 
 
 def index(request):
     return render(request, 'index.html')
 
 
-def sign_up(request):
-    if request.method == 'GET':
-        form = SignupForm()
-        return render(request, 'register.html', {'form': form})
-
-    if request.method == 'POST':
-        user_name = request.POST['username']
-        password = request.POST['password1']
-        home_address = request.POST['home_address']
-        user = Parent.objects.create_user(username=user_name, password=password, home_address=home_address)
-        user.save()
-        return HttpResponseRedirect('/')
-        # form = SignupForm(request.POST)
-        # if form.is_valid():
-        #     user = form.save(commit=False)
-        #     # user.last_login = timezone.now()
-        #     # user.save(update_fields=['last_login'])
-        #     user.save()
-        #     # messages.success(request, 'You have singed up successfully.')
-        #     login(request, user)
-        #     return HttpResponseRedirect('/')
-        # else:
-        #     return render(request, 'register.html', {'form': form})
-
-
 def log_in(request):
     if request.method == 'GET':
-        return render(request, 'registration/login.html', {})
+        return render(request, 'login.html', {})
 
     if request.method == "POST":
         username = request.POST['username']
@@ -53,6 +24,25 @@ def log_in(request):
         else:
             messages.success(request, ("There Was An Error Logging In, Try Again..."))
             return redirect('login')
+
+
+def sign_up(request):
+    if request.method == "POST":
+        form = RegisterUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=email, password=password)
+            login(request, user)
+            messages.success(request, ("Registration Successful!"))
+            return redirect('/')
+    else:
+        form = RegisterUserForm()
+
+    return render(request, 'register.html', {
+        'form': form,
+    })
 
 
 def get_kindergarten(request):
