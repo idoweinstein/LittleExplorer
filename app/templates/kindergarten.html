@@ -8,17 +8,28 @@
         <h1>{{ kindergarten.name }}</h1>
 
         כתובת: {{ kindergarten.address }}, {{ kindergarten.region }}
+
+        {% if kindergarten_info.phone or kindergarten_info.mail %}
         <p>מידע ליצירת קשר:
+            {% if kindergarten_info.phone %}
             <br>טלפון: {{ kindergarten_info.phone }}
+            {% endif %}
+            {% if kindergarten_info.mail %}
             <br>מייל: {{ kindergarten_info.mail }}
+            {% endif %}
         </p>
-        <br>תיאור קצר על הגן: {{ kindergarten_info.description }}
+        {% endif %}
+        {% if kindergarten_info.description %}
+        <br>תיאור קצר על הגן:
+        <br><span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
+        {% endif %}
 
         <p>
+            <!-- TODO: do not forget to fix ages, after ido merges his functionality -->
             <br> הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.min_age}}
             <br>הגיל המקסימלי של ילדים בגן זה הוא {{ kindergarten.max_age}}
             <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
-            <br>וכמו כן, מובטח שיש יחס של  {{ kindergarten.ratio_teacher_children }} גננות לילדים במקרה שבו הגן מלא!
+            <br>וכמו כן, מובטח שיש יחס של  {{ kindergarten.display_ratio_children_teachers }} גננות לילדים במקרה שבו הגן מלא!
         </p>
 
         <p>שעות הפתיחה של הגן:
@@ -32,6 +43,8 @@
             לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
         {% endif %}
         </p>
+
+        <button onclick="location.href = '/'">חזרה לדף הבית</button>
 
     </body>
 </html>

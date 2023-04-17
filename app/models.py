@@ -37,9 +37,11 @@ class Kindergarten(models.Model):
         managed = False
         db_table = 'kindergarten'
 
+    def ratio_children_teachers(self):
+        return round(self.capacity / self.num_of_teachers, 2)
 
-    def ratio_teacher_children(self):
-        return round(self.num_of_teachers / self.capacity, 2)
+    def display_ratio_children_teachers(self):
+        return str(self.capacity) + ':' + str(self.num_of_teachers)
 
 
 class Kindergartenadditionalinfo(models.Model):
