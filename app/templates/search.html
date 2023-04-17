@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--
+    TODO: find a better place for this script tag
+-->
+<script>
+    window.onload = () => {
+        for (const catergory of ["min_age", "max_age", "capacity"]) {
+            const value = document.querySelector(`#${catergory}_value`);
+            const input = document.querySelector(`#${catergory}`);
+            value.textContent = input.value;
+            input.addEventListener("input", (event) => {
+              if (document.querySelector("#min_age").value > document.querySelector("#max_age").value) {
+                /* Enfore min <= max */
+                document.querySelector("#min_age").value = document.querySelector("#max_age").value = input.value;
+                document.querySelector("#min_age_value").textContent = document.querySelector("#max_age_value").textContent = input.value;
+              }
+              /* Update value label */
+              value.textContent = event.target.value;
+            });
+        }
+    }
+</script>
+<h1>
+    תוצאות חיפוש
+</h1>
+<table>
+    <tr>
+        <td>
+            <form method="GET" action="/search">
+                <input type="text" name="value" value="{{ value.value }}" placeholder="Search...">
+                <div>
+                    <input type="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
+                    <label for="min_age">גיל מינימלי: <output id="min_age_value"></output></label>
+                </div>
+                <div>
+                    <input type="range" id="max_age" name="max_age" min="{{ max_age.min }}" max="{{ max_age.max }}" value="{{ max_age.value }}" step="1">
+                    
+                    <label for="max_age">גיל מקסימלי: <output id="max_age_value"></output></label>
+                </div>
+                <div>
+                    <input type="range" id="capacity" name="capacity" min="{{ capacity.min }}" max="{{ capacity.max }}" value="{{ capacity.value }}" step="1">
+                    
+                    <label for="max_age">כמות ילדים מירבית: <output id="capacity_value"></output></label>
+                </div>
+                <div>
+                    שעות פעילות: החל מהשעה <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}"> 
+                    ועד השעה <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
+                </div>
+                <button name="method" value="name" type="submit">Search by name</button>
+                <button name="method" value="location" type="submit">Search by location</button>
+            </form>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <th>שם</th>
+                    <th>כתובת</th>
+                    <th>גיל</th>
+                    <th>כמות ילדים מירבית</th>
+                    <th>יחס ילדים:גננות נוכחי</th>
+                    <th>שעות פעילות</th>
+                    <th>חניה</th>
+                </tr>
+                {% for result in results %}
+                <tr>
+                    <td> {{ result.name }} </td>
+                    <td> {{ result.address }}, {{ result.region }} </td>
+                    <td> {{ result.get_min_age_display }} עד {{ result.get_max_age_display }} </td>
+                    <td> {{ result.capacity }} </td>
+                    <td> {{ result.kids_count }} : {{ result.num_of_teachers }} </td>
+                    <td> {{ result.get_open_time_display }} - {{ result.get_close_time_display }} </td>
+                    <td>{% if results.has_parking %} יש {% else %} אין {% endif %} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock content%}

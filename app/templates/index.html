@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<button onclick="location.href = ''">Search by name</button>
-<button onclick="location.href = ''">Search by location</button>
 <button onclick="location.href = '/signup'">Sign Up</button>
 <button onclick="location.href = '/login'">Log in</button>
+<br>
+<form method="GET" action="/search">
+    <button name="method" value="name" type="submit">Search by name</button>
+    <button name="method" value="location" type="submit">Search by location</button>
+    <br>
+    <input type="text" name="value" placeholder="Search...">
+</form>
 
 {% endblock content%}

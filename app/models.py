@@ -37,6 +37,28 @@ class Kindergarten(models.Model):
         managed = False
         db_table = 'kindergarten'
 
+    @staticmethod
+    def _months_to_display(months):
+        years = months // 12
+        months = months % 12
+        text = []
+        if years > 0:
+            text.append("שנה" if years == 1 else f"{years} שנים")
+        if months > 0:
+            text.append("חודש" if months == 1 else f"{months} חודשים")
+        return " ו-".join(text).replace("ו-חודש", "וחודש")
+
+    def get_min_age_display(self):
+        return Kindergarten._months_to_display(self.min_age)
+
+    def get_max_age_display(self):
+        return Kindergarten._months_to_display(self.max_age)
+
+    def get_open_time_display(self):
+        return self.open_time.isoformat(timespec="minutes")
+
+    def get_close_time_display(self):
+        return self.close_time.isoformat(timespec="minutes")
 
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
