@@ -65,6 +65,13 @@ class Kindergarten(models.Model):
     def get_close_time_display(self):
         return self.close_time.isoformat(timespec="minutes")
 
+    def ratio_children_teachers(self):
+        return round(self.capacity / self.num_of_teachers, 2)
+
+    def display_ratio_children_teachers(self):
+        return str(self.capacity) + ':' + str(self.num_of_teachers)
+
+
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
     phone = models.CharField(max_length=45, blank=True, null=True)
