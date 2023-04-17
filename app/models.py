@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
+# TODO: document we require `sudo apt-get install gdal-bin`
+#from django.contrib.gis.geos import PointField
+from django.contrib.gis.db.models import PointField
+
 
 # Create your models here.
 
@@ -32,6 +36,7 @@ class Kindergarten(models.Model):
     open_time = models.TimeField()
     close_time = models.TimeField()
     has_parking = models.PositiveIntegerField(blank=True, null=True)
+    geolocation = PointField(blank=True, null=True, srid=4326)
 
     class Meta:
         managed = False

@@ -72,7 +72,7 @@ WSGI_APPLICATION = 'LittleExplorerApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'LittleExplorer',
         'USER': 'root',
         'PASSWORD': 'root',
