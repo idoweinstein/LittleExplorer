@@ -65,7 +65,7 @@
                 </tr>
                 {% for result in results %}
                 <tr>
-                    <td> {{ result.name }} </td>
+                    <td> <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">{{ result.name }}</a> </td>
                     <td> {{ result.address }}, {{ result.region }} </td>
                     <td> {{ result.get_min_age_display }} עד {{ result.get_max_age_display }} </td>
                     <td> {{ result.capacity }} </td>

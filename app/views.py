@@ -10,7 +10,6 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
-from .models import Kindergarten
 from .forms import RegisterUserForm
 from .geolocation import get_coordinates
 
