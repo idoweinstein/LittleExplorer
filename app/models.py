@@ -69,7 +69,7 @@ class Kindergarten(models.Model):
         return round(self.capacity / self.num_of_teachers, 2)
 
     def display_ratio_children_teachers(self):
-        return str(self.capacity) + ':' + str(self.num_of_teachers)
+        return str(self.capacity) + ' : ' + str(self.num_of_teachers)
 
 
 class Kindergartenadditionalinfo(models.Model):

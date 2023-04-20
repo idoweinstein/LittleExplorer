@@ -1,14 +1,18 @@
 from django.http import HttpResponse
 from .models import Kindergarten, Kindergartenadditionalinfo
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegisterUserForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.views.decorators.http import require_GET
 from django.db.models import Min, Max, Q
 
+from django.contrib.gis.measure import D
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
+
 from .models import Kindergarten
 from .forms import RegisterUserForm
+from .geolocation import get_coordinates
 
 import operator
 from functools import reduce
@@ -122,6 +126,21 @@ def search(request):
     return render(request, 'search.html', context)
 
 
+import math
+
+def distance_to_decimal_degrees(distance, latitude):
+    """
+    Source of formulae information:
+        1. https://en.wikipedia.org/wiki/Decimal_degrees
+        2. http://www.movable-type.co.uk/scripts/latlong.html
+    :param distance: an instance of `from django.contrib.gis.measure.Distance`
+    :param latitude: y - coordinate of a point/location
+    """
+    lat_radians = latitude * (math.pi / 180)
+    # 1 longitudinal degree at the equator equal 111,319.5m equiv to 111.32km
+    return distance.m / (111_319.5 * math.cos(lat_radians))
+
+
 @require_GET
 def search(request):
     parameters = request.GET
@@ -151,11 +170,14 @@ def search(request):
     close_value = parameters.get("close_time") if parameters.get("close_time") else min_close
 
     filters = list()
+    point = None
     if method == "name":
         filters.append(Q(name__contains=value))
     else:
-        # TODO: implement address search
-        filters.append(Q())
+        # method == "location"
+        coords = get_coordinates(value)
+        point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
+        filters.append(Q(geolocation__dwithin=(point, distance_to_decimal_degrees(D(m=2000)))))
 
     for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", min_age_value),
                        "max_age": ("max_age__lte", max_age_value),
@@ -166,7 +188,13 @@ def search(request):
         if parameters.get(key):
             filters.append(Q(**{attr_key: attr_value}))
 
-    kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))[:100]
+    kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
+
+    if method == "location":
+        kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
+
+    kindergartens = kindergartens[:10]
+    #print(kindergartens[0].name, kindergartens[0].region, kindergartens[0].address, kindergartens[0].distance)
 
     context = {'results': kindergartens,
                'value': Value(value),

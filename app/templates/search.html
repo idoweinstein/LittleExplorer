@@ -69,7 +69,7 @@
                     <td> {{ result.address }}, {{ result.region }} </td>
                     <td> {{ result.get_min_age_display }} עד {{ result.get_max_age_display }} </td>
                     <td> {{ result.capacity }} </td>
-                    <td> {{ result.kids_count }} : {{ result.num_of_teachers }} </td>
+                    <td> {{ result.display_ratio_children_teachers }} </td>
                     <td> {{ result.get_open_time_display }} - {{ result.get_close_time_display }} </td>
                     <td>{% if results.has_parking %} יש {% else %} אין {% endif %} </td>
                 </tr>
