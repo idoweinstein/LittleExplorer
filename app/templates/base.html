@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>My Project</title>
-    </head>
+<html dir="rtl">
+<head>
+<link rel="stylesheet" href="..\static\base_style.css">
+   <div class="header">
+      <img src="..\static\imges\logo.png" alt="logo" />
+         <button class="login_signup" onclick="location.href = '/signup'">הרשמה</button>
+         <button class="login_signup" onclick="location.href = '/login'">היכנס/י</button>
+      <h1>LittleExplorer</h1>
+      <h2>מצאו את הגן הטוב ביותר עבור הבן/ת שלכם!!</h2>
+   </div>
+</head>
 
-    <body>
-    {% block content %}{% endblock content %}
-    </body>
+<body>
+   {% block content %}{% endblock content %}
+</body>
+
 </html>
+
+
+

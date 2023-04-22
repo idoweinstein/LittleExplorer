@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
-<button onclick="location.href = ''">Search by name</button>
-<button onclick="location.href = ''">Search by location</button>
-<button onclick="location.href = '/signup'">Sign Up</button>
-<button onclick="location.href = '/login'">Log in</button>
-
+<body>
+    <div class="search">
+    <form>
+       <div class="radio_inline">
+          <input type="radio" name="name" onclick="checkRadio(name)" checked>חיפוש לפי שם
+          <input type="radio" name="city" onclick="checkRadio(name)">חיפוש לפי עיר
+       </div>
+       <div class="search_input">
+          <input type="text" id="Search" name="Search" minlength="2" size="30">
+       </div>
+    </form>
+ </div>
+</body>
 {% endblock content%}
