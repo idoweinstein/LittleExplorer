@@ -4,8 +4,12 @@
 <link rel="stylesheet" href="..\static\base_style.css">
    <div class="header">
       <img src="..\static\imges\logo.png" alt="logo" />
+      {% if user.is_authenticated %}
+       ברוך הבא {{ user.first_name }} {{ user.last_name }}
+       {% else %}
          <button class="login_signup" onclick="location.href = '/signup'">הרשמה</button>
          <button class="login_signup" onclick="location.href = '/login'">היכנס/י</button>
+       {% endif %}
       <h1>LittleExplorer</h1>
       <h2>מצאו את הגן הטוב ביותר עבור הבן/ת שלכם!!</h2>
    </div>
