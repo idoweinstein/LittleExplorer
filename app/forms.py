@@ -31,8 +31,6 @@ class RegisterUserForm(UserCreationForm):
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
-        self.fields['first_name'].required = False
-        self.fields['last_name'].required = False
         self.fields['home_address'].required = False
         self.fields['home_region'].required = False
         self.fields['work_address'].required = False
