@@ -3,7 +3,7 @@ from .models import Kindergarten, Kindergartenadditionalinfo
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterUserForm
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 
 
 def index(request):
@@ -45,7 +45,11 @@ def sign_up(request):
     })
 
 
+def log_out(request):
+    logout(request)
+    return redirect('/')
+
 def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
     kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
-    return render(request, 'kindergarten.html',{'kindergarten': kindergarten, 'kindergarten_info' : kindergarten_info})
+    return render(request, 'kindergarten.html', {'kindergarten': kindergarten, 'kindergarten_info': kindergarten_info})
