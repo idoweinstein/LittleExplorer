@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Kindergarten, Kindergartenadditionalinfo
+from .models import Kindergarten, Kindergartenadditionalinfo, Comment
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterUserForm
 from django.contrib import messages
@@ -49,7 +49,13 @@ def log_out(request):
     logout(request)
     return redirect('/')
 
+
 def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
     kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
-    return render(request, 'kindergarten.html', {'kindergarten': kindergarten, 'kindergarten_info': kindergarten_info})
+    comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related('parent').all()
+    return render(request, 'kindergarten.html',
+                  {'kindergarten': kindergarten,
+                   'kindergarten_info': kindergarten_info,
+                   'comments_with_parent': comments_with_parent
+                   })

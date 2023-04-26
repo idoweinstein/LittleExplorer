@@ -6,19 +6,6 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 
-class Comment(models.Model):
-    comment_id = models.AutoField(primary_key=True)
-    kindergarten = models.ForeignKey('Kindergarten', models.DO_NOTHING)
-    parent = models.ForeignKey('Parent', models.DO_NOTHING)
-    comment = models.CharField(max_length=1500)
-    grade = models.PositiveIntegerField(blank=True, null=True)
-    date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'comment'
-
-
 class Kindergarten(models.Model):
     kindergarten_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=45)
@@ -59,8 +46,8 @@ class Parent(AbstractUser):
     parent_id = models.AutoField(primary_key=True)
     email = models.EmailField(_('email address'), unique=True)
     password = models.CharField(max_length=16)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
     home_address = models.CharField(max_length=1000, blank=True, null=True)
     home_region = models.CharField(max_length=100, blank=True, null=True)
     work_address = models.CharField(max_length=1000, blank=True, null=True)
@@ -73,3 +60,16 @@ class Parent(AbstractUser):
     class Meta:
         managed = False
         db_table = 'parent'
+
+
+class Comment(models.Model):
+    comment_id = models.AutoField(primary_key=True)
+    kindergarten = models.ForeignKey(Kindergarten, models.DO_NOTHING)
+    parent = models.ForeignKey(Parent, models.DO_NOTHING)
+    comment = models.CharField(max_length=1500)
+    grade = models.PositiveIntegerField(blank=True, null=True)
+    date = models.DateField()
+
+    class Meta:
+        managed = False
+        db_table = 'comment'
