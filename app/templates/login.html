@@ -1,33 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<body>
+  <h3>הרשמה</h3>
+  <form action="" method=POST>
+    {% csrf_token %}
 
-	<h1>Login</h1>
-<br/>
+  <form>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">אימייל</label>
+      <input type="text" class="form-control" name="username" aria-describedby="emailHelp" size="30">
+    </div>
 
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">סיסמא</label>
+      <input type="password" class="form-control" name="password" size="30">
+    </div>
+    
+    <input type="submit" class="body_button" value="היכנס/י" class="btn btn-secondary">
+  
+  </form>
+</body>
 
-		<form action="" method=POST>
-			{% csrf_token %}
-
-		<form>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email</label>
-    <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
-
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" name="password">
-  </div>
-
-
-
-
-
-			<input type="submit" value="Submit" class="btn btn-secondary">
-
-		</form>
-
-
-<br/><br/>
 {% endblock %}

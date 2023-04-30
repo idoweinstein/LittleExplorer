@@ -1,8 +1,8 @@
 from django.http import HttpResponse
-from .models import Kindergarten, Kindergartenadditionalinfo
+from .models import Kindergarten, Kindergartenadditionalinfo, Comment
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.http import require_GET
 from django.db.models import Min, Max, Q
 
@@ -66,6 +66,11 @@ def sign_up(request):
     return render(request, 'register.html', {
         'form': form,
     })
+
+
+def log_out(request):
+    logout(request)
+    return redirect('/')
 
 
 @require_GET
@@ -158,4 +163,9 @@ def search(request):
 def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
     kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
-    return render(request, 'kindergarten.html',{'kindergarten': kindergarten, 'kindergarten_info' : kindergarten_info})
+    comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related('parent').all()
+    return render(request, 'kindergarten.html',
+                  {'kindergarten': kindergarten,
+                   'kindergarten_info': kindergarten_info,
+                   'comments_with_parent': comments_with_parent
+                   })

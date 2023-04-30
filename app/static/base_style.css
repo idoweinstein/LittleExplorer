@@ -1,0 +1,97 @@
+.header {
+   background-color: #cdeff0;
+   height: 130px;
+   background-position: top;
+ }
+ img {
+   float: left;
+   width: 120px;
+   height: 120px;
+   margin-top: 5px; 
+   margin-left: 10px; 
+ }
+ 
+ h1 {
+   font-family: "Georgia", Georgia, serif;
+   font-size: 2em;
+   position: relative;
+   text-align: center;
+ }
+ 
+ 
+ h2 {
+   position: relative;
+   font-family: "Georgia", Georgia, serif;
+   font-size: 1.2em;
+   text-align: center;
+   margin-top: 2px;
+ }
+ 
+ .login_signup {
+   font-family: "Georgia", Georgia, serif;
+   font-size: 0.9em;
+   background-color:  #9fb8b9;
+   border: none;
+   color: black;
+   position: relative;
+   text-align: right;
+   margin-top: 5px; 
+   margin-right: 5px;
+ }
+ 
+ .radio_inline {
+   font-family: "Georgia", Georgia, serif;
+   font-size: 0.9em;
+   position: relative;
+   text-align: center;
+   margin-top: 20px;
+   margin-left: 160px;  
+ }
+ 
+ .search_input {
+   position: relative;
+   text-align: center;
+   margin-top: 5px; 
+   margin-left: 130px; 
+ }
+
+body {
+   background-color: #9fb8b9;
+   height: 130px;
+}
+
+h3 {
+   font-family: "Georgia", Georgia, serif;
+   font-size: 1.5em;
+   position: relative;
+   text-align: center;
+   margin-left: 130px;
+}
+
+.mb-3 {
+   text-align: center;
+   font-family: "Georgia", Georgia, serif;
+   font-size: 1em;
+   position: relative;
+   margin-top: 20px;
+   margin-left: 160px; 
+}
+
+.body_button{
+   font-family: "Georgia", Georgia, serif;
+   font-size: 1em;
+   background-color:  #cdeff0;
+   border: none;
+   color: black;
+   margin-top: 30px;
+   margin-right: 540px; 
+}
+
+.register{
+   ext-align: center;
+   text-align: center;
+   font-family: "Georgia", Georgia, serif;
+   font-size: 1em;
+   position: relative;
+   margin-left: 160px;
+}

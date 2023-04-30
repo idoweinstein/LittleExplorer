@@ -44,6 +44,27 @@
         {% endif %}
         </p>
 
+        {% if comments_with_parent %}
+        <p>תגובות של הורים על הגן:
+            <table>
+                    <tr>
+                        <th>שם</th>
+                        <th>ציון</th>
+                        <th>תאריך</th>
+                        <th>תגובה</th>
+                    </tr>
+                    {% for comment in comments_with_parent %}
+                    <tr>
+                        <td> {{ comment.parent.get_full_name }} </td>
+                        <td> {{ comment.grade }} </td>
+                        <td> {{ comment.date }} </td>
+                        <td> {{ comment.comment }} </td>
+                    </tr>
+                    {% endfor %}
+            </table>
+        </p>
+        {% endif %}
+
         <button onclick="location.href = '/'">חזרה לדף הבית</button>
 
     </body>
