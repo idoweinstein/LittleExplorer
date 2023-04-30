@@ -71,7 +71,7 @@
                     <td> {{ result.capacity }} </td>
                     <td> {{ result.display_ratio_children_teachers }} </td>
                     <td> {{ result.get_open_time_display }} - {{ result.get_close_time_display }} </td>
-                    <td>{% if results.has_parking %} יש {% else %} אין {% endif %} </td>
+                    <td>{% if result.has_parking %} יש {% else %} אין {% endif %} </td>
                 </tr>
                 {% endfor %}
             </table>
