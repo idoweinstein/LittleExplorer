@@ -118,8 +118,12 @@ def search(request):
         filters.append(Q(name__contains=value))
     else:
         # method == "location"
-        coords = get_coordinates(value)
-        point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
+        regional_search = value in Kindergarten.objects.order_by('region').values_list('region', flat=True).distinct()
+        if regional_search:
+            filters.append(Q(region=value))
+        else:
+            coords = get_coordinates(value)
+            point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
 
     for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", min_age_value),
                        "max_age": ("max_age__lte", max_age_value),
@@ -135,7 +139,7 @@ def search(request):
     else:
         kindergartens = Kindergarten.objects.all()
 
-    if method == "location":
+    if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
 
     kindergartens = kindergartens[:10]
