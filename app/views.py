@@ -82,7 +82,7 @@ def search(request):
     if method not in ["name", "location"]:
         method = "name"
 
-    # TODO: VALIDATE INPUTS!!!
+    # TODO: VALIDATE INPUTS!!! (Can be done after version 0)
     l = Kindergarten.objects.all().aggregate(
         Min('min_age'), Max('min_age'),
         Min('max_age'), Max('max_age'),

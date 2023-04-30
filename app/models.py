@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
-# TODO: document we require `sudo apt-get install gdal-bin`
 from django.contrib.gis.db.models import PointField
 
 

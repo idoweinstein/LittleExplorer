@@ -1,7 +1,3 @@
-### http://dev.virtualearth.net/REST/v1/Locations?query={locationQuery}&includeNeighborhood={includeNeighborhood}&include={includeValue}&maxResults={maxResults}&key={BingMapsKey}
-import requests  # TODO: document `pip3 install requests`` is necessary
-
-
 BING_KEY = "Ao8tSGMxgBHd33tp113veePtzRiaEDhNsNLcDPyKnFzjw1_2AjogMbkwANCcK_dE"
 def get_coordinates(location):
     """
