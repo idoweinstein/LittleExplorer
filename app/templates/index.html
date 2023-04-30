@@ -2,13 +2,13 @@
 {% block content %}
 <body>
     <div class="search">
-    <form>
+    <form method="GET" action="/search">
        <div class="radio_inline">
-          <input type="radio" name="name" onclick="checkRadio(name)" checked>חיפוש לפי שם
-          <input type="radio" name="city" onclick="checkRadio(name)">חיפוש לפי עיר
+          <input type="radio" name="method" value="name" checked>חיפוש לפי שם
+          <input type="radio" name="method" value="location">חיפוש לפי מיקום
        </div>
        <div class="search_input">
-          <input type="text" id="Search" name="Search" minlength="2" size="30">
+          <input type="text" id="value" name="value" minlength="2" size="30">
        </div>
     </form>
  </div>

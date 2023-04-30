@@ -147,8 +147,6 @@ def search(request):
     if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
 
-    kindergartens = kindergartens[:10]
-
     context = {'results': kindergartens,
                'value': Value(value),
                'min_age': RangedValue(min_age_value, min_age_min, min_age_max),
