@@ -1,0 +1,47 @@
+.search_button{
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    background-color:  #52bdb7;
+    border: none;
+    color: black;
+    text-align: center;
+ }
+
+ .search_input {
+    position: relative;
+    text-align: center;
+    margin-top: 5px; 
+    margin-left: 130px; 
+  }
+
+  .search_text{
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    border: none;
+  }
+
+  .radio_inline {
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    position: relative;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 160px;
+  }
+  
+  /* .header{
+    background-color: #0b9ba0;
+  }
+
+  body{
+    background-color: #c4fffc;
+  } */
+
+  .index_photo {
+    position: absolute;
+    margin-right: 480px;
+    margin-top: 50px;
+    width: 200px;
+    height: 200px;
+    
+  }

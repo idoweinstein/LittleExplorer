@@ -1,0 +1,24 @@
+.register_button{
+    margin-top: 20px;
+    margin-right: 300px;
+ }
+ 
+ .register{
+    text-align: center;
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    position: relative;
+    margin-left: 160px;
+ }
+
+ h3 {
+    margin-right: 130px;
+ }
+
+ .header{
+    background-color: #0b9ba0;
+  }
+
+  body{
+    background-color: #c4fffc;
+  }

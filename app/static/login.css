@@ -1,0 +1,42 @@
+.login_button{
+    position: absolute;
+    margin-top: 30px;
+    margin-right: 540px;
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    background-color:  #0b9ba0;
+    border: none;
+    color: black;
+ }
+
+ .mb-3 {
+    text-align: center;
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    position: relative;
+    margin-top: 20px;
+    margin-left: 160px; 
+ }
+
+  .header{
+    background-color: #0b9ba0;
+  }
+
+  body{
+    background-color: #c4fffc;
+  }
+
+  .form_control{
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    border: none;
+  }
+
+  .login_photo {
+    position: absolute;
+    margin-right: 450px;
+    margin-top: 70px;
+    width: 200px;
+    height: 200px;
+    
+  }

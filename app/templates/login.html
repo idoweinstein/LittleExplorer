@@ -2,24 +2,28 @@
 
 {% block content %}
 <body>
-  <h3>הרשמה</h3>
-  <form action="" method=POST>
-    {% csrf_token %}
+  <div class="login">
+    <link rel="stylesheet" href="..\static\login.css">
+    <h3>כניסה למערכת</h3>
+    <form action="" method=POST>
+      {% csrf_token %}
 
-  <form>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">אימייל</label>
-      <input type="text" class="form-control" name="username" aria-describedby="emailHelp" size="30">
-    </div>
+    <form>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">אימייל</label>
+        <input type="text" class="form_control" name="username" aria-describedby="emailHelp" size="30">
+      </div>
 
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">סיסמא</label>
-      <input type="password" class="form-control" name="password" size="30">
-    </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">סיסמא</label>
+        <input type="password" class="form_control" name="password" size="30">
+      </div>
+      
+      <input type="submit" class="login_button" value="היכנס/י" class="btn btn-secondary">
     
-    <input type="submit" class="body_button" value="היכנס/י" class="btn btn-secondary">
-  
-  </form>
+    </form>
+    <img src="..\static\imges\10.png" alt="photo" class="login_photo"/>
+  </div>
 </body>
 
 {% endblock %}

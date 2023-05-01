@@ -3,9 +3,10 @@
 {% block content %}
 <body>
 <div class="register">
+    <link rel="stylesheet" href="..\static\register.css">
     <form method="POST" novalidate>
         {% csrf_token %}
-        <h3>Sign Up</h3>
+        <h3>הרשמה</h3>
 
         {% for field in form %}
         <p>
@@ -20,7 +21,7 @@
         </p>
         {% endfor %}
 
-        <input type="submit" class="body_button" value="הרשמה"/>
+        <input type="submit" class="body_button" class="register_button" value="הרשמה"/>
     </form>
 </div>
 </body>
