@@ -1,3 +1,5 @@
+import requests
+
 BING_KEY = "Ao8tSGMxgBHd33tp113veePtzRiaEDhNsNLcDPyKnFzjw1_2AjogMbkwANCcK_dE"
 def get_coordinates(location):
     """

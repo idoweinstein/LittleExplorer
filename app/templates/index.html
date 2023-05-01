@@ -5,11 +5,11 @@
     <div class="search">
     <form method="GET" action="/search">
        <div class="radio_inline">
-          <input type="radio" name="search_type" onclick="checkRadio(name)" checked>חיפוש לפי שם
-          <input type="radio" name="search_type" onclick="checkRadio(name)">חיפוש לפי עיר
+           <input type="radio" name="method" value="name" id="name" checked><label for="name">חיפוש לפי שם</label>
+          <input type="radio" name="method" value="location" id="location"><label for="location">חיפוש לפי עיר/כתובת</label>
        </div>
        <div class="search_input">
-          <input type="text" class="search_text" id="Search" name="Search" minlength="2" size="30">
+          <input type="text" class="search_text" id="Search" name="value" minlength="2" size="30">
           <input type="submit" class="search_button" value="חיפוש">
        </div>
     </form>

@@ -6,7 +6,7 @@
       <img src="..\static\imges\logo.png" class="logo" alt="logo" />
       {% if user.is_authenticated %}
        ברוך הבא {{ user.first_name }} {{ user.last_name }}
-       <button class="login_signup" onclick="location.href = '/logout'">logout/י</button>
+       <button class="login_signup" onclick="location.href = '/logout'">התנתק/י</button>
        {% else %}
          <button class="login_signup" onclick="location.href = '/signup'">הרשמה</button>
          <button class="login_signup" onclick="location.href = '/login'">היכנס/י</button>
