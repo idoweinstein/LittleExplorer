@@ -6,9 +6,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.http import require_GET
 from django.db.models import Min, Max, Q
 
-from django.contrib.gis.measure import D
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import Point
+
+# TODO: restore after GDAL Installation
+#from django.contrib.gis.measure import D
+#from django.contrib.gis.db.models.functions import Distance
+#from django.contrib.gis.geos import Point
 
 from .forms import RegisterUserForm
 from .geolocation import get_coordinates
@@ -17,16 +19,17 @@ import operator
 from functools import reduce
 from datetime import time
 
-class Value:
-    def __init__(self, value):
-        self.value = value
-
-
-class RangedValue(Value):
-    def __init__(self, value, min, max):
-        super().__init__(value)
-        self.min = min
-        self.max = max
+# TODO: restore after GDAL Installation
+#class Value:
+#    def __init__(self, value):
+#        self.value = value
+#
+#
+#class RangedValue(Value):
+#    def __init__(self, value, min, max):
+#        super().__init__(value)
+#        self.min = min
+#        self.max = max
 
 
 def index(request):
@@ -72,7 +75,8 @@ def log_out(request):
     logout(request)
     return redirect('/')
 
-
+# TODO: restore after GDAL Installation
+"""
 @require_GET
 def search(request):
     parameters = request.GET
@@ -156,7 +160,7 @@ def search(request):
                'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"), max_close.isoformat("minutes"))}
 
     return render(request, 'search.html', context)
-
+"""
 
 def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)

@@ -72,7 +72,9 @@ WSGI_APPLICATION = 'LittleExplorerApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        # TODO: restore after GDAL Installation
+        #    'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'LittleExplorer',
         'USER': 'root',
         'PASSWORD': 'root',
