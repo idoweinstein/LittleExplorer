@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html dir="rtl">
 <head>
-<link rel="stylesheet" href="..\static\base.css">
+<link rel="stylesheet" href="..\static\base_style.css">
    <div class="header">
-      <img src="..\static\imges\logo.png" class="logo" alt="logo" />
+      <a href="http://127.0.0.1:8000/">
+         <img src="..\static\imges\logo.png" class="logo" alt="logo" />
+      </a>
       {% if user.is_authenticated %}
        ברוך הבא {{ user.first_name }} {{ user.last_name }}
        <button class="login_signup" onclick="location.href = '/logout'">התנתק/י</button>
@@ -11,7 +13,9 @@
          <button class="login_signup" onclick="location.href = '/signup'">הרשמה</button>
          <button class="login_signup" onclick="location.href = '/login'">היכנס/י</button>
        {% endif %}
-      <h1>LittleExplorer</h1>
+       <a href="http://127.0.0.1:8000/">
+         <h1>LittleExplorer</h1>
+       </a>
    </div>
 </head>
 

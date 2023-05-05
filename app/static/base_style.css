@@ -16,20 +16,24 @@
    font-size: 2em;
    position: relative;
    text-align: center;
+   color: black;
  }
+ a{
+  text-decoration:none;
+  }
  
  
  h2 {
    position: relative;
    font-family: "Georgia", Georgia, serif;
-   font-size: 1.2em;
+   font-size: 1.5em;
    text-align: center;
    margin-top: 2px;
  }
  
  .login_signup {
    font-family: "Georgia", Georgia, serif;
-   font-size: 0.9em;
+   font-size: 1em;
    background-color:  #c4fffc;
    border: none;
    color: black;
@@ -53,6 +57,29 @@ h3 {
    text-align: center;
    margin-left: 130px;
 }
+
+h4 {
+  font-family: "Georgia", Georgia, serif;
+  font-size: 1.1em;
+  position: relative;
+  text-align: center;
+  margin-left: 130px;
+}
+h5 {
+  font-family: "Georgia", Georgia, serif;
+  font-size: 0.9em;
+  position: relative;
+  text-align: center;
+  margin-left: 130px;
+}
+h6 {
+  font-family: "Georgia", Georgia, serif;
+  font-size: 0.9em;
+  position: relative;
+  text-align: right;
+  margin-right: 30px;
+}
+
 
 
 .body_button{
