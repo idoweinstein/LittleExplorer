@@ -1,0 +1,93 @@
+.header{
+    background-color: #0b9ba0;
+}
+
+body{
+background-color: #c4fffc;
+padding-bottom: 100px;
+}
+
+.filters{
+    float:right;
+    width:21%;
+    border: 3px solid #fff;
+}
+/* .advance_search{
+    border: 3px solid #fff;
+    background-color: #0b9ba0;
+    height: 30px;
+} */
+
+.label{
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    color: black;
+}
+.search_results{
+    float: left;
+    width:78%;
+}
+.kindergarten{
+    border: 3px solid #fff;
+    text-align: center;
+}
+.kindergarten_name{
+    border: 3px solid #fff;
+    background-color: #0b9ba0;
+}
+h4{
+    margin-right: 110px;
+}
+h6{
+    border: 3px solid #fff;
+    background-color: #0b9ba0;
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1.1em;
+    position: relative;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 3px;
+}
+.kindergarten_photo{
+    float: left;
+   width: 60px;
+   height:60px;
+   margin-left: 50px; 
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+.search_button{
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    background-color:  #52bdb7;
+    border: none;
+    color: black;
+    text-align: center;
+ }
+
+ .search_input {
+    position: relative;
+    text-align: center;
+    margin-top: 5px; 
+    margin-left: 130px; 
+  }
+
+  .search_text{
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    border: none;
+  }
+
+  .radio_inline {
+    font-family: "Georgia", Georgia, serif;
+    font-size: 1em;
+    position: relative;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 160px;
+  }
+  
