@@ -43,6 +43,12 @@
         {% endif %}
         </p>
 
+        {% if user.is_authenticated %}
+        <br><button onclick="location.href = '/comment'">הוספת תגובה</button>
+        {% else %}
+        <br>עדיין לא רשום לאתר? הירשם ותוכל להוסיף תגובות על הגן!
+        {% endif %}
+
         {% if comments_with_parent %}
         <p>תגובות של הורים על הגן:
             <table>

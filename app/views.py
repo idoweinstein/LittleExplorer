@@ -10,12 +10,12 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
-from .forms import RegisterUserForm
+from .forms import RegisterUserForm, CommentForm
 from .geolocation import get_coordinates
 
 import operator
 from functools import reduce
-from datetime import time
+from datetime import time, date
 
 class Value:
     def __init__(self, value):
@@ -167,3 +167,23 @@ def get_kindergarten_details(request, kindergarten_id):
                    'kindergarten_info': kindergarten_info,
                    'comments_with_parent': comments_with_parent
                    })
+
+
+def add_comment(request):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.date = date.today()
+            comment.parent = request.user.id
+            #comment.kindergarten = ?????
+            comment.save()
+
+            #we want to show a response to the user
+            return redirect('/')
+    else:
+        form = CommentForm()
+
+    return render(request, 'comment.html', {
+        'form': form,
+    })

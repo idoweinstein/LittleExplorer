@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from .models import Parent
+from .models import Parent, Comment
 from django import forms
 
 
@@ -45,3 +45,16 @@ class RegisterUserForm(UserCreationForm):
         self.fields['work_region'].label = "עיר עבודה"
         self.fields['password1'].label = "סיסמה"
         self.fields['password2'].label = "חזור על הסיסמה"
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment', 'grade']
+        widgets = {
+            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50})
+        }
+        labels = {
+            'comment': 'תגובה',
+            'grade': 'ציון- (1 - גרוע מאוד, 5 - מצוין) '
+        }
