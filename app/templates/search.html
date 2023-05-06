@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-
 {% block content %}
+
 <!--
     TODO: find a better place for this script tag
 -->
@@ -22,60 +22,58 @@
         }
     }
 </script>
-<h1>
-    תוצאות חיפוש
-</h1>
-<table>
-    <tr>
-        <td>
-            <form method="GET" action="/search">
-                <input type="text" name="value" value="{{ value.value }}" placeholder="Search...">
-                <div>
-                    <input type="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
-                    <label for="min_age">גיל מינימלי: <output id="min_age_value"></output></label>
-                </div>
-                <div>
-                    <input type="range" id="max_age" name="max_age" min="{{ max_age.min }}" max="{{ max_age.max }}" value="{{ max_age.value }}" step="1">
-                    
-                    <label for="max_age">גיל מקסימלי: <output id="max_age_value"></output></label>
-                </div>
-                <div>
-                    <input type="range" id="capacity" name="capacity" min="{{ capacity.min }}" max="{{ capacity.max }}" value="{{ capacity.value }}" step="1">
-                    
-                    <label for="max_age">כמות ילדים מירבית: <output id="capacity_value"></output></label>
-                </div>
-                <div>
-                    שעות פעילות: החל מהשעה <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}"> 
-                    ועד השעה <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
-                </div>
-                <button name="method" value="name" type="submit">Search by name</button>
-                <button name="method" value="location" type="submit">Search by location</button>
-            </form>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <th>שם</th>
-                    <th>כתובת</th>
-                    <th>גיל</th>
-                    <th>כמות ילדים מירבית</th>
-                    <th>יחס ילדים:גננות נוכחי</th>
-                    <th>שעות פעילות</th>
-                    <th>חניה</th>
-                </tr>
-                {% for result in results %}
-                <tr>
-                    <td> <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">{{ result.name }}</a> </td>
-                    <td> {{ result.address }}, {{ result.region }} </td>
-                    <td> {{ result.get_min_age_display }} עד {{ result.get_max_age_display }} </td>
-                    <td> {{ result.capacity }} </td>
-                    <td> {{ result.display_ratio_children_teachers }} </td>
-                    <td> {{ result.get_open_time_display }} - {{ result.get_close_time_display }} </td>
-                    <td>{% if result.has_parking %} יש {% else %} אין {% endif %} </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </td>
-    </tr>
-</table>
+<body>
+    <form method="GET" action="/search">
+        <div class="radio_inline">
+            <input type="radio" name="method" value="name" id="name" checked><label for="name">חיפוש לפי שם</label>
+           <input type="radio" name="method" value="location" id="location"><label for="location">חיפוש לפי עיר/כתובת</label>
+        </div>
+        <div class="search_input">
+           <input type="text" class="search_text" value="{{ value.value }}" id="Search" name="value" minlength="2" size="30" placeholder="Search...">
+           <input type="submit" class="search_button" value="חיפוש">
+        </div>
+     </form>
+    <link rel="stylesheet" href="..\static\search.css">
+    <h3>תוצאות חיפוש</h3>
+    <div class="filters"> 
+        <div class="advance_search">
+            <h6>חיפוש מתקדם</h4>
+        </div>
+        <form method="GET" action="/search">
+            <h5>
+                <input type="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
+                <label for="min_age">גיל מינימלי: <output id="min_age_value"></output></label>
+            </h5>
+            <h5>
+                <input type="range" id="max_age" name="max_age" min="{{ max_age.min }}" max="{{ max_age.max }}" value="{{ max_age.value }}" step="1">
+                
+                <label for="max_age">גיל מקסימלי: <output id="max_age_value"></output></label>
+            </h5>
+            <h5 >
+                <input type="range" id="capacity" name="capacity" min="{{ capacity.min }}" max="{{ capacity.max }}" value="{{ capacity.value }}" step="1">
+                
+                <label for="max_age">כמות ילדים מירבית: <output id="capacity_value"></output></label>
+            </h5>
+            <h5>
+                שעות פעילות: החל מהשעה <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}"> 
+                ועד השעה <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
+            </h5>
+        </form>
+    </div>
+    <div class="search_results">
+        {% for result in results %}
+        <div class="kindergarten">
+            <div class="kindergarten_name">
+                <img src="..\static\imges\{{ forloop.counter }}.png" alt="photo" class="kindergarten_photo"/>
+                <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">
+                    <h4>{{ result.name }}</h4>
+                </a>
+            </div>
+            <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
+            <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
 {% endblock content%}

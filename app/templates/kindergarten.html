@@ -1,77 +1,79 @@
-<!DOCTYPE html>
-<html dir="rtl">
-    <head>
-        <title>{{ kindergarten.name }} - פרטים</title>
-    </head>
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <link rel="stylesheet" href="..\static\kindergarten.css">
+    <h3>{{ kindergarten.name }}</h3>
 
-    <body>
-        <h1>{{ kindergarten.name }}</h1>
-
-        כתובת: {{ kindergarten.address }}, {{ kindergarten.region }}
-
-        {% if kindergarten_info.phone or kindergarten_info.mail %}
-        <p>מידע ליצירת קשר:
-            {% if kindergarten_info.phone %}
-            <br>טלפון: {{ kindergarten_info.phone }}
-            {% endif %}
-            {% if kindergarten_info.mail %}
-            <br>מייל: {{ kindergarten_info.mail }}
-            {% endif %}
-        </p>
-        {% endif %}
+    <div class="description">
         {% if kindergarten_info.description %}
-        <br>תיאור קצר על הגן:
-        <br><span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
+        <h4>
+            <br><span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
+        </h4>
         {% endif %}
 
-        <p>
-            <br> הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}}
-            <br>הגיל המקסימלי של ילדים בגן זה הוא {{ kindergarten.get_max_age_display}}
-            <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
-            <br>וכמו כן, מובטח שיש יחס של  {{ kindergarten.display_ratio_children_teachers }} ילדים לגננות במקרה שבו הגן מלא!
-        </p>
-
-        <p>שעות הפתיחה של הגן:
-            <br>שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
-            <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
-        </p>
-
-        <p>{% if kindergarten.has_parking == 1 %}
-            לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
-        {% else %}
-            לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
-        {% endif %}
-        </p>
+    </div>
+    <div class= "details">
+        <div class="contact_details">
+            <h5>
+                כתובת: {{ kindergarten.address }}, {{ kindergarten.region }}
+            </h5>
+            {% if kindergarten_info.phone or kindergarten_info.mail %}
+            <h5>מידע ליצירת קשר:
+                {% if kindergarten_info.phone %}
+                <br>טלפון: {{ kindergarten_info.phone }}
+                {% endif %}
+                {% if kindergarten_info.mail %}
+                <br>מייל: {{ kindergarten_info.mail }}
+                {% endif %}
+            </h5>
+            {% endif %}
+            <h5>שעות הפתיחה של הגן:
+                <br>שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
+                <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
+            </h5>
+        </div>
+        <div class="kindergarten_details">
+            <h5> הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}} </h5>
+            <h5>הגיל המקסימלי של ילדים בגן זה הוא {{ kindergarten.get_max_age_display}} </h5>
+            <h5>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }} </h5>
+            <h5>וכמו כן, מובטח שיש יחס של  {{ kindergarten.display_ratio_children_teachers }} ילדים לגננות במקרה שבו הגן מלא! </h5>
+            <h5>{% if kindergarten.has_parking == 1 %}
+                לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
+            {% else %}
+                לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
+            {% endif %}
+            </h5>
+        </div>
+    </div>
 
         {% if user.is_authenticated %}
         <br><button onclick="location.href = '/comment'">הוספת תגובה</button>
         {% else %}
         <br>עדיין לא רשום לאתר? הירשם ותוכל להוסיף תגובות על הגן!
         {% endif %}
-
+    <p>
         {% if comments_with_parent %}
-        <p>תגובות של הורים על הגן:
-            <table>
-                    <tr>
-                        <th>שם</th>
-                        <th>ציון</th>
-                        <th>תאריך</th>
-                        <th>תגובה</th>
-                    </tr>
-                    {% for comment in comments_with_parent %}
-                    <tr>
-                        <td> {{ comment.parent.get_full_name }} </td>
-                        <td> {{ comment.grade }} </td>
-                        <td> {{ comment.date }} </td>
-                        <td> {{ comment.comment }} </td>
-                    </tr>
-                    {% endfor %}
-            </table>
-        </p>
+        <h6>תגובות של הורים על הגן:  </h6>
+        <h6>
+            {% for comment in comments_with_parent %}
+            <div class="grade">
+            {{ comment.grade }} כוכבים
+            </div>
+            <div class="name">
+            {{ comment.parent.get_full_name }}
+            </div>
+            <div class="comment">
+                {{ comment.comment }}
+            </div>
+            <div class="date">
+                {{ comment.date }}
+            </div>
+            {% endfor %}
+        </h6>
         {% endif %}
+    </p>
 
-        <button onclick="location.href = '/'">חזרה לדף הבית</button>
 
-    </body>
-</html>
+</body>
+{% endblock content%}
 
