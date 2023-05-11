@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext_lazy as _
 
 from django.contrib.gis.db.models import PointField
@@ -93,7 +94,7 @@ class Comment(models.Model):
     kindergarten = models.ForeignKey(Kindergarten, models.DO_NOTHING)
     parent = models.ForeignKey(Parent, models.DO_NOTHING)
     comment = models.CharField(max_length=1500)
-    grade = models.PositiveIntegerField(blank=True, null=True)
+    grade = models.PositiveIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     date = models.DateField()
 
     class Meta:

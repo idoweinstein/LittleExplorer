@@ -169,17 +169,17 @@ def get_kindergarten_details(request, kindergarten_id):
                    })
 
 
-def add_comment(request):
+def add_comment(request, kindergarten_id):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.date = date.today()
-            comment.parent = request.user.id
-            #comment.kindergarten = ?????
+            comment.parent = request.user
+            comment.kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
             comment.save()
 
-            #we want to show a response to the user
+            #TODO: we want to show a response to the user
             return redirect('/')
     else:
         form = CommentForm()

@@ -47,7 +47,7 @@
     </div>
 
         {% if user.is_authenticated %}
-        <br><button onclick="location.href = '/comment'">הוספת תגובה</button>
+        <br><button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">הוספת תגובה</button>
         {% else %}
         <br>עדיין לא רשום לאתר? הירשם ותוכל להוסיף תגובות על הגן!
         {% endif %}

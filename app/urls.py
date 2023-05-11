@@ -8,5 +8,5 @@ urlpatterns = [
     path('logout/', views.log_out, name='logout'),
     path('kindergarten/<int:kindergarten_id>', views.get_kindergarten_details, name='kindergartenPage'),
     path('search/', views.search, name='search'),
-    path('comment/', views.add_comment, name='comment')
+    path('comment/<int:kindergarten_id>', views.add_comment, name='comment')
 ]
