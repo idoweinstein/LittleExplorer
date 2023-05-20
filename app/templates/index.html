@@ -1,8 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-    <link rel="stylesheet" href="..\static\index_style.css">
-    <div class="search">
+   <div class="d-flex justify-content-center" style="margin-top: 110px;">
+      <form method="GET" action="/search">
+         <input type="radio" id="name" checked><label for="name">חיפוש לפי שם</label>
+         <input type="radio" id="location"><label for="location">חיפוש לפי מקום</label>
+         <div class="input-group rounded">
+            <form class="form-inline">
+               <input class="form-control mr-sm-2" type="search" aria-label="Search">
+               <button class="btn btn-outline-dark btn-sm" type="submit">חיפוש</button>
+            </form>
+         </div>
+      </form>
+   </div>
+
+   <div class="d-flex justify-content-center" style="margin-top: 50px;">
+      <img src="..\static\imges\11.png" width="250" height="250" alt="photo" class="index_photo"/>
+   </div>
+
+      
+      <!-- <div class="container">
+         <div class="form-outline">
+           <input id="search-input" type="search" id="form1" class="form-control" />
+         </div>
+         <button type="button" class="btn btn-outline-dark btn-sm">
+           חיפוש
+         </button>
+      </div> -->
+    
+
+
+
+    <!-- <link rel="stylesheet" href="..\static\index_style.css"> -->
+    <!-- <div class="search">
     <form method="GET" action="/search">
        <div class="radio_inline">
            <input type="radio" name="method" value="name" id="name" checked><label for="name">חיפוש לפי שם</label>
@@ -14,6 +44,6 @@
        </div>
     </form>
     <img src="..\static\imges\11.png" alt="photo" class="index_photo"/>
- </div>
+ </div> -->
 </body>
 {% endblock content%}
