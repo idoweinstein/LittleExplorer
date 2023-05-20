@@ -1,5 +1,5 @@
 .header {
-   background-color: #0b9ba0;
+   background-color: #AEDFFF;
    height: 130px;
    background-position: top;
  }
@@ -29,12 +29,12 @@
    font-size: 1.5em;
    text-align: center;
    margin-top: 2px;
- }
+ }c4fffc
  
  .login_signup {
    font-family: "Georgia", Georgia, serif;
    font-size: 1em;
-   background-color:  #c4fffc;
+   background-color: #AEDFFF;
    border: none;
    color: black;
    position: relative;
@@ -46,7 +46,7 @@
  
 
 .body {
-   background-color: #c4fffc;
+   background-color: white;
    height: 130px;
 }
 
