@@ -4,8 +4,8 @@
     margin-right: 540px;
     font-family: "Georgia", Georgia, serif;
     font-size: 1em;
-    background-color:  #0b9ba0;
-    border: none;
+    background-color:  white;
+    border: #FDCDE8;
     color: black;
  }
 
@@ -19,17 +19,16 @@
  }
 
   .header{
-    background-color: #0b9ba0;
+    background-color: #AEDFFF;
   }
 
   body{
-    background-color: #c4fffc;
+    background-color: white;
   }
 
   .form_control{
     font-family: "Georgia", Georgia, serif;
     font-size: 1em;
-    border: none;
   }
 
   .login_photo {
@@ -40,3 +39,5 @@
     height: 200px;
     
   }
+
+  
