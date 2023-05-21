@@ -97,13 +97,23 @@ class Parent(AbstractUser):
         managed = False
         db_table = 'parent'
 
+    def is_parent(self):
+        if self.user_type == "parent":
+            return True
+        return False
+
+    def is_teacher(self):
+        if self.user_type == "teacher":
+            return True
+        return False
+
 
 class Comment(models.Model):
     comment_id = models.AutoField(primary_key=True)
     kindergarten = models.ForeignKey(Kindergarten, models.DO_NOTHING)
     parent = models.ForeignKey(Parent, models.DO_NOTHING)
     comment = models.CharField(max_length=1500)
-    grade = models.PositiveIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    grade = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     date = models.DateField()
 
     class Meta:

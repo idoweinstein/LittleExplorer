@@ -9,6 +9,9 @@
       {% if user.is_authenticated %}
        ברוך הבא {{ user.first_name }} {{ user.last_name }}
        <button class="login_signup" onclick="location.href = '/logout'">התנתק/י</button>
+            {% if user.is_teacher %}
+            <button class="login_signup" onclick="location.href = '/add_kindergarten'">הוסף גן</button>
+            {% endif %}
        {% else %}
          <button class="login_signup" onclick="location.href = '/parent_sign_up'">הרשמה כהורה</button>
          <button class="login_signup" onclick="location.href = '/teacher_sign_up'">הרשמה כגננת</button>
