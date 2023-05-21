@@ -10,7 +10,8 @@
        ברוך הבא {{ user.first_name }} {{ user.last_name }}
        <button class="login_signup" onclick="location.href = '/logout'">התנתק/י</button>
        {% else %}
-         <button class="login_signup" onclick="location.href = '/signup'">הרשמה</button>
+         <button class="login_signup" onclick="location.href = '/parent_sign_up'">הרשמה כהורה</button>
+         <button class="login_signup" onclick="location.href = '/teacher_sign_up'">הרשמה כגננת</button>
          <button class="login_signup" onclick="location.href = '/login'">היכנס/י</button>
        {% endif %}
        <a href="http://127.0.0.1:8000/">

@@ -4,6 +4,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext_lazy as _
 
 from django.contrib.gis.db.models import PointField
+from .geolocation import get_coordinates
+from django.contrib.gis.geos import Point
 
 
 # Create your models here.
@@ -57,6 +59,12 @@ class Kindergarten(models.Model):
     def display_ratio_children_teachers(self):
         return str(self.capacity) + ' : ' + str(self.num_of_teachers)
 
+    def set_geolocation(self):
+        location = f"{self.address} {self.region}"
+        coordinates = get_coordinates(location)
+        pnt = Point(coordinates[1], coordinates[0], srid=4326)
+        self.geolocation = pnt
+
 
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
@@ -79,6 +87,7 @@ class Parent(AbstractUser):
     home_region = models.CharField(max_length=100, blank=True, null=True)
     work_address = models.CharField(max_length=1000, blank=True, null=True)
     work_region = models.CharField(max_length=100, blank=True, null=True)
+    user_type = models.CharField(max_length=100, blank=True, null=True)
 
     USERNAME_FIELD = "email"
 

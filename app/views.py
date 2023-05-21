@@ -10,12 +10,14 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
-from .forms import RegisterUserForm, CommentForm
+from .forms import RegisterParentForm, CommentForm, RegisterTeacherForm, KindergartenForm, \
+    KindergartenAdditionalInfoForm
 from .geolocation import get_coordinates
 
 import operator
 from functools import reduce
 from datetime import time, date
+
 
 class Value:
     def __init__(self, value):
@@ -49,9 +51,9 @@ def log_in(request):
             return redirect('login')
 
 
-def sign_up(request):
+def sign_up(request, user_type):
     if request.method == "POST":
-        form = RegisterUserForm(request.POST)
+        form = RegisterParentForm(request.POST) if user_type == "parent" else RegisterTeacherForm(request.POST)
         if form.is_valid():
             form.save()
             email = form.cleaned_data['email']
@@ -61,11 +63,19 @@ def sign_up(request):
             messages.success(request, ("Registration Successful!"))
             return redirect('/')
     else:
-        form = RegisterUserForm()
+        form = RegisterParentForm() if user_type == "parent" else RegisterTeacherForm()
 
     return render(request, 'register.html', {
         'form': form,
     })
+
+
+def parent_sign_up(request):
+    return sign_up(request, "parent")
+
+
+def teacher_sign_up(request):
+    return sign_up(request, "teacher")
 
 
 def log_out(request):
@@ -89,7 +99,8 @@ def search(request):
         Min('capacity'), Max('capacity'),
         Min('open_time'), Max('open_time'),
         Min('close_time'), Max('close_time'))
-    (min_age_min, min_age_max, max_age_min, max_age_max, min_capacity, max_capacity, min_open, max_open, min_close, max_close) = (
+    (min_age_min, min_age_max, max_age_min, max_age_max, min_capacity, max_capacity, min_open, max_open, min_close,
+     max_close) = (
         int(l['min_age__min']), int(l['min_age__max']), int(l['max_age__min']), int(l['max_age__max']),
         int(l['capacity__min']), int(l['capacity__max']),
         l['open_time__min'], l['open_time__max'], l['close_time__min'], l['close_time__max']
@@ -131,11 +142,11 @@ def search(request):
             point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
 
     for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", min_age_value),
-                       "max_age": ("max_age__lte", max_age_value),
-                       "capacity": ("capacity__lte", capacity_value),
-                       "open_time": ("open_time__lte", open_value),
-                       "close_time": ("close_time__gte",  close_value)
-                    }.items():
+                                        "max_age": ("max_age__lte", max_age_value),
+                                        "capacity": ("capacity__lte", capacity_value),
+                                        "open_time": ("open_time__lte", open_value),
+                                        "close_time": ("close_time__gte", close_value)
+                                        }.items():
         if parameters.get(key):
             filters.append(Q(**{attr_key: attr_value}))
 
@@ -152,8 +163,10 @@ def search(request):
                'min_age': RangedValue(min_age_value, min_age_min, min_age_max),
                'max_age': RangedValue(max_age_value, max_age_min, max_age_max),
                'capacity': RangedValue(capacity_value, min_capacity, max_capacity),
-               'open_time': RangedValue(open_value.isoformat("minutes"), min_open.isoformat("minutes"), max_open.isoformat("minutes")),
-               'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"), max_close.isoformat("minutes"))}
+               'open_time': RangedValue(open_value.isoformat("minutes"), min_open.isoformat("minutes"),
+                                        max_open.isoformat("minutes")),
+               'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"),
+                                         max_close.isoformat("minutes"))}
 
     return render(request, 'search.html', context)
 
@@ -161,7 +174,8 @@ def search(request):
 def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
     kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
-    comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related('parent').all()
+    comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related(
+        'parent').all()
     return render(request, 'kindergarten.html',
                   {'kindergarten': kindergarten,
                    'kindergarten_info': kindergarten_info,
@@ -179,11 +193,30 @@ def add_comment(request, kindergarten_id):
             comment.kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
             comment.save()
 
-            #TODO: we want to show a response to the user
+            # TODO: we want to show a response to the user
             return redirect('/')
     else:
         form = CommentForm()
 
     return render(request, 'comment.html', {
         'form': form,
+    })
+
+
+def add_kindergarten(request):
+    if request.method == "POST":
+        kindergarten_form = KindergartenForm(request.POST)
+        kindergarten_additional_info = KindergartenAdditionalInfoForm(request.POST)
+        if kindergarten_form.is_valid() and kindergarten_additional_info.is_valid():
+            kindergarten = kindergarten_form.save()
+            kindergarten_additional_info.save(kindergarten)
+            # TODO: we want to show a response to the user
+            return redirect('/')
+    else:
+        kindergarten_form = KindergartenForm()
+        kindergarten_additional_info = KindergartenAdditionalInfoForm()
+
+    return render(request, 'add_kindergarten.html', {
+        'kindergarten_form': kindergarten_form,
+        'kindergarten_additional_info': kindergarten_additional_info
     })

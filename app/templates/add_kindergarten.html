@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+<div class="register">
+    <link rel="stylesheet" href="..\static\register.css">
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        <h3>הוספת גן</h3>
+
+        {% for field in kindergarten_form %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </p>
+        {% endfor %}
+
+        {% for field in kindergarten_additional_info %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </p>
+        {% endfor %}
+
+        <input type="submit" value="שמירה">
+    </form>
+</div>
+</body>
+
+
+{% endblock content%}
