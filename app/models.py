@@ -11,6 +11,37 @@ from django.contrib.gis.geos import Point
 # Create your models here.
 
 
+class Parent(AbstractUser):
+    parent_id = models.AutoField(primary_key=True)
+    email = models.EmailField(_('email address'), unique=True)
+    password = models.CharField(max_length=16)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    home_address = models.CharField(max_length=1000, blank=True, null=True)
+    home_region = models.CharField(max_length=100, blank=True, null=True)
+    work_address = models.CharField(max_length=1000, blank=True, null=True)
+    work_region = models.CharField(max_length=100, blank=True, null=True)
+    user_type = models.CharField(max_length=100, blank=True, null=True)
+
+    USERNAME_FIELD = "email"
+
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        managed = False
+        db_table = 'parent'
+
+    def is_parent(self):
+        if self.user_type == "parent":
+            return True
+        return False
+
+    def is_teacher(self):
+        if self.user_type == "teacher":
+            return True
+        return False
+
+
 class Kindergarten(models.Model):
     kindergarten_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=45)
@@ -25,6 +56,7 @@ class Kindergarten(models.Model):
     close_time = models.TimeField()
     has_parking = models.PositiveIntegerField(blank=True, null=True)
     geolocation = PointField(blank=True, null=True, srid=4326)
+    teacher = models.ForeignKey(Parent, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -75,37 +107,6 @@ class Kindergartenadditionalinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'kindergartenadditionalinfo'
-
-
-class Parent(AbstractUser):
-    parent_id = models.AutoField(primary_key=True)
-    email = models.EmailField(_('email address'), unique=True)
-    password = models.CharField(max_length=16)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    home_address = models.CharField(max_length=1000, blank=True, null=True)
-    home_region = models.CharField(max_length=100, blank=True, null=True)
-    work_address = models.CharField(max_length=1000, blank=True, null=True)
-    work_region = models.CharField(max_length=100, blank=True, null=True)
-    user_type = models.CharField(max_length=100, blank=True, null=True)
-
-    USERNAME_FIELD = "email"
-
-    REQUIRED_FIELDS = []
-
-    class Meta:
-        managed = False
-        db_table = 'parent'
-
-    def is_parent(self):
-        if self.user_type == "parent":
-            return True
-        return False
-
-    def is_teacher(self):
-        if self.user_type == "teacher":
-            return True
-        return False
 
 
 class Comment(models.Model):

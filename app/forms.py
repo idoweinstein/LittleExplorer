@@ -97,19 +97,10 @@ class CommentForm(forms.ModelForm):
 
 class KindergartenForm(forms.ModelForm):
     class Meta:
-        open_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M:%S'))
-        close_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M:%S'))
         model = Kindergarten
         fields = ['name', 'address', 'region', 'min_age', 'max_age', 'capacity', 'kids_count', 'num_of_teachers',
                   'open_time',
                   'close_time', 'has_parking']
-
-    def save(self, commit=True):
-        kindergarten = super(KindergartenForm, self).save(commit=False)
-        kindergarten.set_geolocation()
-        if commit:
-            kindergarten.save()
-        return kindergarten
 
 
 class KindergartenAdditionalInfoForm(forms.ModelForm):

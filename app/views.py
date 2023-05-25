@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Kindergarten, Kindergartenadditionalinfo, Comment
+from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Parent
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -17,6 +17,9 @@ from .geolocation import get_coordinates
 import operator
 from functools import reduce
 from datetime import time, date
+
+from django.core.mail import send_mail
+import LittleExplorerApp.settings
 
 
 class Value:
@@ -206,17 +209,30 @@ def add_comment(request, kindergarten_id):
 def add_kindergarten(request):
     if request.method == "POST":
         kindergarten_form = KindergartenForm(request.POST)
-        kindergarten_additional_info = KindergartenAdditionalInfoForm(request.POST)
-        if kindergarten_form.is_valid() and kindergarten_additional_info.is_valid():
-            kindergarten = kindergarten_form.save()
-            kindergarten_additional_info.save(kindergarten)
+        kindergarten_additional_info_form = KindergartenAdditionalInfoForm(request.POST)
+        if kindergarten_form.is_valid() and kindergarten_additional_info_form.is_valid():
+            kindergarten = kindergarten_form.save(commit=False)
+            kindergarten.teacher_id = request.user.parent_id
+            kindergarten.set_geolocation()
+            kindergarten = kindergarten.save()
+            kindergarten_additional_info_form.save(kindergarten)
+
             # TODO: we want to show a response to the user
             return redirect('/')
     else:
         kindergarten_form = KindergartenForm()
-        kindergarten_additional_info = KindergartenAdditionalInfoForm()
+        kindergarten_additional_info_form = KindergartenAdditionalInfoForm()
 
     return render(request, 'add_kindergarten.html', {
         'kindergarten_form': kindergarten_form,
-        'kindergarten_additional_info': kindergarten_additional_info
+        'kindergarten_additional_info': kindergarten_additional_info_form
     })
+
+
+def send_email(request):
+    subject = 'welcome to GFG world'
+    message = f'Hi thank you for registering in geeksforgeeks.'
+    email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
+    recipient_list = ["danieljaffe@mail.tau.ac.il", ]
+    send_mail(subject, message, email_from, recipient_list)
+    return redirect('/')
