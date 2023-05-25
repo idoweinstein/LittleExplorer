@@ -2,36 +2,29 @@
 
 {% block content %}
 <body>
-<div class="register">
-    <link rel="stylesheet" href="..\static\register.css">
-    <form method="POST" novalidate>
-        {% csrf_token %}
-        <h3>הרשמה</h3>
-
-        {% for field in form %}
-        <div>
-            <div>
-                {{ field.label_tag }}
-            </div>
-            <div>
-                {{ field }}
-            </div>
-
-            {% if field.help_text %}
-            <small style="color: grey">{{ field.help_text }}</small>
-            {% endif %}
-
-            {% for error in field.errors %}
-            <div style="color: red">{{ error }}</div>
-            {% endfor %}
-
-            <br>
+    <div class="d-flex justify-content-center" dir="rtl">
+        <div  style="margin-top: 50px;">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                <h3>הרשמה</h3>
+                {% for field in form %}
+                <p>
+                    {{ field.label_tag }}<br>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+                </p>
+                {% endfor %}
+                <div class="form-group" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-outline-dark btn-sm">הרשמה</button>
+                </div>
+            </form>
         </div>
-        {% endfor %}
-
-        <input type="submit" class="body_button" class="register_button" value="הרשמה"/>
-    </form>
-</div>
+    </div>
 </body>
 
 
