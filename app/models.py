@@ -97,6 +97,11 @@ class Kindergarten(models.Model):
         pnt = Point(coordinates[1], coordinates[0], srid=4326)
         self.geolocation = pnt
 
+    def is_free(self):
+        if self.kids_count < self.capacity:
+            return True
+        return False
+
 
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)

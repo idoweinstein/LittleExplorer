@@ -229,10 +229,29 @@ def add_kindergarten(request):
     })
 
 
-def send_email(request):
-    subject = 'welcome to GFG world'
-    message = f'Hi thank you for registering in geeksforgeeks.'
-    email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
-    recipient_list = ["danieljaffe@mail.tau.ac.il", ]
-    send_mail(subject, message, email_from, recipient_list)
-    return redirect('/')
+def sign_up_kid_to_kindergarten(request, kindergarten_id):
+    if request.method == "POST":
+        kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
+        kindergarten_name = kindergarten.name  # get kindergarten name
+        subject = f"הרשמה חדשה עבור {kindergarten_name}"
+
+        parent_email = request.user.email
+        message = f"הוריו של {request.POST['first-name']} {request.POST['last-name']} רשמו אותו לגן" \
+                  f"\n{request.POST['first-name']} מתרגש מאוד להצטרף לגן והוא בן {request.POST['age-months']} חודשים" \
+                  f"\n{parent_email} ליצירת קשר עם ההורים ניתן לשלוח מייל לכתובת הבאה" \
+                  f"\n,בברכה" \
+                  f"\nLittleExplorer"
+
+        teacher_id = kindergarten.teacher_id
+        teacher = Parent.objects.get(parent_id=teacher_id)
+        recipient = [teacher.email]
+
+        email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
+
+        send_mail(subject, message, email_from, recipient)
+
+        kindergarten.kids_count = kindergarten.kids_count + 1
+        kindergarten.save()
+        return redirect('/')
+
+    return render(request, 'payment.html')
