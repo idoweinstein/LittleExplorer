@@ -50,7 +50,7 @@ class Kindergarten(models.Model):
     min_age = models.PositiveSmallIntegerField()
     max_age = models.PositiveSmallIntegerField()
     capacity = models.PositiveSmallIntegerField()
-    kids_count = models.PositiveSmallIntegerField(blank=True, null=True)
+    kids_count = models.PositiveSmallIntegerField()
     num_of_teachers = models.PositiveSmallIntegerField()
     open_time = models.TimeField()
     close_time = models.TimeField()
@@ -101,7 +101,7 @@ class Kindergarten(models.Model):
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
     phone = models.CharField(max_length=45, blank=True, null=True)
-    mail = models.CharField(max_length=45, blank=True, null=True)
+    mail = models.EmailField(max_length=45, blank=True, null=True)
     description = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
