@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Kindergarten, Kindergartenadditionalinfo, Comment
+from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Parent
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -10,13 +10,17 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
-from .forms import RegisterParentForm, CommentForm, RegisterTeacherForm, KindergartenForm, \
-    KindergartenAdditionalInfoForm, AddKindergartenForm, AddKindergartenAdditionalInfoForm
+from .forms import RegisterParentForm, CommentForm, RegisterTeacherForm, \
+    KindergartenForm, KindergartenAdditionalInfoForm, \
+    AddKindergartenForm, AddKindergartenAdditionalInfoForm
 from .geolocation import get_coordinates
 
 import operator
 from functools import reduce
 from datetime import time, date
+
+from django.core.mail import send_mail
+import LittleExplorerApp.settings
 
 
 class Value:
@@ -206,17 +210,49 @@ def add_comment(request, kindergarten_id):
 def add_kindergarten(request):
     if request.method == "POST":
         kindergarten_form = AddKindergartenForm(request.POST)
-        kindergarten_additional_info = AddKindergartenAdditionalInfoForm(request.POST)
-        if kindergarten_form.is_valid() and kindergarten_additional_info.is_valid():
-            kindergarten = kindergarten_form.save()
-            kindergarten_additional_info.save(kindergarten)
+        kindergarten_additional_info_form = AddKindergartenAdditionalInfoForm(request.POST)
+        if kindergarten_form.is_valid() and kindergarten_additional_info_form.is_valid():
+            kindergarten = kindergarten_form.save(commit=False)
+            kindergarten.teacher_id = request.user.parent_id
+            kindergarten.set_geolocation()
+            kindergarten = kindergarten.save()
+            kindergarten_additional_info_form.save(kindergarten)
+
             # TODO: we want to show a response to the user
             return redirect('/')
     else:
         kindergarten_form = AddKindergartenForm()
-        kindergarten_additional_info = AddKindergartenAdditionalInfoForm()
+        kindergarten_additional_info_form = AddKindergartenAdditionalInfoForm()
 
     return render(request, 'add_kindergarten.html', {
         'kindergarten_form': kindergarten_form,
-        'kindergarten_additional_info': kindergarten_additional_info
+        'kindergarten_additional_info': kindergarten_additional_info_form
     })
+
+
+def sign_up_kid_to_kindergarten(request, kindergarten_id):
+    if request.method == "POST":
+        kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
+        kindergarten_name = kindergarten.name  # get kindergarten name
+        subject = f"הרשמה חדשה עבור {kindergarten_name}"
+
+        parent_email = request.user.email
+        message = f"הוריו של {request.POST['first-name']} {request.POST['last-name']} רשמו אותו לגן" \
+                  f"\n{request.POST['first-name']} מתרגש מאוד להצטרף לגן והוא בן {request.POST['age-months']} חודשים" \
+                  f"\n{parent_email} ליצירת קשר עם ההורים ניתן לשלוח מייל לכתובת הבאה" \
+                  f"\n,בברכה" \
+                  f"\nLittleExplorer"
+
+        teacher_id = kindergarten.teacher_id
+        teacher = Parent.objects.get(parent_id=teacher_id)
+        recipient = [teacher.email]
+
+        email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
+
+        send_mail(subject, message, email_from, recipient)
+
+        kindergarten.kids_count = kindergarten.kids_count + 1
+        kindergarten.save()
+        return redirect('/')
+
+    return render(request, 'payment.html')

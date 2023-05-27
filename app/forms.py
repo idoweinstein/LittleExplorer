@@ -101,42 +101,55 @@ class CommentForm(forms.ModelForm):
 
 
 class KindergartenForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super(KindergartenForm, self).clean()
+        kids_count = cleaned_data.get('kids_count')
+        capacity = cleaned_data.get('capacity')
+        if capacity < kids_count:
+            self.add_error('kids_count', "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
+
+        min_age = cleaned_data.get('min_age')
+        max_age = cleaned_data.get('max_age')
+        if min_age > max_age:
+            self.add_error('max_age', "The maximum age can't be lower from the minimum age.")
+
+        return cleaned_data
+
     class Meta:
-        open_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M:%S'))
-        close_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M:%S'))
         model = Kindergarten
         fields = ['name', 'address', 'region', 'min_age', 'max_age', 'capacity', 'kids_count', 'num_of_teachers',
                   'open_time',
                   'close_time', 'has_parking']
+        PARKING_COHICES = [(1, 'כן'),(0, 'לא')]
+        widgets = {
+            'has_parking': forms.RadioSelect(choices=PARKING_COHICES)
+        }
         labels = {
             'name': 'שם הגן',
-            'address': 'כתובת',
+            'address': 'כתובת (רחוב ומספר)',
             'region': 'עיר',
-            'min_age': 'גיל מינימלי',
-            'max_age': 'גיל מקסימלי',
-            'capacity': 'כמות ילדים מקסימלית',
-            'kids_count': 'כמות ילדים נוכחית',
-            'num_of_teachers': 'כמות גננות',
+            'min_age': 'גיל מינימלי לילדים בגן (בחודשים)',
+            'max_age': 'גיל מקסימלי לילדים בגן (בחודשים)',
+            'capacity':'כמות מקסימלית של ילדים בגן',
+            'kids_count': 'כמה ילדים כבר יש בגן היום?',
+            'num_of_teachers':'מספר גננות בגן',
             'open_time': 'שעת פתיחה',
             'close_time': 'שעת סגירה',
-            'has_parking': 'האם יש חניה במקום',
-            'phone': 'מספר טלפון',
-            'mail': 'כתובת אימייל',
-            'description': 'תיאור הגן'
+            'has_parking': 'האם יש חניה ליד הגן?'
         }
-
-    def save(self, commit=True):
-        kindergarten = super(KindergartenForm, self).save(commit=False)
-        kindergarten.set_geolocation()
-        if commit:
-            kindergarten.save()
-        return kindergarten
-
 
 class KindergartenAdditionalInfoForm(forms.ModelForm):
     class Meta:
         model = Kindergartenadditionalinfo
         fields = ['phone', 'mail', 'description']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 10, 'cols': 50})
+        }
+        labels = {
+            'phone': 'טלפון',
+            'mail': 'מייל',
+            'description': 'זה המקום לרשום לנו כמה מילים על הגן שלך!',
+        }
 
     def save(self, kindergarten, commit=True):
         kindergarten_addition_info = super(KindergartenAdditionalInfoForm, self).save(commit=False)
@@ -149,9 +162,10 @@ class KindergartenAdditionalInfoForm(forms.ModelForm):
 class AddKindergartenForm(forms.ModelForm):
     class Meta:
         model = Kindergarten
-        fields = ['name', 'address', 'region', 'min_age', 'max_age', 'capacity', 'kids_count', 'num_of_teachers',
-                  'open_time',
-                  'close_time', 'has_parking']
+        fields = ['name', 'address', 'region', 'min_age',
+                  'max_age', 'capacity', 'kids_count', 'num_of_teachers',
+                  'open_time', 'close_time', 'has_parking']
+        PARKING_COHICES = [(True, 'כן'),(False, 'לא')]
         widgets = {
             'min_age': forms.NumberInput(),
             'max_age': forms.NumberInput(),
@@ -160,25 +174,36 @@ class AddKindergartenForm(forms.ModelForm):
             'numb_of_teachers': forms.NumberInput(),
             'open_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
             'close_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
-            'has_parking': forms.CheckboxInput()
-        }
-        labels = {
-            'name': 'שם הגן',
-            'address': 'כתובת',
-            'region': 'עיר',
-            'min_age': 'גיל מינימלי',
-            'max_age': 'גיל מקסימלי',
-            'capacity': 'כמות ילדים מקסימלית',
-            'kids_count': 'כמות ילדים נוכחית',
-            'num_of_teachers': 'כמות גננות',
-            'open_time': 'שעת פתיחה',
-            'close_time': 'שעת סגירה',
-            'has_parking': 'האם יש חניה במקום',
+            'has_parking': forms.RadioSelect(choices=PARKING_COHICES)
         }
 
-    def __init__(self, *args, **kwargs):
-        super(AddKindergartenForm, self).__init__(*args, **kwargs)
-        self.fields['has_parking'].initial = 0
+        labels = {
+            'name': 'שם הגן',
+            'address': 'כתובת (רחוב ומספר)',
+            'region': 'עיר',
+            'min_age': 'גיל מינימלי לילדים בגן (בחודשים)',
+            'max_age': 'גיל מקסימלי לילדים בגן (בחודשים)',
+            'capacity': 'כמות מקסימלית של ילדים בגן',
+            'kids_count': 'כמה ילדים כבר יש בגן היום?',
+            'num_of_teachers': 'מספר גננות בגן',
+            'open_time': 'שעת פתיחה',
+            'close_time': 'שעת סגירה',
+            'has_parking': 'האם יש חניה ליד הגן?',
+        }
+
+    def clean(self):
+        cleaned_data = super(AddKindergartenForm, self).clean()
+        kids_count = cleaned_data.get('kids_count')
+        capacity = cleaned_data.get('capacity')
+        if capacity < kids_count:
+            self.add_error('kids_count', "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
+
+        min_age = cleaned_data.get('min_age')
+        max_age = cleaned_data.get('max_age')
+        if min_age > max_age:
+            self.add_error('max_age', "The maximum age can't be lower from the minimum age.")
+
+        return cleaned_data
 
     def clean_has_parking(self):
         print('called')

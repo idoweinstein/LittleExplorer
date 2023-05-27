@@ -11,6 +11,37 @@ from django.contrib.gis.geos import Point
 # Create your models here.
 
 
+class Parent(AbstractUser):
+    parent_id = models.AutoField(primary_key=True)
+    email = models.EmailField(_('email address'), unique=True)
+    password = models.CharField(max_length=16)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    home_address = models.CharField(max_length=1000, blank=True, null=True)
+    home_region = models.CharField(max_length=100, blank=True, null=True)
+    work_address = models.CharField(max_length=1000, blank=True, null=True)
+    work_region = models.CharField(max_length=100, blank=True, null=True)
+    user_type = models.CharField(max_length=100, blank=True, null=True)
+
+    USERNAME_FIELD = "email"
+
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        managed = False
+        db_table = 'parent'
+
+    def is_parent(self):
+        if self.user_type == "parent":
+            return True
+        return False
+
+    def is_teacher(self):
+        if self.user_type == "teacher":
+            return True
+        return False
+
+
 class Kindergarten(models.Model):
     kindergarten_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=45)
@@ -19,12 +50,13 @@ class Kindergarten(models.Model):
     min_age = models.PositiveSmallIntegerField()
     max_age = models.PositiveSmallIntegerField()
     capacity = models.PositiveSmallIntegerField()
-    kids_count = models.PositiveSmallIntegerField(blank=True, null=True)
+    kids_count = models.PositiveSmallIntegerField()
     num_of_teachers = models.PositiveSmallIntegerField()
     open_time = models.TimeField()
     close_time = models.TimeField()
     has_parking = models.BooleanField(blank=True, null=True)
     geolocation = PointField(blank=True, null=True, srid=4326)
+    teacher = models.ForeignKey(Parent, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -65,47 +97,21 @@ class Kindergarten(models.Model):
         pnt = Point(coordinates[1], coordinates[0], srid=4326)
         self.geolocation = pnt
 
+    def is_free(self):
+        if self.kids_count < self.capacity:
+            return True
+        return False
+
 
 class Kindergartenadditionalinfo(models.Model):
     kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
     phone = models.CharField(max_length=45, blank=True, null=True)
-    mail = models.CharField(max_length=45, blank=True, null=True)
+    mail = models.EmailField(max_length=45, blank=True, null=True)
     description = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'kindergartenadditionalinfo'
-
-
-class Parent(AbstractUser):
-    parent_id = models.AutoField(primary_key=True)
-    email = models.EmailField(_('email address'), unique=True)
-    password = models.CharField(max_length=16)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    home_address = models.CharField(max_length=1000, blank=True, null=True)
-    home_region = models.CharField(max_length=100, blank=True, null=True)
-    work_address = models.CharField(max_length=1000, blank=True, null=True)
-    work_region = models.CharField(max_length=100, blank=True, null=True)
-    user_type = models.CharField(max_length=100, blank=True, null=True)
-
-    USERNAME_FIELD = "email"
-
-    REQUIRED_FIELDS = []
-
-    class Meta:
-        managed = False
-        db_table = 'parent'
-
-    def is_parent(self):
-        if self.user_type == "parent":
-            return True
-        return False
-
-    def is_teacher(self):
-        if self.user_type == "teacher":
-            return True
-        return False
 
 
 class Comment(models.Model):
