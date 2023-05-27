@@ -6,12 +6,12 @@
       <div class="d-flex justify-content-center">
          <form method="GET" action="/search">
             <div  style="margin-top: 100px;">
-               <input type="radio" id="name" checked><label for="name">חיפוש לפי שם</label>
-               <input type="radio" id="location"><label for="location">חיפוש לפי מקום</label>
+               <input type="radio" name="method" id="name" checked><label for="name">חיפוש לפי שם</label>
+               <input type="radio" name="method" id="location"><label for="location">חיפוש לפי מקום</label>
                <div class="input-group rounded">
                <form class="form-inline">
                   <input class="form-control mr-sm-2" type="search" aria-label="Search">
-                  <button class="btn btn-outline-dark btn-sm" type="submit">חיפוש</button>
+                  <button class="btn btn-outline-dark btn-sm" name="value" type="submit">חיפוש</button>
                </form>
             </div>
             </div>

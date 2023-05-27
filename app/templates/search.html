@@ -23,17 +23,21 @@
     }
 </script>
 <body>
-    <form method="GET" action="/search">
-        <div class="radio_inline">
-            <input type="radio" name="method" value="name" id="name" checked><label for="name">חיפוש לפי שם</label>
-           <input type="radio" name="method" value="location" id="location"><label for="location">חיפוש לפי עיר/כתובת</label>
-        </div>
-        <div class="search_input">
-           <input type="text" class="search_text" value="{{ value.value }}" id="Search" name="value" minlength="2" size="30" placeholder="Search...">
-           <input type="submit" class="search_button" value="חיפוש">
-        </div>
-     </form>
-    <link rel="stylesheet" href="..\static\search.css">
+    <div class="d-flex justify-content-center">
+        <form method="GET" action="/search">
+           <div  style="margin-top: 50px;">
+              <input type="radio" name="method" id="name" checked><label for="name">חיפוש לפי שם</label>
+              <input type="radio" name="method" id="location"><label for="location">חיפוש לפי מקום</label>
+              <div class="input-group rounded">
+              <form class="form-inline">
+                 <input class="form-control mr-sm-2" type="search" aria-label="Search">
+                 <button class="btn btn-outline-dark btn-sm" name="value" type="submit">חיפוש</button>
+              </form>
+           </div>
+           </div>
+        </form>
+     </div>
+
     <h3>תוצאות חיפוש</h3>
     <div class="filters"> 
         <div class="advance_search">

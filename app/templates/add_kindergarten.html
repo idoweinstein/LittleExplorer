@@ -3,7 +3,6 @@
 {% block content %}
 <body>
 <div class="register">
-    <link rel="stylesheet" href="..\static\register.css">
     <form method="POST" novalidate>
         {% csrf_token %}
         <h3>הוספת גן</h3>
@@ -20,6 +19,7 @@
             {% if field.help_text %}
             <small style="color: grey">{{ field.help_text }}</small>
             {% endif %}
+
 
             {% for error in field.errors %}
             <div style="color: red">{{ error }}</p>
@@ -42,7 +42,6 @@
             {% if field.help_text %}
             <small style="color: grey">{{ field.help_text }}</small>
             {% endif %}
-
             {% for error in field.errors %}
             <div style="color: red">{{ error }}</p>
             {% endfor %}
