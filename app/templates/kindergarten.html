@@ -1,5 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+    /* TODO: move to base.css after merge with Shir's code */
+    .grade.deactivated {
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
+        font-size: 2em;
+    }
+
+    .grade.pending {
+        -webkit-filter: grayscale(50%);
+        filter: grayscale(50%);
+        font-size: 2em;
+    }
+
+    .grade.chosen {
+        -webkit-filter: grayscale(0%);
+        filter: grayscale(0%);
+        font-size: 2em;
+    }
+</style>
+<script>
+    window.onload = () => {
+        for (const element of document.getElementsByName('grade')) {
+            debugger;
+            const value = +(element.getAttribute('value'));
+            for (let i = 5; i >= 1; --i) {
+                // Iterating backwards since page is rtl but the bottles are ltr
+                const subelement = document.createElement('span');
+                subelement.innerHTML = '🍼';
+                subelement.classList.add('grade');
+                subelement.classList.add(i <= value ? 'chosen' : 'deactivated');
+                element.appendChild(subelement);
+            }
+            element.setAttribute("title", "דירוג: " + value);
+        }
+    }
+</script>
 <body>
     <link rel="stylesheet" href="..\static\kindergarten.css">
     <h3>{{ kindergarten.name }}</h3>
@@ -56,8 +93,7 @@
         <h6>תגובות של הורים על הגן:  </h6>
         <h6>
             {% for comment in comments_with_parent %}
-            <div class="grade">
-            {{ comment.grade }} כוכבים
+            <div name="grade" class="grade" value="{{ comment.grade }}">
             </div>
             <div class="name">
             {{ comment.parent.get_full_name }}

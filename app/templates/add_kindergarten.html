@@ -9,29 +9,45 @@
         <h3>הוספת גן</h3>
 
         {% for field in kindergarten_form %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
+        <div>
+            <div>
+                {{ field.label_tag }}
+            </div>
+            <div>
+                {{ field }}
+            </div>
+
             {% if field.help_text %}
             <small style="color: grey">{{ field.help_text }}</small>
             {% endif %}
+
             {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
+            <div style="color: red">{{ error }}</p>
             {% endfor %}
-        </p>
+
+            <br>
+        </div>
         {% endfor %}
 
         {% for field in kindergarten_additional_info %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
+        <div>
+            <div>
+                {{ field.label_tag }}
+            </div>
+            <div>
+                {{ field }}
+            </div>
+
             {% if field.help_text %}
             <small style="color: grey">{{ field.help_text }}</small>
             {% endif %}
+
             {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
+            <div style="color: red">{{ error }}</p>
             {% endfor %}
-        </p>
+
+            <br>
+        </div>
         {% endfor %}
 
         <input type="submit" value="שמירה">

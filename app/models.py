@@ -23,7 +23,7 @@ class Kindergarten(models.Model):
     num_of_teachers = models.PositiveSmallIntegerField()
     open_time = models.TimeField()
     close_time = models.TimeField()
-    has_parking = models.PositiveIntegerField(blank=True, null=True)
+    has_parking = models.BooleanField(blank=True, null=True)
     geolocation = PointField(blank=True, null=True, srid=4326)
 
     class Meta:

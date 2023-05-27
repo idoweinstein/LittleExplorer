@@ -11,7 +11,7 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
 from .forms import RegisterParentForm, CommentForm, RegisterTeacherForm, KindergartenForm, \
-    KindergartenAdditionalInfoForm
+    KindergartenAdditionalInfoForm, AddKindergartenForm, AddKindergartenAdditionalInfoForm
 from .geolocation import get_coordinates
 
 import operator
@@ -205,16 +205,16 @@ def add_comment(request, kindergarten_id):
 
 def add_kindergarten(request):
     if request.method == "POST":
-        kindergarten_form = KindergartenForm(request.POST)
-        kindergarten_additional_info = KindergartenAdditionalInfoForm(request.POST)
+        kindergarten_form = AddKindergartenForm(request.POST)
+        kindergarten_additional_info = AddKindergartenAdditionalInfoForm(request.POST)
         if kindergarten_form.is_valid() and kindergarten_additional_info.is_valid():
             kindergarten = kindergarten_form.save()
             kindergarten_additional_info.save(kindergarten)
             # TODO: we want to show a response to the user
             return redirect('/')
     else:
-        kindergarten_form = KindergartenForm()
-        kindergarten_additional_info = KindergartenAdditionalInfoForm()
+        kindergarten_form = AddKindergartenForm()
+        kindergarten_additional_info = AddKindergartenAdditionalInfoForm()
 
     return render(request, 'add_kindergarten.html', {
         'kindergarten_form': kindergarten_form,

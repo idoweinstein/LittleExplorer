@@ -87,12 +87,17 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['comment', 'grade']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50})
+            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'תגובה...'}),
+            'grade': forms.HiddenInput()
         }
         labels = {
             'comment': 'תגובה',
             'grade': 'ציון- (1 - גרוע מאוד, 5 - מצוין) '
         }
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['grade'].initial = 0
 
 
 class KindergartenForm(forms.ModelForm):
@@ -103,6 +108,22 @@ class KindergartenForm(forms.ModelForm):
         fields = ['name', 'address', 'region', 'min_age', 'max_age', 'capacity', 'kids_count', 'num_of_teachers',
                   'open_time',
                   'close_time', 'has_parking']
+        labels = {
+            'name': 'שם הגן',
+            'address': 'כתובת',
+            'region': 'עיר',
+            'min_age': 'גיל מינימלי',
+            'max_age': 'גיל מקסימלי',
+            'capacity': 'כמות ילדים מקסימלית',
+            'kids_count': 'כמות ילדים נוכחית',
+            'num_of_teachers': 'כמות גננות',
+            'open_time': 'שעת פתיחה',
+            'close_time': 'שעת סגירה',
+            'has_parking': 'האם יש חניה במקום',
+            'phone': 'מספר טלפון',
+            'mail': 'כתובת אימייל',
+            'description': 'תיאור הגן'
+        }
 
     def save(self, commit=True):
         kindergarten = super(KindergartenForm, self).save(commit=False)
@@ -119,6 +140,74 @@ class KindergartenAdditionalInfoForm(forms.ModelForm):
 
     def save(self, kindergarten, commit=True):
         kindergarten_addition_info = super(KindergartenAdditionalInfoForm, self).save(commit=False)
+        kindergarten_addition_info.kindergarten = kindergarten
+        if commit:
+            kindergarten_addition_info.save()
+        return kindergarten_addition_info
+
+
+class AddKindergartenForm(forms.ModelForm):
+    class Meta:
+        model = Kindergarten
+        fields = ['name', 'address', 'region', 'min_age', 'max_age', 'capacity', 'kids_count', 'num_of_teachers',
+                  'open_time',
+                  'close_time', 'has_parking']
+        widgets = {
+            'min_age': forms.NumberInput(),
+            'max_age': forms.NumberInput(),
+            'capacity': forms.NumberInput(),
+            'kids_count': forms.NumberInput(),
+            'numb_of_teachers': forms.NumberInput(),
+            'open_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
+            'close_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
+            'has_parking': forms.CheckboxInput()
+        }
+        labels = {
+            'name': 'שם הגן',
+            'address': 'כתובת',
+            'region': 'עיר',
+            'min_age': 'גיל מינימלי',
+            'max_age': 'גיל מקסימלי',
+            'capacity': 'כמות ילדים מקסימלית',
+            'kids_count': 'כמות ילדים נוכחית',
+            'num_of_teachers': 'כמות גננות',
+            'open_time': 'שעת פתיחה',
+            'close_time': 'שעת סגירה',
+            'has_parking': 'האם יש חניה במקום',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(AddKindergartenForm, self).__init__(*args, **kwargs)
+        self.fields['has_parking'].initial = 0
+
+    def clean_has_parking(self):
+        print('called')
+        return 1 if self.cleaned_data['has_parking'] else 0
+
+    def save(self, commit=True):
+        kindergarten = super(AddKindergartenForm, self).save(commit=False)
+        kindergarten.set_geolocation()
+        if commit:
+            kindergarten.save()
+        return kindergarten
+
+
+class AddKindergartenAdditionalInfoForm(forms.ModelForm):
+    class Meta:
+        model = Kindergartenadditionalinfo
+        fields = ['phone', 'mail', 'description']
+        labels = {
+            'phone': 'מספר טלפון',
+            'mail': 'כתובת אימייל',
+            'description': 'תיאור הגן'
+        }
+        widgets = {
+            'mail': forms.EmailInput(),
+            'description': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'תיאור הגן...'})
+        }
+
+    def save(self, kindergarten, commit=True):
+        kindergarten_addition_info = super(AddKindergartenAdditionalInfoForm, self).save(commit=False)
         kindergarten_addition_info.kindergarten = kindergarten
         if commit:
             kindergarten_addition_info.save()

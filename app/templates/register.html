@@ -9,16 +9,24 @@
         <h3>הרשמה</h3>
 
         {% for field in form %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
+        <div>
+            <div>
+                {{ field.label_tag }}
+            </div>
+            <div>
+                {{ field }}
+            </div>
+
             {% if field.help_text %}
             <small style="color: grey">{{ field.help_text }}</small>
             {% endif %}
+
             {% for error in field.errors %}
-        <p style="color: red">{{ error }}</p>
-        {% endfor %}
-        </p>
+            <div style="color: red">{{ error }}</div>
+            {% endfor %}
+
+            <br>
+        </div>
         {% endfor %}
 
         <input type="submit" class="body_button" class="register_button" value="הרשמה"/>
