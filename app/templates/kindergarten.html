@@ -45,7 +45,7 @@
             <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
         </div>
 
-        <div class="card rounded-3 p-md-5" style="background-color: #9addf7; margin-bottom: 20px;">
+        <div class="card rounded-3 p-md-5" style="background-color: #b2e6fa; margin-bottom: 20px;">
             {% if kindergarten_info.description %}
             <h5 class="text-center">
                 <span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
@@ -55,7 +55,7 @@
 
         <div class="row row-cols-2 g-3 text-center">
             <div class="col">
-              <div class="card rounded-3" style="background-color: #d2e6ee;">
+              <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
                 <h5 class="card-title">יצירת קשר</h5>
                 <p class="card-text">
                     כתובת:{{ kindergarten.address }}, {{ kindergarten.region }}
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="col">
-                <div class="card rounded-3" style="background-color: #d2e6ee;">
+                <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
                     <h5 class="card-title">פרטים על הגן</h5>
                     <p class="card-text">
                         הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}}
@@ -88,12 +88,61 @@
                         {% else %}
                         <br>לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
                         {% endif %}
+                        <br>
                     </p>
                 </div>
             </div>
 
     </div>
+</section>
+
+
+{% if comments_with_parent %}
+<h2 class="fw-bold mb-2 text-uppercase text-center">תגובות</h2>
+<section  dir="rtl">
+    <div class="container my-5 py-5">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 col-lg-10">
+          <div class="card text-dark">
+            {% for comment in comments_with_parent %}
+                <div class="card-body p-4">
+    
+                <div class="d-flex flex-start">
+                    <div>
+                    <h6 class="fw-bold mb-1">{{ comment.parent.get_full_name }}</h6>
+                    <div class="d-flex align-items-center mb-3">
+                        <p class="mb-0">
+                            {{ comment.date }}
+                            {% if comment.grade > 3 %}
+                                <span class="badge bg-success"> {{ comment.grade }} כוכבים</span>
+                            {% else %}
+                                <span class="badge bg-danger"> {{ comment.grade }} כוכבים</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <p class="mb-0">
+                        {{ comment.comment }}
+                    </p>
+                    </div>
+                </div>
+                <hr class="my-0" />
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
+
+{% endif %}
+<div dir="rtl"> 
+    {% if user.is_authenticated %}
+    <br>
+    <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">הוספת תגובה</button>
+    {% else %}
+    <br>עדיין לא רשום לאתר? הירשם ותוכל להוסיף תגובות על הגן!
+    {% endif %}
+</div>
 
 
 <div class="d-flex justify-content-center"> 
@@ -110,36 +159,6 @@
     {% endif %}
     {% endif %}
 </div>
-
-
-{% if user.is_authenticated %}
-<br>
-<button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">הוספת תגובה</button>
-{% else %}
-<br>עדיין לא רשום לאתר? הירשם ותוכל להוסיף תגובות על הגן!
-{% endif %}
-<p>
-    {% if comments_with_parent %}
-<h6>תגובות של הורים על הגן: </h6>
-<h6>
-    {% for comment in comments_with_parent %}
-    <div name="grade" class="grade" value="{{ comment.grade }}">
-    </div>
-    <div class="name">
-        {{ comment.parent.get_full_name }}
-    </div>
-    <div class="comment">
-        {{ comment.comment }}
-    </div>
-    <div class="date">
-        {{ comment.date }}
-    </div>
-    {% endfor %}
-</h6>
-{% endif %}
-</p>
-
-
 </body>
 {% endblock content%}
 
