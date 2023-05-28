@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+    <div class="d-flex justify-content-center" dir="rtl">
+        <div  style="margin-top: 50px;">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                <h3>הרשמה</h3>
+                <p>
+                    {{ form.email.label_tag }}<br>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.first_name.label_tag }}<br>
+                    {{ form.first_name }}<br>
+                    {% for error in form.first_name.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.last_name.label_tag }}<br>
+                    {{ form.last_name }}
+                    {% for error in form.last_name.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.home_address.label_tag }}<br>
+                    {{ form.home_address }}
+                    {% for error in form.home_address.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.home_region.label_tag }}<br>
+                    {{ form.home_region }}
+                    {% for error in form.home_regionerrors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.work_address.label_tag }}<br>
+                    {{ form.work_address }}
+                    {% for error in form.work_address.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.work_region.label_tag }}<br>
+                    {{ form.work_region }}
+                    {% for error in form.work_region.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.password1.label_tag }}<br>
+                    {{ form.password1 }}
+                    {% for error in form.password1.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    {{ form.password2.label_tag }}<br>
+                    {{ form.password2 }}
+                    {% for error in form.password2.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                </p>
+                <div class="form-group" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-outline-dark btn-sm">הרשמה</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+{% endblock content%}

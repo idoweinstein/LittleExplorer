@@ -69,7 +69,8 @@ def sign_up(request, user_type):
     else:
         form = RegisterParentForm() if user_type == "parent" else RegisterTeacherForm()
 
-    return render(request, 'register.html', {
+    html_page = 'parent_register.html' if user_type == 'parent' else 'register.html'
+    return render(request, html_page, {
         'form': form,
     })
 
