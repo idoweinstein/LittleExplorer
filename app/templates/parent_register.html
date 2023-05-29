@@ -2,73 +2,139 @@
 
 {% block content %}
 <body>
-    <div class="d-flex justify-content-center" dir="rtl">
-        <div  style="margin-top: 50px;">
-            <form method="POST" novalidate>
-                {% csrf_token %}
-                <h3>הרשמה</h3>
-                <p>
-                    {{ form.email.label_tag }}<br>
-                    {{ form.email }}
-                    {% for error in form.email.errors %}
-                        <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+          <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-lg-9 col-xl-7">
+              <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                <div class="card-body p-4 p-md-5">
+                  <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" dir="rtl" style="text-align: center;">הרשמה להורים</h3>
+                  <form method="POST" novalidate dir="rtl" tyle="text-align: center;">
+                        {% csrf_token %}
+      
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <label class="form-label">{{ form.first_name.label_tag }}</label>
+                        <div class="form-outline">
+                                {{ form.first_name }}
+                                {% for error in form.first_name.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}  
+                        </div>
+      
+                      </div>
+                      <div class="col-md-6 mb-4">
 
-                    {{ form.first_name.label_tag }}<br>
-                    {{ form.first_name }}<br>
-                    {% for error in form.first_name.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                        <div class="form-outline">
+                                <label class="form-label">{{ form.last_name.label_tag }}</label>
+                                {{ form.last_name }} 
+                                {% for error in form.last_name.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %} 
+                        </div>
+      
+                      </div>
+                    </div>
+      
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+      
+                        <div class="form-outline datepicker w-100">
+                                <label class="form-label">  {{ form.home_address.label_tag }}</label>
+                                {{ form.home_address }}
 
-                    {{ form.last_name.label_tag }}<br>
-                    {{ form.last_name }}
-                    {% for error in form.last_name.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                                {% for error in form.home_address.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                          
+                        </div>
+      
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-outline datepicker w-100">
+                                <label class="form-label">{{ form.home_region.label_tag }}</label>
+                                {{ form.home_region }}
 
-                    {{ form.home_address.label_tag }}<br>
-                    {{ form.home_address }}
-                    {% for error in form.home_address.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                                {% for error in form.home_regionerrors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+      
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline datepicker w-100">
+                                <label class="form-label">{{ form.work_address.label_tag }}</label>
+                                {{ form.work_address }}
 
-                    {{ form.home_region.label_tag }}<br>
-                    {{ form.home_region }}
-                    {% for error in form.home_regionerrors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                                {% for error in form.work_address.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                          </div>
+        
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline datepicker w-100">
+                                <label class="form-label"> {{ form.work_region.label_tag }}</label>
+                                {{ form.work_region }}
 
-                    {{ form.work_address.label_tag }}<br>
-                    {{ form.work_address }}
-                    {% for error in form.work_address.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                                {% for error in form.work_region.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                        </div>
+                      </div> 
+      
+                    <div class="row">
+                        <div class="col mb-4">
+                                <div class="form-outline">
+                                        <label class="form-label">{{ form.email.label_tag }}</label>
+                                        {{ form.email }}
+        
+                                        {% for error in form.email.errors %}
+                                                <p style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                </div>    
+                        </div>
+                    </div>
 
-                    {{ form.work_region.label_tag }}<br>
-                    {{ form.work_region }}
-                    {% for error in form.work_region.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline datepicker w-100">
+                                <label class="form-label">{{ form.password1.label_tag }}</label>
+                                {{ form.password1 }}
 
-                    {{ form.password1.label_tag }}<br>
-                    {{ form.password1 }}
-                    {% for error in form.password1.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                                {% for error in form.password1.errors %}
+                                <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                          </div>
+        
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline datepicker w-100">
+                                <label class="form-label">{{ form.password2.label_tag }}</label>
+                                {{ form.password2 }}
 
-                    {{ form.password2.label_tag }}<br>
-                    {{ form.password2 }}
-                    {% for error in form.password2.errors %}
-                            <p style="color: red">{{ error }}</p>
-                    {% endfor %}
-
-                </p>
-                <div class="form-group" style="margin-top: 20px;">
-                    <button type="submit" class="btn btn-outline-dark btn-sm">הרשמה</button>
+                                {% for error in form.password2.errors %}
+                                <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                        </div>
+                      </div> 
+        
+      
+                    <div style="text-align: center;">
+                      <button type="submit" class="btn btn-outline-dark btn-m">הרשמה</button>
+                    </div>
+      
+                  </form>
                 </div>
-            </form>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+      </section>
+
 </body>
 
 {% endblock content%}
