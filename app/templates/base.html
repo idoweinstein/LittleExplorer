@@ -13,9 +13,9 @@
       {% if user.is_authenticated %}
          ברוך הבא {{ user.first_name }} {{ user.last_name }}
          <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>התנתק/י</button>
-         {% if user.is_teacher %}
-         <button ype="button" class="btn btn-outline-dark  btn-sm" onclick="location.href = '/add_kindergarten'">הוסף גן</button>
-         {% endif %}
+            {% if user.is_teacher %}
+               <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>הוספת גן</button>
+            {% endif %}
       {% else %}
          <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/parent_sign_up'">
             <span class="glyphicon glyphicon-user"></span>הרשמה להורים</button>
