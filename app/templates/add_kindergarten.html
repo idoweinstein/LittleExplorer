@@ -7,48 +7,153 @@
         {% csrf_token %}
         <h3>הוספת גן</h3>
 
-        {% for field in kindergarten_form %}
+
         <div>
             <div>
-                {{ field.label_tag }}
+                {{ kindergarten_form.name.label_tag }}
             </div>
             <div>
-                {{ field }}
+                {{ kindergarten_form.name }}
+                {% for error in kindergarten_form.name.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
 
-            {% if field.help_text %}
-            <small style="color: grey">{{ field.help_text }}</small>
-            {% endif %}
+             <div>
+                {{ kindergarten_form.address.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.address }}
+                {% for error in kindergarten_form.address.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
 
+             <div>
+                {{ kindergarten_form.region.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.region }}
+                {% for error in kindergarten_form.region.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-            {% for error in field.errors %}
-            <div style="color: red">{{ error }}</p>
-            {% endfor %}
+             <div>
+                {{ kindergarten_form.min_age.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.min_age }}
+                {% for error in kindergarten_form.min_age.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-            <br>
+             <div>
+                {{ kindergarten_form.max_age.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.max_age }}
+                {% for error in kindergarten_form.max_age.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+             <div>
+                {{ kindergarten_form.capacity.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.capacity }}
+                {% for error in kindergarten_form.capacity.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+             <div>
+                {{ kindergarten_form.kids_count.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.kids_count }}
+                {% for error in kindergarten_form.kids_count.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+             <div>
+                {{ kindergarten_form.num_of_teachers.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.num_of_teachers }}
+                {% for error in kindergarten_form.num_of_teachers.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+             <div>
+                {{ kindergarten_form.open_time.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.open_time }}
+                {% for error in kindergarten_form.open_time.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ kindergarten_form.close_time.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.close_time }}
+                {% for error in kindergarten_form.close_time.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ kindergarten_form.has_parking.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_form.has_parking }}
+                {% for error in kindergarten_form.has_parking.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
         </div>
-        {% endfor %}
 
         <br>פרטים ליצירת קשר עם הגן:
-        {% for field in kindergarten_additional_info %}
         <div>
-            <div>
-                {{ field.label_tag }}
+             <div>
+                {{ kindergarten_additional_info.phone.label_tag }}
             </div>
             <div>
-                {{ field }}
+                {{ kindergarten_additional_info.phone }}
+                {% for error in kindergarten_additional_info.phone.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
 
-            {% if field.help_text %}
-            <small style="color: grey">{{ field.help_text }}</small>
-            {% endif %}
-            {% for error in field.errors %}
-            <div style="color: red">{{ error }}</p>
-            {% endfor %}
+             <div>
+                {{ kindergarten_additional_info.mail.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_additional_info.mail }}
+                {% for error in kindergarten_additional_info.mail.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-            <br>
+             <div>
+                {{ kindergarten_additional_info.description.label_tag }}
+            </div>
+            <div>
+                {{ kindergarten_additional_info.description }}
+                {% for error in kindergarten_additional_info.description.errors %}
+                    <div style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
         </div>
-        {% endfor %}
+
+
 
         <input type="submit" value="שמירה">
     </form>

@@ -95,6 +95,20 @@ class AddCommentForm(forms.ModelForm):
 
 
 class AddKindergartenForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super(AddKindergartenForm, self).clean()
+        kids_count = cleaned_data.get('kids_count')
+        capacity = cleaned_data.get('capacity')
+        if capacity and kids_count and capacity < kids_count:
+            self.add_error('kids_count', "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
+
+        min_age = cleaned_data.get('min_age')
+        max_age = cleaned_data.get('max_age')
+        if min_age and max_age and min_age > max_age:
+            self.add_error('max_age', "The maximum age can't be lower from the minimum age.")
+
+        return cleaned_data
+
     class Meta:
         model = Kindergarten
         fields = ['name', 'address', 'region', 'min_age',
@@ -120,20 +134,6 @@ class AddKindergartenForm(forms.ModelForm):
             'close_time': 'שעת סגירה',
             'has_parking': 'האם יש חניה ליד הגן?',
         }
-
-    def clean(self):
-        cleaned_data = super(AddKindergartenForm, self).clean()
-        kids_count = cleaned_data.get('kids_count')
-        capacity = cleaned_data.get('capacity')
-        if capacity < kids_count:
-            self.add_error('kids_count', "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
-
-        min_age = cleaned_data.get('min_age')
-        max_age = cleaned_data.get('max_age')
-        if min_age > max_age:
-            self.add_error('max_age', "The maximum age can't be lower from the minimum age.")
-
-        return cleaned_data
 
 
 class AddKindergartenAdditionalInfoForm(forms.ModelForm):
