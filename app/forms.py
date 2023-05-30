@@ -27,7 +27,8 @@ class RegisterParentForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(RegisterParentForm, self).__init__(*args, **kwargs)
-
+        self.fields['first_name'].widget.attrs['class'] = 'form-control'
+        self.fields['last_name'].widget.attrs['class'] = 'form-control'
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
@@ -67,6 +68,8 @@ class RegisterTeacherForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegisterTeacherForm, self).__init__(*args, **kwargs)
 
+        self.fields['first_name'].widget.attrs['class'] = 'form-control'
+        self.fields['last_name'].widget.attrs['class'] = 'form-control'
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
