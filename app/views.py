@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Parent
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -6,12 +5,10 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.http import require_GET
 from django.db.models import Min, Max, Q
 
-from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
-from .forms import RegisterParentForm, CommentForm, RegisterTeacherForm, \
-    KindergartenForm, KindergartenAdditionalInfoForm, \
+from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm, AddKindergartenAdditionalInfoForm
 from .geolocation import get_coordinates
 
@@ -189,7 +186,7 @@ def get_kindergarten_details(request, kindergarten_id):
 
 def add_comment(request, kindergarten_id):
     if request.method == "POST":
-        form = CommentForm(request.POST)
+        form = AddCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.date = date.today()
@@ -200,7 +197,7 @@ def add_comment(request, kindergarten_id):
             # TODO: we want to show a response to the user
             return redirect('/')
     else:
-        form = CommentForm()
+        form = AddCommentForm()
 
     return render(request, 'comment.html', {
         'form': form,

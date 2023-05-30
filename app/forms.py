@@ -12,10 +12,9 @@ class RegisterParentForm(UserCreationForm):
 
     class Meta:
         model = Parent
-        fields = (
-            'email', 'first_name', 'last_name', 'home_address', 'home_region', 'work_address', 'work_region',
-            'password1',
-            'password2')
+        fields = ('email', 'first_name', 'last_name',
+                'home_address', 'home_region', 'work_address', 'work_region',
+                'password1', 'password2')
 
     def save(self, commit=True):
         user = super(RegisterParentForm, self).save(commit=False)
@@ -54,8 +53,7 @@ class RegisterParentForm(UserCreationForm):
 class RegisterTeacherForm(UserCreationForm):
     class Meta:
         model = Parent
-        fields = (
-            'email', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('email', 'first_name', 'last_name', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super(RegisterTeacherForm, self).save(commit=False)
@@ -82,7 +80,7 @@ class RegisterTeacherForm(UserCreationForm):
         self.user_type = "teacher"
 
 
-class CommentForm(forms.ModelForm):
+class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment', 'grade']
@@ -95,69 +93,6 @@ class CommentForm(forms.ModelForm):
             'grade': 'ציון- (1 - גרוע מאוד, 5 - מצוין) '
         }
 
-    def __init__(self, *args, **kwargs):
-        super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['grade'].initial = 0
-
-
-class KindergartenForm(forms.ModelForm):
-    def clean(self):
-        cleaned_data = super(KindergartenForm, self).clean()
-        kids_count = cleaned_data.get('kids_count')
-        capacity = cleaned_data.get('capacity')
-        if capacity < kids_count:
-            self.add_error('kids_count', "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
-
-        min_age = cleaned_data.get('min_age')
-        max_age = cleaned_data.get('max_age')
-        if min_age > max_age:
-            self.add_error('max_age', "The maximum age can't be lower from the minimum age.")
-
-        return cleaned_data
-
-    class Meta:
-        model = Kindergarten
-        fields = ['name', 'address', 'region', 'min_age', 'max_age', 'capacity', 'kids_count', 'num_of_teachers',
-                  'open_time',
-                  'close_time', 'has_parking']
-        PARKING_COHICES = [(1, 'כן'),(0, 'לא')]
-        widgets = {
-            'has_parking': forms.RadioSelect(choices=PARKING_COHICES)
-        }
-        labels = {
-            'name': 'שם הגן',
-            'address': 'כתובת (רחוב ומספר)',
-            'region': 'עיר',
-            'min_age': 'גיל מינימלי לילדים בגן (בחודשים)',
-            'max_age': 'גיל מקסימלי לילדים בגן (בחודשים)',
-            'capacity':'כמות מקסימלית של ילדים בגן',
-            'kids_count': 'כמה ילדים כבר יש בגן היום?',
-            'num_of_teachers':'מספר גננות בגן',
-            'open_time': 'שעת פתיחה',
-            'close_time': 'שעת סגירה',
-            'has_parking': 'האם יש חניה ליד הגן?'
-        }
-
-class KindergartenAdditionalInfoForm(forms.ModelForm):
-    class Meta:
-        model = Kindergartenadditionalinfo
-        fields = ['phone', 'mail', 'description']
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 10, 'cols': 50})
-        }
-        labels = {
-            'phone': 'טלפון',
-            'mail': 'מייל',
-            'description': 'זה המקום לרשום לנו כמה מילים על הגן שלך!',
-        }
-
-    def save(self, kindergarten, commit=True):
-        kindergarten_addition_info = super(KindergartenAdditionalInfoForm, self).save(commit=False)
-        kindergarten_addition_info.kindergarten = kindergarten
-        if commit:
-            kindergarten_addition_info.save()
-        return kindergarten_addition_info
-
 
 class AddKindergartenForm(forms.ModelForm):
     class Meta:
@@ -165,16 +100,11 @@ class AddKindergartenForm(forms.ModelForm):
         fields = ['name', 'address', 'region', 'min_age',
                   'max_age', 'capacity', 'kids_count', 'num_of_teachers',
                   'open_time', 'close_time', 'has_parking']
-        PARKING_COHICES = [(True, 'כן'),(False, 'לא')]
+        PARKING_CHOICES = [(True, 'כן'), (False, 'לא')]
         widgets = {
-            'min_age': forms.NumberInput(),
-            'max_age': forms.NumberInput(),
-            'capacity': forms.NumberInput(),
-            'kids_count': forms.NumberInput(),
-            'numb_of_teachers': forms.NumberInput(),
             'open_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
             'close_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
-            'has_parking': forms.RadioSelect(choices=PARKING_COHICES)
+            'has_parking': forms.RadioSelect(choices=PARKING_CHOICES)
         }
 
         labels = {
@@ -205,29 +135,17 @@ class AddKindergartenForm(forms.ModelForm):
 
         return cleaned_data
 
-    def clean_has_parking(self):
-        print('called')
-        return 1 if self.cleaned_data['has_parking'] else 0
-
-    def save(self, commit=True):
-        kindergarten = super(AddKindergartenForm, self).save(commit=False)
-        kindergarten.set_geolocation()
-        if commit:
-            kindergarten.save()
-        return kindergarten
-
 
 class AddKindergartenAdditionalInfoForm(forms.ModelForm):
     class Meta:
         model = Kindergartenadditionalinfo
         fields = ['phone', 'mail', 'description']
         labels = {
-            'phone': 'מספר טלפון',
-            'mail': 'כתובת אימייל',
-            'description': 'תיאור הגן'
+            'phone': 'טלפון',
+            'mail': 'מייל',
+            'description': 'זה המקום לרשום לנו כמה מילים על הגן שלך!',
         }
         widgets = {
-            'mail': forms.EmailInput(),
             'description': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'תיאור הגן...'})
         }
 
