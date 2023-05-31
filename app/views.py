@@ -168,7 +168,8 @@ def search(request):
                'open_time': RangedValue(open_value.isoformat("minutes"), min_open.isoformat("minutes"),
                                         max_open.isoformat("minutes")),
                'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"),
-                                         max_close.isoformat("minutes"))}
+                                         max_close.isoformat("minutes")),
+                'request': request.GET}
 
     return render(request, 'search.html', context)
 

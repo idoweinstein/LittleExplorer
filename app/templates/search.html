@@ -23,31 +23,28 @@
     }
 </script>
 <body>
-    <div class="d-flex justify-content-center">
-        <form method="GET" action="/search">
+    <link rel="stylesheet" href="..\static\search.css">
+    <form method="GET" action="/search">
+        <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
-              <input type="radio" name="method" value="name" id="name" checked><label for="name">חיפוש לפי שם</label>
-              <input type="radio" name="method" value="location" id="location"><label for="location">חיפוש לפי מקום</label>
+              <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">חיפוש לפי שם</label>
+              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">חיפוש לפי מקום</label>
               <div class="input-group rounded">
               <form class="form-inline">
-                 <input class="form-control mr-sm-2" name="value" type="search" aria-label="Search">
+                 <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search">
                  <button class="btn btn-outline-dark btn-sm" type="submit">חיפוש</button>
-              </form>
            </div>
            </div>
-        </form>
-     </div>
-
-    <link rel="stylesheet" href="..\static\search.css">
-    <div style="margin-top: 25px;">
-        <h2 class="fw-bold mb-2 text-uppercase text-center">תוצאות חיפוש</h2>
-    </div>
-    
-    <div class="filters"> 
-        <div class="advance_search">
-            <h6>חיפוש מתקדם</h4>
         </div>
-        <form method="GET" action="/search">
+
+        <div style="margin-top: 25px;">
+            <h2 class="fw-bold mb-2 text-uppercase text-center">תוצאות חיפוש</h2>
+        </div>
+
+        <div class="filters"> 
+            <div class="advance_search">
+                <h6>חיפוש מתקדם</h4>
+            </div>
             <h5>
                 <input type="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
                 <label for="min_age">גיל מינימלי: <output id="min_age_value"></output></label>
@@ -66,8 +63,8 @@
                 שעות פעילות: החל מהשעה <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}"> 
                 ועד השעה <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
             </h5>
-        </form>
-    </div>
+        </div>
+    </form>
     <div class="search_results">
         {% for result in results %}
         <div class="kindergarten">
