@@ -217,6 +217,35 @@ INSERT INTO `comment` VALUES (1,1,1,'פעוטון משפחתי עם צוות ח�
 UNLOCK TABLES;
 
 --
+-- Table structure for table `connections`
+--
+
+DROP TABLE IF EXISTS `connections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `connections` (
+  `connection_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `connector` int unsigned NOT NULL,
+  `connectee` int unsigned NOT NULL,
+  PRIMARY KEY (`connection_id`),
+  UNIQUE KEY `connection_id_UNIQUE` (`connection_id`),
+  KEY `idx_connector` (`connector`),
+  KEY `idx_connectee` (`connectee`),
+  CONSTRAINT `FK_connectee` FOREIGN KEY (`connectee`) REFERENCES `users` (`parent_id`),
+  CONSTRAINT `FK_connector` FOREIGN KEY (`connector`) REFERENCES `users` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `connections`
+--
+
+LOCK TABLES `connections` WRITE;
+/*!40000 ALTER TABLE `connections` DISABLE KEYS */;
+/*!40000 ALTER TABLE `connections` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `django_admin_log`
 --
 
@@ -442,4 +471,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-01 13:09:57
+-- Dump completed on 2023-06-01 14:30:52
