@@ -11,7 +11,7 @@ from django.contrib.gis.geos import Point
 # Create your models here.
 
 
-class Parent(AbstractUser):
+class Users(AbstractUser):
     parent_id = models.AutoField(primary_key=True)
     email = models.EmailField(_('email address'), unique=True)
     password = models.CharField(max_length=16)
@@ -29,7 +29,7 @@ class Parent(AbstractUser):
 
     class Meta:
         managed = False
-        db_table = 'parent'
+        db_table = 'users'
 
     def is_parent(self):
         if self.user_type == "parent":
@@ -56,7 +56,7 @@ class Kindergarten(models.Model):
     close_time = models.TimeField()
     has_parking = models.BooleanField(blank=True, null=True)
     geolocation = PointField(blank=True, null=True, srid=4326)
-    teacher = models.ForeignKey(Parent, models.DO_NOTHING)
+    teacher = models.ForeignKey(Users, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -117,7 +117,7 @@ class Kindergartenadditionalinfo(models.Model):
 class Comment(models.Model):
     comment_id = models.AutoField(primary_key=True)
     kindergarten = models.ForeignKey(Kindergarten, models.DO_NOTHING)
-    parent = models.ForeignKey(Parent, models.DO_NOTHING)
+    parent = models.ForeignKey(Users, models.DO_NOTHING)
     comment = models.CharField(max_length=1500)
     grade = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     date = models.DateField()

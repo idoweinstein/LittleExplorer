@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Parent, Comment, Kindergarten, Kindergartenadditionalinfo
+from .models import Users, Comment, Kindergarten, Kindergartenadditionalinfo
 
 
 class RegisterParentForm(UserCreationForm):
@@ -11,7 +11,7 @@ class RegisterParentForm(UserCreationForm):
     work_region = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
-        model = Parent
+        model = Users
         fields = ('email', 'first_name', 'last_name',
                 'home_address', 'home_region', 'work_address', 'work_region',
                 'password1', 'password2')
@@ -53,7 +53,7 @@ class RegisterParentForm(UserCreationForm):
 
 class RegisterTeacherForm(UserCreationForm):
     class Meta:
-        model = Parent
+        model = Users
         fields = ('email', 'first_name', 'last_name', 'password1', 'password2')
 
     def save(self, commit=True):

@@ -1,4 +1,4 @@
-from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Parent
+from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Users
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -243,7 +243,7 @@ def sign_up_kid_to_kindergarten(request, kindergarten_id):
                   f"\nLittleExplorer"
 
         teacher_id = kindergarten.teacher_id
-        teacher = Parent.objects.get(parent_id=teacher_id)
+        teacher = Users.objects.get(parent_id=teacher_id)
         recipient = [teacher.email]
 
         email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
