@@ -44,14 +44,13 @@
         <div class="d-flex justify-content-center" style="margin-bottom: 20px;">
             <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
         </div>
-
-        <div class="card rounded-3 p-md-5" style="background-color: #b2e6fa; margin-bottom: 20px;">
-            {% if kindergarten_info.description %}
-            <h5 class="text-center">
-                <span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
-            </h3>
-            {% endif %}
-        </div>
+        {% if kindergarten_info.description %}
+            <div class="card rounded-3 p-md-5" style="background-color: #b2e6fa; margin-bottom: 20px;">
+                <h5 class="text-center">
+                    <span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
+                </h5>
+            </div>
+        {% endif %}
 
         <div class="row row-cols-2 g-3 text-center">
             <div class="col">
