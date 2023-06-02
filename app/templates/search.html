@@ -23,7 +23,8 @@
     }
 </script>
 <body>
-    <link rel="stylesheet" href="..\static\search.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'search.css' %}">
     <form method="GET" action="/search">
         <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
@@ -69,7 +70,7 @@
         {% for result in results %}
         <div class="kindergarten">
             <div class="kindergarten_name">
-                <img src="..\static\imges\{{ forloop.counter }}.png" alt="photo" class="kindergarten_photo"/>
+                <img src="{% get_static_prefix %}imges/{{ forloop.counter }}.png" alt="photo" class="kindergarten_photo"/>
                 <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">
                     <h4>{{ result.name }}</h4>
                 </a>

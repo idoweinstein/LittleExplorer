@@ -23,7 +23,6 @@
 <script>
     window.onload = () => {
         for (const element of document.getElementsByName('grade')) {
-            debugger;
             const value = +(element.getAttribute('value'));
             for (let i = 5; i >= 1; --i) {
                 // Iterating backwards since page is rtl but the bottles are ltr
