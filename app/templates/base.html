@@ -9,7 +9,6 @@
     <script>
         $(document).ready(function() {
             $("#search-button").click(function() {
-                debugger;
                 var userEmail = $("#search-input").val();
                 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
                 $.ajax({
@@ -41,7 +40,7 @@
             <img src="..\static\imges\logo_img3.svg" width="35" height="35" class="d-inline-block align-top" alt="">
             LittleExplorer
         </a>
-        <form class="navbar-form">
+        <form class="navbar-form" onsubmit="return false">
             {% if user.is_authenticated %}
             ברוך הבא {{ user.first_name }} {{ user.last_name }}
             <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>התנתק/י</button>
