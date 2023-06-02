@@ -36,37 +36,37 @@
             });
         });
     </script>
+    <nav class="navbar navbar-left navbar-light justify-content-between" style="background-color: #c9f0c9;">
+      <a class="navbar-brand" href="http://127.0.0.1:8000/">
+          <img src="..\static\imges\logo_img3.svg" width="35" height="35" class="d-inline-block align-top" alt="">
+          LittleExplorer
+      </a>
+      <form class="navbar-form" onsubmit="return false">
+          {% if user.is_authenticated %}
+          ברוך הבא {{ user.first_name }} {{ user.last_name }}
+          <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>התנתק/י</button>
+          {% if user.is_teacher %}
+          <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>הוספת גן</button>
+          {% endif %}
+
+          {% if user.is_parent %}
+          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+          <input type="text" id="search-input" placeholder="Enter user's email">
+          <button id="search-button">Add Connection</button>
+          {% endif %}
+
+          {% else %}
+          <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/parent_sign_up'">
+              <span class="glyphicon glyphicon-user"></span>הרשמה להורים</button>
+          <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/teacher_sign_up'">
+              <span class="glyphicon glyphicon-user"></span>הרשמה לגננות</button>
+          <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/login'">
+              <span class="glyphicon glyphicon-log-in"></span>כניסה</button>
+          {% endif %}
+      </form>
+  </nav>
 </head>
 <body style="background-color: #c9ccca;">
-    <nav class="navbar navbar-left navbar-light justify-content-between" style="background-color: #c9f0c9;">
-        <a class="navbar-brand" href="http://127.0.0.1:8000/">
-            <img src="..\static\imges\logo_img3.svg" width="35" height="35" class="d-inline-block align-top" alt="">
-            LittleExplorer
-        </a>
-        <form class="navbar-form" onsubmit="return false">
-            {% if user.is_authenticated %}
-            ברוך הבא {{ user.first_name }} {{ user.last_name }}
-            <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>התנתק/י</button>
-            {% if user.is_teacher %}
-            <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>הוספת גן</button>
-            {% endif %}
-
-            {% if user.is_parent %}
-            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-            <input type="text" id="search-input" placeholder="Enter user's email">
-            <button id="search-button">Add Connection</button>
-            {% endif %}
-
-            {% else %}
-            <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/parent_sign_up'">
-                <span class="glyphicon glyphicon-user"></span>הרשמה להורים</button>
-            <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/teacher_sign_up'">
-                <span class="glyphicon glyphicon-user"></span>הרשמה לגננות</button>
-            <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/login'">
-                <span class="glyphicon glyphicon-log-in"></span>כניסה</button>
-            {% endif %}
-        </form>
-    </nav>
     {% block content %}{% endblock %}
 </body>
 </html>
