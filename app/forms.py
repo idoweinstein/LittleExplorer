@@ -123,34 +123,58 @@ class AddKindergartenForm(forms.ModelForm):
             'close_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
             'has_parking': forms.RadioSelect(choices=PARKING_CHOICES)
         }
+    
+    def __init__(self, *args, **kwargs):
+        super(AddKindergartenForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['address'].widget.attrs['class'] = 'form-control'
+        self.fields['region'].widget.attrs['class'] = 'form-control'
+        self.fields['min_age'].widget.attrs['class'] = 'form-control'
+        self.fields['max_age'].widget.attrs['class'] = 'form-control'
+        self.fields['capacity'].widget.attrs['class'] = 'form-control'
+        self.fields['kids_count'].widget.attrs['class'] = 'form-control'
+        self.fields['num_of_teachers'].widget.attrs['class'] = 'form-control'
+        self.fields['open_time'].widget.attrs['class'] = 'form-control'
+        self.fields['close_time'].widget.attrs['class'] = 'form-control'
+        self.fields['has_parking'].widget.attrs['class'] = 'form-control'
 
-        labels = {
-            'name': 'שם הגן',
-            'address': 'כתובת (רחוב ומספר)',
-            'region': 'עיר',
-            'min_age': 'גיל מינימלי לילדים בגן (בחודשים)',
-            'max_age': 'גיל מקסימלי לילדים בגן (בחודשים)',
-            'capacity': 'כמות מקסימלית של ילדים בגן',
-            'kids_count': 'כמה ילדים כבר יש בגן היום?',
-            'num_of_teachers': 'מספר גננות בגן',
-            'open_time': 'שעת פתיחה',
-            'close_time': 'שעת סגירה',
-            'has_parking': 'האם יש חניה ליד הגן?',
-        }
+        self.fields['has_parking'].required = False
+
+        self.fields['name'].label = 'שם הגן'
+        self.fields['address'].label = 'כתובת (רחוב ומספר)'
+        self.fields['region'].label = 'עיר'
+        self.fields['min_age'].label = 'גיל מינימלי לילדים בגן (בחודשים)'
+        self.fields['max_age'].label = 'גיל מקסימלי לילדים בגן (בחודשים)'
+        self.fields['capacity'].label = 'מספר מקומות בגן'
+        self.fields['kids_count'].label = 'מספר ילדים רשומים'
+        self.fields['num_of_teachers'].label = 'מספר גננות בגן'
+        self.fields['open_time'].label = 'שעת פתיחה'
+        self.fields['close_time'].label= 'שעת סגירה'
+        self.fields['has_parking'].label = 'האם יש חניה ליד הגן?'
 
 
 class AddKindergartenAdditionalInfoForm(forms.ModelForm):
     class Meta:
         model = Kindergartenadditionalinfo
         fields = ['phone', 'mail', 'description']
-        labels = {
-            'phone': 'טלפון',
-            'mail': 'מייל',
-            'description': 'זה המקום לרשום לנו כמה מילים על הגן שלך!',
-        }
+        # labels = {
+        #     'phone': 'טלפון',
+        #     'mail': 'מייל',
+        #     'description': 'זה המקום לרשום לנו כמה מילים על הגן שלך!',
+        # }
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'תיאור הגן...'})
+            'description': forms.Textarea(attrs={'rows': 5, 'cols': 50, 'placeholder': 'תיאור הגן...'})
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AddKindergartenAdditionalInfoForm, self).__init__(*args, **kwargs)
+        self.fields['phone'].widget.attrs['class'] = 'form-control'
+        self.fields['mail'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
+
+        self.fields['phone'].label = 'טלפון'
+        self.fields['mail'].label = 'מייל'
+        self.fields['description'].label = 'זה המקום לרשום לנו כמה מילים על הגן שלך!'
 
     def save(self, kindergarten, commit=True):
         kindergarten_addition_info = super(AddKindergartenAdditionalInfoForm, self).save(commit=False)

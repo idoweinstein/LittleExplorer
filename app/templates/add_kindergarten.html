@@ -2,162 +2,200 @@
 
 {% block content %}
 <body>
-<div class="register">
-    <form method="POST" novalidate>
-        {% csrf_token %}
-        <h3>הוספת גן</h3>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+          <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-xl-10 col-xl-7">
+                <div class="card text-black" style="border-radius: 15px;">
+                    <div class="card-body p-md-5">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" dir="rtl" style="text-align: center;">הוספת גן</h3>
+                        <form method="POST" novalidate dir="rtl" tyle="text-align: center;">
+                            {% csrf_token %}
 
+                            <div class="row">
+                                <div class="col mb-4">
+                                    <label class="form-label">{{ kindergarten_form.name.label_tag }}</label>
+                                    <div class="form-outline-dark mb-4" class="opacity-25">
+                                        {{ kindergarten_form.name }}
+                                        {% for error in kindergarten_form.name.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>  
+                                </div>  
+                            </div>
 
-        <div>
-            <div>
-                {{ kindergarten_form.name.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.name }}
-                {% for error in kindergarten_form.name.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">{{ kindergarten_form.address.label_tag }}</label>
+                                    <div class="form-outline-dark">
+                                        {{ kindergarten_form.address }}
+                                        {% for error in kindergarten_form.address.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">{{ kindergarten_form.region.label_tag }}</label>
+                                    <div class="form-outline">                          
+                                        {{ kindergarten_form.region }}
+                                        {% for error in kindergarten_form.region.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                            </div>
 
-             <div>
-                {{ kindergarten_form.address.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.address }}
-                {% for error in kindergarten_form.address.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="form-outline">
 
-             <div>
-                {{ kindergarten_form.region.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.region }}
-                {% for error in kindergarten_form.region.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                                        <label class="form-label">{{ kindergarten_form.open_time.label_tag }}</label>
+                                        {{ kindergarten_form.open_time }}
+                                        {% for error in kindergarten_form.open_time.errors %}
+                                            <div style="color: red">{{ error }}</p>
+                                        {% endfor %}
 
-             <div>
-                {{ kindergarten_form.min_age.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.min_age }}
-                {% for error in kindergarten_form.min_age.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                                    </div>           
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="form-outline">
+                                        
+                                        <label class="form-label"></label>{{ kindergarten_form.close_time.label_tag }}</label>
+                                        {{ kindergarten_form.close_time }}
+                                        {% for error in kindergarten_form.close_time.errors %}
+                                            <div style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <label class="form-label">{{ kindergarten_form.has_parking.label_tag }}</label>
+                                    <div class="form-outline">
+                                        {% for choice in kindergarten_form.has_parking %}
+                                        <div class="form-check form-check-inline">
+                                            {{ choice }}
+                                        </div>                           
+                                        {% endfor %}
+                                        {% for error in kindergarten_form.has_parking.errors %}
+                                            <div style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
 
-             <div>
-                {{ kindergarten_form.max_age.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.max_age }}
-                {% for error in kindergarten_form.max_age.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-outline">
 
-             <div>
-                {{ kindergarten_form.capacity.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.capacity }}
-                {% for error in kindergarten_form.capacity.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                                        <label class="form-label">{{ kindergarten_form.min_age.label_tag }}</label>
+                                        {{ kindergarten_form.min_age }}
+                                        {% for error in kindergarten_form.min_age.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
 
-             <div>
-                {{ kindergarten_form.kids_count.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.kids_count }}
-                {% for error in kindergarten_form.kids_count.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                                    </div>           
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-outline">
+                                        
+                                        <label class="form-label">{{ kindergarten_form.max_age.label_tag }}</label>
+                                        {{ kindergarten_form.max_age }}
+                                        {% for error in kindergarten_form.max_age.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                            </div>
 
-             <div>
-                {{ kindergarten_form.num_of_teachers.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.num_of_teachers }}
-                {% for error in kindergarten_form.num_of_teachers.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="form-outline">
 
-             <div>
-                {{ kindergarten_form.open_time.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.open_time }}
-                {% for error in kindergarten_form.open_time.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                                        <label class="form-label"> {{ kindergarten_form.capacity.label_tag }}</label>
+                                        {{ kindergarten_form.capacity }}
+                                        {% for error in kindergarten_form.capacity.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                        
+                                        </div>
+                                    </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="form-outline">
 
-            <div>
-                {{ kindergarten_form.close_time.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.close_time }}
-                {% for error in kindergarten_form.close_time.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
+                                        <label class="form-label">{{ kindergarten_form.kids_count.label_tag }}</label>
+                                        {{ kindergarten_form.kids_count }}
+                                        {% for error in kindergarten_form.kids_count.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="form-outline">
+    
+                                        <label class="form-label">{{ kindergarten_form.num_of_teachers.label_tag }}</label>
+                                        {{ kindergarten_form.num_of_teachers }}
+                                        {% for error in kindergarten_form.num_of_teachers.errors %}
+                                            <div style="color: red">{{ error }}</div>
+                                        {% endfor %}
+                                    
+                                    </div>
+                                </div>
+                            </div>                
+                
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-outline">
 
-            <div>
-                {{ kindergarten_form.has_parking.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_form.has_parking }}
-                {% for error in kindergarten_form.has_parking.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
+                                        <label class="form-label">{{ kindergarten_additional_info.phone.label_tag }}</label>
+                                        {{ kindergarten_additional_info.phone }}
+                                        {% for error in kindergarten_additional_info.phone.errors %}
+                                            <div style="color: red">{{ error }}</p>
+                                        {% endfor %}
+
+                                    </div>           
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-outline">
+                                        
+                                        <label class="form-label">{{ kindergarten_additional_info.mail.label_tag }}</label>
+                                        {{ kindergarten_additional_info.mail }}
+                                        {% for error in kindergarten_additional_info.mail.errors %}
+                                            <div style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <div class="row">
+                                <div class="col mb-4">
+                                    <label class="form-label">{{ kindergarten_additional_info.description.label_tag }}</label>
+                                    <div class="form-outline">
+                                        {{ kindergarten_additional_info.description }}
+                                        {% for error in kindergarten_additional_info.description.errors %}
+                                            <div style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>  
+                                </div>  
+                            </div>
+                
+                            <div class="mt-4 pt-2">
+                                <input class="btn btn-outline-dark btn-lg px-5" type="submit" value="שמירה" />
+                            </div>
+                
+                        </form>
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
-
-        <br>פרטים ליצירת קשר עם הגן:
-        <div>
-             <div>
-                {{ kindergarten_additional_info.phone.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_additional_info.phone }}
-                {% for error in kindergarten_additional_info.phone.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
-
-             <div>
-                {{ kindergarten_additional_info.mail.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_additional_info.mail }}
-                {% for error in kindergarten_additional_info.mail.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
-
-             <div>
-                {{ kindergarten_additional_info.description.label_tag }}
-            </div>
-            <div>
-                {{ kindergarten_additional_info.description }}
-                {% for error in kindergarten_additional_info.description.errors %}
-                    <div style="color: red">{{ error }}</p>
-                {% endfor %}
-            </div>
-        </div>
-
-
-
-        <input type="submit" value="שמירה">
-    </form>
-</div>
+    </section>
 </body>
 
 
