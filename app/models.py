@@ -125,3 +125,17 @@ class Comment(models.Model):
     class Meta:
         managed = False
         db_table = 'comment'
+
+
+class Connections(models.Model):
+    connector = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='outgoing_connections',
+                                  db_column='connector')
+    connectee = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='incoming_connections',
+                                  db_column='connectee')
+
+    class Meta:
+        managed = False
+        db_table = 'connections'
+        constraints = [
+            models.UniqueConstraint(fields=['connector', 'connectee'], name='unique_connection')
+        ]

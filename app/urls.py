@@ -13,4 +13,5 @@ urlpatterns = [
     path('add_kindergarten/', views.add_kindergarten, name='add_kindergarten'),
     path('sign_up_kid_to_kindergarten/<int:kindergarten_id>', views.sign_up_kid_to_kindergarten,
          name='sign_up_kid_to_kindergarten'),
+    path('add-connection/', views.add_connection, name='add_connection'),
 ]

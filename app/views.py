@@ -1,23 +1,26 @@
-from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Users
-from django.shortcuts import render, redirect, get_object_or_404
+import operator
+from datetime import time, date
+from functools import reduce
+
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.views.decorators.http import require_GET
-from django.db.models import Min, Max, Q
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.core.validators import validate_email
+from django.db import IntegrityError
+from django.db.models import Min, Max, Q
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_GET
 
+import LittleExplorerApp.settings
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm, AddKindergartenAdditionalInfoForm
 from .geolocation import get_coordinates
-
-import operator
-from functools import reduce
-from datetime import time, date
-
-from django.core.mail import send_mail
-import LittleExplorerApp.settings
+from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Users, Connections
 
 
 class Value:
@@ -169,7 +172,7 @@ def search(request):
                                         max_open.isoformat("minutes")),
                'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"),
                                          max_close.isoformat("minutes")),
-                'request': request.GET}
+               'request': request.GET}
 
     return render(request, 'search.html', context)
 
@@ -255,3 +258,53 @@ def sign_up_kid_to_kindergarten(request, kindergarten_id):
         return redirect('/')
 
     return render(request, 'payment.html')
+
+
+@login_required
+def add_connection(request):
+    if request.method == 'POST':
+        user_email = request.POST.get('user_email')
+        try:
+            validate_email(user_email)
+        except ValidationError:
+            response_data = {
+                'message': 'Invalid email address',
+            }
+            return JsonResponse(response_data, status=400)
+
+        try:
+            connectee = Users.objects.get(email=user_email)
+        except Users.DoesNotExist:
+            response_data = {
+                'message': 'User does not exist',
+            }
+            return JsonResponse(response_data, status=404)
+
+        connector_id = request.user.parent_id
+        connector = Users.objects.get(parent_id=connector_id)
+
+        try:
+            if connector.email == connectee.email:
+                raise ValidationError("You entered your own email")
+            if connectee.user_type == "teacher":
+                raise ValidationError("User does not exist")
+        except ValidationError as e:
+            response_data = {
+                'message': e.message,
+            }
+            return JsonResponse(response_data, status=400)
+
+        connection = Connections(connector=connector, connectee=connectee)
+
+        try:
+            connection.save()
+        except IntegrityError:
+            response_data = {
+                'message': 'You have this connection already',
+            }
+            return JsonResponse(response_data, status=500)
+
+        response_data = {
+            'message': 'Connection added successfully',
+        }
+        return JsonResponse(response_data)
