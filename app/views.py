@@ -169,7 +169,7 @@ def search(request):
                                         max_open.isoformat("minutes")),
                'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"),
                                          max_close.isoformat("minutes")),
-                'request': request.GET}
+               'request': request.GET}
 
     return render(request, 'search.html', context)
 
@@ -255,3 +255,29 @@ def sign_up_kid_to_kindergarten(request, kindergarten_id):
         return redirect('/')
 
     return render(request, 'payment.html')
+
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Connections
+
+
+@login_required
+def add_connection(request):
+    if request.method == 'POST':
+        user_email = request.POST.get('user_email')
+        connectee = Users.objects.get(email=user_email)
+
+        # Get the currently logged in user's id as the connector
+        connector_id = request.user.parent_id
+        connector = Users.objects.get(parent_id=connector_id)
+
+        # Create a new connection
+        connection = Connections(connector=connector, connectee=connectee)
+        connection.save()
+
+        # Return a JSON response
+        response_data = {
+            'message': 'Connection added successfully',
+        }
+        return JsonResponse(response_data)
