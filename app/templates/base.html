@@ -27,9 +27,12 @@
                     },
                     error: function(xhr) {
                         // Handle error
-                        console.log(xhr.responseText);
+                        var response = JSON.parse(xhr.responseText);
+                        var errorMessage = response.message;
+                        alert(errorMessage);
                     }
                 });
+                $("#search-input").val("");
             });
         });
     </script>
