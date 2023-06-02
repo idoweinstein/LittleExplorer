@@ -110,12 +110,6 @@ class AddKindergartenForm(forms.ModelForm):
         if min_age and max_age and min_age > max_age:
             self.add_error('max_age', "The maximum age can't be lower from the minimum age.")
 
-        open_time = cleaned_data.get('open_time')
-        close_time = cleaned_data.get('close_time')
-        if open_time and close_time and open_time > close_time:
-            self.add_error('close_time', "The open time can't be later then the close time.")
-
-
         return cleaned_data
 
     class Meta:
@@ -163,11 +157,6 @@ class AddKindergartenAdditionalInfoForm(forms.ModelForm):
     class Meta:
         model = Kindergartenadditionalinfo
         fields = ['phone', 'mail', 'description']
-        # labels = {
-        #     'phone': 'טלפון',
-        #     'mail': 'מייל',
-        #     'description': 'זה המקום לרשום לנו כמה מילים על הגן שלך!',
-        # }
         widgets = {
             'description': forms.Textarea(attrs={'rows': 5, 'cols': 50, 'placeholder': 'תיאור הגן...'})
         }
