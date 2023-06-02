@@ -1,43 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<style>
-    /* TODO: move to base.css after merge with Shir's code */
-    .grade.deactivated {
-        -webkit-filter: grayscale(100%);
-        filter: grayscale(100%);
-        font-size: 2em;
-    }
-
-    .grade.pending {
-        -webkit-filter: grayscale(50%);
-        filter: grayscale(50%);
-        font-size: 2em;
-    }
-
-    .grade.chosen {
-        -webkit-filter: grayscale(0%);
-        filter: grayscale(0%);
-        font-size: 2em;
-    }
-</style>
-<script>
-    window.onload = () => {
-        for (const element of document.getElementsByName('grade')) {
-            const value = +(element.getAttribute('value'));
-            for (let i = 5; i >= 1; --i) {
-                // Iterating backwards since page is rtl but the bottles are ltr
-                const subelement = document.createElement('span');
-                subelement.innerHTML = '🍼';
-                subelement.classList.add('grade');
-                subelement.classList.add(i <= value ? 'chosen' : 'deactivated');
-                element.appendChild(subelement);
-            }
-            element.setAttribute("title", "דירוג: " + value);
-        }
-    }
-</script>
 <body>
-
 <section class="vh-100 h-custom">
     <div class="container py-5" dir="rtl">
         <div class="d-flex justify-content-center" style="margin-bottom: 20px;">
