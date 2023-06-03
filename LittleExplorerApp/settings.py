@@ -21,9 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e_eg=m)omk-vf6$k^_t7afn7#%k(jz86ds@x9!=^%mz^c0^$!a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO: switch to False before merging to main
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'localhost', '0.0.0.0', '127.0.0.1']
 
 # Application definition
 
@@ -112,8 +113,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
+import os
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'app', STATIC_URL)
+
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

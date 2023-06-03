@@ -4,10 +4,9 @@ from functools import reduce
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.db import IntegrityError
@@ -15,6 +14,8 @@ from django.db.models import Min, Max, Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET
+
+from django.contrib.auth.decorators import user_passes_test
 
 import LittleExplorerApp.settings
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
@@ -35,10 +36,40 @@ class RangedValue(Value):
         self.max = max
 
 
+def assert_true(func):
+    def inner(*args, **kwargs):
+        value = func(*args, **kwargs)
+        if not value:
+            raise PermissionDenied
+        return value
+    return inner
+
+
+@assert_true
+def unauthenticated(user):
+    return not user.is_authenticated
+
+
+@assert_true
+def authenticated(user):
+    return user.is_authenticated
+
+
+@assert_true
+def parent(user):
+    return user.is_parent()
+
+
+@assert_true
+def teacher(user):
+    return user.is_teacher()
+
+
 def index(request):
     return render(request, 'index.html')
 
 
+@user_passes_test(unauthenticated)
 def log_in(request):
     if request.method == 'GET':
         return render(request, 'login.html', {})
@@ -75,14 +106,17 @@ def sign_up(request, user_type):
     })
 
 
+@user_passes_test(unauthenticated)
 def parent_sign_up(request):
     return sign_up(request, "parent")
 
 
+@user_passes_test(unauthenticated)
 def teacher_sign_up(request):
     return sign_up(request, "teacher")
 
 
+@user_passes_test(authenticated)
 def log_out(request):
     logout(request)
     return redirect('/')
@@ -155,10 +189,15 @@ def search(request):
         if parameters.get(key):
             filters.append(Q(**{attr_key: attr_value}))
 
+    
     if filters:
         kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
     else:
         kindergartens = Kindergarten.objects.all()
+
+    # Show only kindergartens with left slots
+    if parameters.get('is_free') == 'on':
+        kindergartens = [k for k in kindergartens.iterator() if k.is_free()]
 
     if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
@@ -189,6 +228,7 @@ def get_kindergarten_details(request, kindergarten_id):
                    })
 
 
+@user_passes_test(parent)
 def add_comment(request, kindergarten_id):
     if request.method == "POST":
         form = AddCommentForm(request.POST)
@@ -209,6 +249,7 @@ def add_comment(request, kindergarten_id):
     })
 
 
+@user_passes_test(teacher)
 def add_kindergarten(request):
     if request.method == "POST":
         kindergarten_form = AddKindergartenForm(request.POST)
@@ -232,6 +273,7 @@ def add_kindergarten(request):
     })
 
 
+@user_passes_test(parent)
 def sign_up_kid_to_kindergarten(request, kindergarten_id):
     if request.method == "POST":
         kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
@@ -260,7 +302,7 @@ def sign_up_kid_to_kindergarten(request, kindergarten_id):
     return render(request, 'payment.html')
 
 
-@login_required
+@user_passes_test(authenticated)
 def add_connection(request):
     if request.method == 'POST':
         user_email = request.POST.get('user_email')

@@ -34,7 +34,8 @@
 </script>
 
 <body>
-    <!-- <link rel="stylesheet" href="..\static\search.css"> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'search.css' %}">
     <form method="GET" action="/search">
         <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
@@ -64,6 +65,7 @@
 
                         <div class="text-center">
 
+<<<<<<< HEAD
                             <label class="form-label" for="min_age">גיל מינימלי (בחודשים): <output id="min_age_value"></output></label>
                             <div class="form-outline-dark mb-2">
                                 <input type="range" class="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
@@ -148,6 +150,43 @@
                     <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
                     <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
                 </div>
+=======
+        <div class="filters"> 
+            <div class="advance_search">
+                <h6>חיפוש מתקדם</h4>
+            </div>
+            <h5>
+                <input type="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
+                <label for="min_age">גיל מינימלי: <output id="min_age_value"></output></label>
+            </h5>
+            <h5>
+                <input type="range" id="max_age" name="max_age" min="{{ max_age.min }}" max="{{ max_age.max }}" value="{{ max_age.value }}" step="1">
+                
+                <label for="max_age">גיל מקסימלי: <output id="max_age_value"></output></label>
+            </h5>
+            <h5 >
+                <input type="range" id="capacity" name="capacity" min="{{ capacity.min }}" max="{{ capacity.max }}" value="{{ capacity.value }}" step="1">
+                
+                <label for="max_age">כמות ילדים מירבית: <output id="capacity_value"></output></label>
+            </h5>
+            <h5>
+                שעות פעילות: החל מהשעה <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}"> 
+                ועד השעה <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
+            </h5>
+            <h5>
+                חפש גנים עם מקומות פנויים: <input type="checkbox" id="is_free" name="is_free">
+            </h5>
+        </div>
+    </form>
+    <div class="search_results">
+        {% for result in results %}
+        <div class="kindergarten">
+            <div class="kindergarten_name">
+                <img src="{% get_static_prefix %}imges/{{ forloop.counter }}.png" alt="photo" class="kindergarten_photo"/>
+                <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">
+                    <h4>{{ result.name }}</h4>
+                </a>
+>>>>>>> dev
             </div>
             {% endfor %}
         </div>
