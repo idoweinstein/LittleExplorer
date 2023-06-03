@@ -21,16 +21,6 @@
             });
         }
     }
-    $('#multi3').mdbRange({
-        width: '100%',
-        single: {
-            active: true,
-            multi: {
-                active: true,
-                rangeLength: 2
-            },
-        }
-    });
 </script>
 
 <body>
@@ -50,7 +40,7 @@
            </div>
         </div>
     </form>
-    <div style="margin-top: 25px; text-align: center; margin-bottom: 20px;" >
+    <div style="margin-top: 25px; text-align: center; margin-bottom: 25px;" >
         <h2 class="fw-bold mb-2">תוצאות חיפוש</h2>
     </div>
     
@@ -64,8 +54,6 @@
                         <h5 class="card-title mb-2 text-center">חיפוש מתקדם</h5>
 
                         <div class="text-center">
-
-<<<<<<< HEAD
                             <label class="form-label" for="min_age">גיל מינימלי (בחודשים): <output id="min_age_value"></output></label>
                             <div class="form-outline-dark mb-2">
                                 <input type="range" class="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
@@ -105,7 +93,7 @@
                             </div>
                              
                         </div>
-                        <div class="text-center">
+                        <div class="text-center mb-2" style="margin-top: 10px;">
                             <button class="btn btn-outline-dark btn-sm" type="submit">פילטר</button>
                         </div>
                     </div>
@@ -118,23 +106,24 @@
                 <div class="container">
                       <div class="card text-dark">
                         {% for result in results %}
-                            <div class="card-body">
-                
-                                <div class="flex-start" style="text-align: center;">
-                                    <p class="mb-0">
-                                        <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="לדף המפורט של הגן לחצו כאן" style="color: black; text-decoration: none;">
-                                            <h4 class="fw-bold mb-0">{{ result.name }}</h4>
-                                        </a>
-                                    </p>
-                                    
-                                    <p class="mb-0">
-                                        <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
-                                    </p>
-                                    <p class="mb-0">
-                                        <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
-                                    </p>
-                                </div>
-                                <hr class="my-0" />
+                            <div class="card-body" class="kindergarten">
+                                <div class="kindergarten">
+                                    <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="לדף המפורט של הגן לחצו כאן" style="color: black; text-decoration: none;">
+                                        <div class="flex-start" style="text-align: center;">
+                                            <p class="mb-0">
+                                                <h4 class="fw-bold mb-0">{{ result.name }}</h4>
+                                                
+                                            </p>
+                                            <p class="mb-0">
+                                                <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
+                                            </p>
+                                            <p class="mb-0">
+                                                <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
+                                            </p>
+                                        </div>
+                                    </a>
+                                    <hr class="my-0" />
+                                </div>    
                             </div>
                         {% endfor %}
                       </div>
@@ -150,43 +139,6 @@
                     <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
                     <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
                 </div>
-=======
-        <div class="filters"> 
-            <div class="advance_search">
-                <h6>חיפוש מתקדם</h4>
-            </div>
-            <h5>
-                <input type="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
-                <label for="min_age">גיל מינימלי: <output id="min_age_value"></output></label>
-            </h5>
-            <h5>
-                <input type="range" id="max_age" name="max_age" min="{{ max_age.min }}" max="{{ max_age.max }}" value="{{ max_age.value }}" step="1">
-                
-                <label for="max_age">גיל מקסימלי: <output id="max_age_value"></output></label>
-            </h5>
-            <h5 >
-                <input type="range" id="capacity" name="capacity" min="{{ capacity.min }}" max="{{ capacity.max }}" value="{{ capacity.value }}" step="1">
-                
-                <label for="max_age">כמות ילדים מירבית: <output id="capacity_value"></output></label>
-            </h5>
-            <h5>
-                שעות פעילות: החל מהשעה <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}"> 
-                ועד השעה <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
-            </h5>
-            <h5>
-                חפש גנים עם מקומות פנויים: <input type="checkbox" id="is_free" name="is_free">
-            </h5>
-        </div>
-    </form>
-    <div class="search_results">
-        {% for result in results %}
-        <div class="kindergarten">
-            <div class="kindergarten_name">
-                <img src="{% get_static_prefix %}imges/{{ forloop.counter }}.png" alt="photo" class="kindergarten_photo"/>
-                <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">
-                    <h4>{{ result.name }}</h4>
-                </a>
->>>>>>> dev
             </div>
             {% endfor %}
         </div>

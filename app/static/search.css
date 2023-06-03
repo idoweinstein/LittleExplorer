@@ -3,3 +3,7 @@ a{
     text-decoration: none;
     color: black;
 }
+
+.kindergarten:hover{
+    transform: scale(1.05);
+}
