@@ -189,10 +189,15 @@ def search(request):
         if parameters.get(key):
             filters.append(Q(**{attr_key: attr_value}))
 
+    
     if filters:
         kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
     else:
         kindergartens = Kindergarten.objects.all()
+
+    # Show only kindergartens with left slots
+    if parameters.get('is_free') == 'on':
+        kindergartens = [k for k in kindergartens.iterator() if k.is_free()]
 
     if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
