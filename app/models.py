@@ -91,6 +91,12 @@ class Kindergarten(models.Model):
     def display_ratio_children_teachers(self):
         return str(self.capacity) + ' : ' + str(self.num_of_teachers)
 
+    def get_longitude(self):
+        return self.geolocation.x
+
+    def get_latitude(self):
+        return self.geolocation.y
+
     def set_geolocation(self):
         location = f"{self.address} {self.region}"
         coordinates = get_coordinates(location)

@@ -22,8 +22,106 @@
         }
     }
 </script>
+<script id="mapmap" type="text/javascript" data-kindergartens="{{ json_results }}">
+    var map, clusterLayer, infobox, searchManager;
+    const kindergartens = JSON.parse(document.currentScript.dataset.kindergartens);
+    // TODO: use kindergartens list instead of inlining django tags
+    // TODO: move most of javascript logic to a separate file under static dir
+
+	function GetMap() {
+	    map = new Microsoft.Maps.Map('#myMap', {});
+
+        //Add an infobox to the map.
+	    infobox = new Microsoft.Maps.Infobox(map.getCenter(), { visible: false });
+	    infobox.setMap(map);
+
+        Microsoft.Maps.loadModule("Microsoft.Maps.Clustering", function () {
+            //Create a clustering layer
+            clusterLayer = new Microsoft.Maps.ClusterLayer(createCustomPushpins(), {
+                clusteredPinCallback: createCustomClusterPushpins,
+            });
+
+            //Add a click event to the clustering layer.
+            Microsoft.Maps.Events.addHandler(clusterLayer, 'click', pushpinClicked);
+
+            map.layers.insert(clusterLayer);
+        });
+	}
+
+    function createCustomPushpins() {
+        // Create pins for the kindergartens.
+        let pin, loc;
+        const pins = [], locs = [];
+
+        {% for result in results %}
+            loc = new Microsoft.Maps.Location(
+                {{ result.get_latitude }},
+                {{ result.get_longitude }});
+            pin = new Microsoft.Maps.Pushpin(loc, {text: ''});
+            pin.metadata = {'id': {{ result.kindergarten_id }}};
+            pin.setOptions({title: "{{ result.name|safe }}"});
+            pins.push(pin);
+            locs.push(loc);
+        {% endfor %}
+
+        return pins;
+    }
+
+	function createCustomClusterPushpins(cluster) {
+	    //Create a title for the cluster.
+	    cluster.setOptions({
+	        title: cluster.containedPushpins.length + ' גנים'
+	    });
+	}
+
+	function pushpinClicked(e) {
+        //Show an infobox when a pushpin is clicked.
+        if (!e.target.containedPushpins) {
+            // Redirect to the proper page
+            window.location.href = `/kindergarten/${e.target.metadata.id}`;
+        } else {
+            showInfobox(e.target);
+        }
+	}
+
+	function showInfobox(pin) {
+	    var description = [];
+
+        //Check to see if the pushpin is a cluster.
+	    if (pin.containedPushpins) {
+
+	        //Create a list of all pushpins that are in the cluster.
+	        for (var i = 0; i < pin.containedPushpins.length; i++) {
+                description.push(
+                    `<a style="font-family: arial; color:blue; text-decoration: underline" href="/kindergarten/`+
+                    `${pin.containedPushpins[i].metadata.id}">${pin.containedPushpins[i].getTitle()}</a><br>`);
+	        }
+	    } else {
+            description.push(``)
+        }
+
+        //Display an infobox for the pushpin.
+	    infobox.setOptions({
+	        title: pin.getTitle(),
+	        location: pin.getLocation(),
+	        description: description.join(''),
+	        visible: true
+	    });
+	}
+    </script>
+    <script>
+        // Dynamic load the Bing Maps Key and Script
+        // Get your own Bing Maps key at https://www.microsoft.com/maps
+        window.addEventListener("load", async () => {
+            const script = document.createElement("script");
+            const bingKey = "Ao8tSGMxgBHd33tp113veePtzRiaEDhNsNLcDPyKnFzjw1_2AjogMbkwANCcK_dE";
+            script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=${bingKey}`);
+            document.body.appendChild(script);
+        });
+    </script>
 <body>
     {% load static %}
+    {% load my_tags %}
     <link rel="stylesheet" href="{% static 'search.css' %}">
     <form method="GET" action="/search">
         <div class="d-flex justify-content-center">
@@ -69,20 +167,38 @@
             </h5>
         </div>
     </form>
-    <div class="search_results">
-        {% for result in results %}
-        <div class="kindergarten">
-            <div class="kindergarten_name">
-                <img src="{% get_static_prefix %}imges/{{ forloop.counter }}.png" alt="photo" class="kindergarten_photo"/>
-                <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">
-                    <h4>{{ result.name }}</h4>
-                </a>
+    <div class="search_results" class="d-flex align-items-center">
+        <ul class="nav nav-pills mb-3 mx-auto justify-content-center" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button" role="tab" aria-controls="pills-list" aria-selected="true">רשימה</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-map-tab" data-bs-toggle="pill" data-bs-target="#pills-map" type="button" role="tab" aria-controls="pills-map" aria-selected="false">מפה</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
+                <!-- List content -->
+                {% for result in results %}
+                <div class="kindergarten">
+                    <div class="kindergarten_name">
+                        <img src="{% get_static_prefix %}imges/{{ forloop.counter|custommod:12 }}.png" alt="photo" class="kindergarten_photo"/>
+                        <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן">
+                            <h4>{{ result.name }}</h4>
+                        </a>
+                    </div>
+                    <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
+                    <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
+                </div>
+                {% endfor %}
             </div>
-            <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
-            <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
+            <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
+                <!-- Map content -->
+                <div id="myMap" class="side justify-content-center" style="position:relative;width:100%;min-width:290px;height:100%; min-height:80vh;background-color:gray"></div>
+            </div>
         </div>
-        {% endfor %}
     </div>
+    
 </body>
 
 {% endblock content%}

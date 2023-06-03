@@ -23,6 +23,8 @@ from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
 from .geolocation import get_coordinates
 from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Users, Connections
 
+from django.core import serializers
+
 
 class Value:
     def __init__(self, value):
@@ -203,6 +205,7 @@ def search(request):
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
 
     context = {'results': kindergartens,
+               'json_results': serializers.serialize("json", kindergartens),
                'value': Value(value),
                'min_age': RangedValue(min_age_value, min_age_min, min_age_max),
                'max_age': RangedValue(max_age_value, max_age_min, max_age_max),
