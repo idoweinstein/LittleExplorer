@@ -13,22 +13,10 @@ from django.views.decorators.http import require_GET
 from django.contrib.auth.decorators import user_passes_test
 
 import LittleExplorerApp.settings
-from app.search import get_boundaries_of_fields, get_filtered_kindergartens
+from app.search import get_boundaries_of_fields, get_filtered_kindergartens, RangedValue, Value
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm, AddKindergartenAdditionalInfoForm
-from .models import Kindergarten, Users, Connections
-
-
-class Value:
-    def __init__(self, value):
-        self.value = value
-
-
-class RangedValue(Value):
-    def __init__(self, value, min, max):
-        super().__init__(value)
-        self.min = min
-        self.max = max
+from .models import Kindergarten, Users, Connections, Kindergartenadditionalinfo, Comment
 
 
 def assert_true(func):
