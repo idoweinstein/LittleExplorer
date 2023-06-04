@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.mail import send_mail
+from django.core import serializers
 from django.core.validators import validate_email
 from django.db import IntegrityError
 from django.http import JsonResponse
@@ -118,6 +119,7 @@ def search(request):
     kindergartens = get_filtered_kindergartens(boundaries, parameters, method, value)
 
     context = {'results': kindergartens,
+               'json_results': serializers.serialize("json", kindergartens),
                'value': Value(value),
                'min_age': RangedValue(boundaries['min_age_value'], boundaries['min_age_min'],
                                       boundaries['min_age_max']),
