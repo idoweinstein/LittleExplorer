@@ -1,39 +1,21 @@
-import operator
-from datetime import time, date
-from functools import reduce
+from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import Point
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.db import IntegrityError
-from django.db.models import Min, Max, Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET
 
-from django.contrib.auth.decorators import user_passes_test
-
 import LittleExplorerApp.settings
+from app.search import get_boundaries_of_fields, get_filtered_kindergartens, Value, RangedValue
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm, AddKindergartenAdditionalInfoForm
-from .geolocation import get_coordinates
 from .models import Kindergarten, Kindergartenadditionalinfo, Comment, Users, Connections
-
-
-class Value:
-    def __init__(self, value):
-        self.value = value
-
-
-class RangedValue(Value):
-    def __init__(self, value, min, max):
-        super().__init__(value)
-        self.min = min
-        self.max = max
 
 
 def assert_true(func):
@@ -42,6 +24,7 @@ def assert_true(func):
         if not value:
             raise PermissionDenied
         return value
+
     return inner
 
 
@@ -128,89 +111,22 @@ def search(request):
     method = parameters.get("method")
     value = parameters.get("value")
 
-    if method not in ["name", "location"]:
+    if method not in ["name", "location", "advanced"]:
         method = "name"
 
-    # TODO: VALIDATE INPUTS!!! (Can be done after version 0)
-    l = Kindergarten.objects.all().aggregate(
-        Min('min_age'), Max('min_age'),
-        Min('max_age'), Max('max_age'),
-        Min('capacity'), Max('capacity'),
-        Min('open_time'), Max('open_time'),
-        Min('close_time'), Max('close_time'))
-    (min_age_min, min_age_max, max_age_min, max_age_max, min_capacity, max_capacity, min_open, max_open, min_close,
-     max_close) = (
-        int(l['min_age__min']), int(l['min_age__max']), int(l['max_age__min']), int(l['max_age__max']),
-        int(l['capacity__min']), int(l['capacity__max']),
-        l['open_time__min'], l['open_time__max'], l['close_time__min'], l['close_time__max']
-    )
-
-    min_age_value = int(parameters.get("min_age")) if parameters.get("min_age") else min_age_min
-    max_age_value = int(parameters.get("max_age")) if parameters.get("max_age") else max_age_max
-    if min_age_value > max_age_value:
-        min_age_value = max_age_value
-    capacity_value = int(parameters.get("capacity")) if parameters.get("capacity") else max_capacity
-    open_value = parameters.get("open_time") if parameters.get("open_time") else max_open
-    close_value = parameters.get("close_time") if parameters.get("close_time") else min_close
-
-    if isinstance(min_open, str):
-        min_open = time.fromisoformat(min_open)
-    if isinstance(max_open, str):
-        max_open = time.fromisoformat(max_open)
-    if isinstance(open_value, str):
-        open_value = time.fromisoformat(open_value)
-
-    if isinstance(min_close, str):
-        min_close = time.fromisoformat(min_close)
-    if isinstance(max_close, str):
-        max_close = time.fromisoformat(max_close)
-    if isinstance(close_value, str):
-        close_value = time.fromisoformat(close_value)
-
-    filters = list()
-    point = None
-    if method == "name":
-        filters.append(Q(name__contains=value))
-    else:
-        # method == "location"
-        regional_search = value in Kindergarten.objects.order_by('region').values_list('region', flat=True).distinct()
-        if regional_search:
-            filters.append(Q(region=value))
-        else:
-            coords = get_coordinates(value)
-            point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
-
-    for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", min_age_value),
-                                        "max_age": ("max_age__lte", max_age_value),
-                                        "capacity": ("capacity__lte", capacity_value),
-                                        "open_time": ("open_time__lte", open_value),
-                                        "close_time": ("close_time__gte", close_value)
-                                        }.items():
-        if parameters.get(key):
-            filters.append(Q(**{attr_key: attr_value}))
-
-    if filters:
-        kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
-    else:
-        kindergartens = Kindergarten.objects.all()
-
-    # Show only kindergartens with left slots
-    if parameters.get('is_free') == 'on':
-        kindergartens = [k for k in kindergartens.iterator() if k.is_free()]
-
-    if method == "location" and not regional_search:
-        kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
+    boundaries = get_boundaries_of_fields(parameters)
+    kindergartens = get_filtered_kindergartens(boundaries, parameters, method, value)
 
     context = {'results': kindergartens,
                'value': Value(value),
-               'min_age': RangedValue(min_age_value, min_age_min, min_age_max),
-               'max_age': RangedValue(max_age_value, max_age_min, max_age_max),
-               'capacity': RangedValue(capacity_value, min_capacity, max_capacity),
-               'open_time': RangedValue(open_value.isoformat("minutes"), min_open.isoformat("minutes"),
-                                        max_open.isoformat("minutes")),
-               'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"),
-                                         max_close.isoformat("minutes")),
-                'is_free': parameters.get('is_free') == 'on',
+               'min_age': RangedValue(boundaries['min_age_value'], boundaries['min_age_min'], boundaries['min_age_max']),
+               'max_age': RangedValue(boundaries['max_age_value'], boundaries['max_age_min'], boundaries['max_age_max']),
+               'capacity': RangedValue(boundaries['capacity_value'], boundaries['min_capacity'], boundaries['max_capacity']),
+               'open_time': RangedValue(boundaries['open_value'].isoformat("minutes"), boundaries['min_open'].isoformat("minutes"),
+                                        boundaries['max_open'].isoformat("minutes")),
+               'close_time': RangedValue(boundaries['close_value'].isoformat("minutes"), boundaries['min_close'].isoformat("minutes"),
+                                         boundaries['max_close'].isoformat("minutes")),
+               'is_free': parameters.get('is_free') == 'on',
                'request': request.GET}
 
     return render(request, 'search.html', context)
