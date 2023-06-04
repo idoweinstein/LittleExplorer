@@ -29,12 +29,12 @@
     <form method="GET" action="/search">
         <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
-              <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">חיפוש לפי שם</label>
-              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">חיפוש לפי מקום</label>
+              <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">Search by name</label>
+              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Search by location</label>
               <div class="input-group rounded">
                 <form class="form-inline">
                         <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search">
-                        <button class="btn btn-outline-dark btn-sm" type="submit">חיפוש</button>
+                        <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
 
                         <input type="hidden" name="min_age" value="{{ min_age.value }}">
                         <input type="hidden" name="max_age" value="{{ max_age.value }}">
@@ -94,7 +94,7 @@
                                 from <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}">
                             </div>
                             <div class="form-outline-dark mb-2"> 
-                                to  <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
+                                until <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
                             </div>
                              
                         </div>
@@ -112,7 +112,7 @@
 
 
                         <div class="text-center mb-2" style="margin-top: 10px;">
-                            <button class="btn btn-outline-dark btn-sm" type="submit">search</button>
+                            <button class="btn btn-outline-dark btn-sm" type="submit">Filter</button>
                         </div>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                       <div class="card text-dark">
                         {% for result in results %}
                             <div class="card-body" class="kindergarten">
-                                <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="לדף המפורט של הגן לחצו כאן" style="color: black; text-decoration: none;">
+                                <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="Click here for more details" style="color: black; text-decoration: none;">
                                     <div class="kindergarten">
                                         <div class="flex-start" style="text-align: center;">
                                             <p class="mb-0">
@@ -133,10 +133,10 @@
                                                 
                                             </p>
                                             <p class="mb-0">
-                                                <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
+                                                <h5>Address: {{ result.address }}, {{ result.region }}</h5>
                                             </p>
                                             <p class="mb-0">
-                                                <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
+                                                <h5>Ages: {{ result.get_min_age_display }} to {{ result.get_max_age_display }}</h5>
                                             </p>
                                         </div>
                                     </div>
