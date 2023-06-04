@@ -35,6 +35,15 @@
                 <form class="form-inline">
                         <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search">
                         <button class="btn btn-outline-dark btn-sm" type="submit">חיפוש</button>
+
+                        <input type="hidden" name="min_age" value="{{ min_age.value }}">
+                        <input type="hidden" name="max_age" value="{{ max_age.value }}">
+                        <input type="hidden" name="capacity" value="{{ capacity.value }}">
+                        <input type="hidden" name="open_time" value="{{ open_time.value }}">
+                        <input type="hidden" name="close_time" value="{{ close_time.value }}">
+                        {% if request.is_free %}
+                        <input type="hidden" name="is_free" value="on">
+                        {% endif %}
                     </form>
                 </div>
            </div>
@@ -57,7 +66,6 @@
                             <label class="form-label" for="min_age">גיל מינימלי (בחודשים): <output id="min_age_value"></output></label>
                             <div class="form-outline-dark mb-2">
                                 <input type="range" class="range" id="min_age" name="min_age" min="{{ min_age.min }}" max="{{ min_age.max }}" value="{{ min_age.value }}" step="1">
-                       
                             </div>
 
                         </div>
@@ -97,10 +105,13 @@
                         <div class="text-center">
                             <div class="form-outline-dark mb-2">
                                 <label class="form-label" for="capacity"> גנים עם מקום פנוי בלבד<output id="capacity_value"></output></label>
-                                <input type="checkbox" class="range" id="is_free" name="is_free">   
+                                <input type="checkbox" class="range" id="is_free" name="is_free" {% if request.is_free %} checked {% endif %}>
                             </div>
 
                         </div>
+
+                        <input type="hidden" name="method" value="{{ request.method }}">
+                        <input type="hidden" name="value" value="{{ request.value }}">
 
 
                         <div class="text-center mb-2" style="margin-top: 10px;">
@@ -133,24 +144,15 @@
                                         </div>
                                     </a>
                                     <hr class="my-0" />
-                                </div>    
+                                </div>
                             </div>
                         {% endfor %}
+                        {% if not results %}
+                            אין תוצאות...
+                        {% endif %}
                       </div>
                 </div>
               </section>
-
-            {% for result in results %}
-            <div class="card text-black">
-                <div class="card-body p-md-5" style="text-align: center;">
-                    <a href="/kindergarten/{{ result.kindergarten_id }}" title="לדף המפורט של הגן לחצו כאן" style="color: black; text-decoration: none;">
-                        <h4 class="card-title">{{ result.name }}</h4>
-                    </a>
-                    <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
-                    <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </div>
    

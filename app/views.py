@@ -189,7 +189,6 @@ def search(request):
         if parameters.get(key):
             filters.append(Q(**{attr_key: attr_value}))
 
-    
     if filters:
         kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
     else:
@@ -211,6 +210,7 @@ def search(request):
                                         max_open.isoformat("minutes")),
                'close_time': RangedValue(close_value.isoformat("minutes"), min_close.isoformat("minutes"),
                                          max_close.isoformat("minutes")),
+                'is_free': parameters.get('is_free') == 'on',
                'request': request.GET}
 
     return render(request, 'search.html', context)
