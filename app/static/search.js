@@ -106,6 +106,7 @@ window.addEventListener("load", async () => {
 
     // Update kindergartens variable
     kindergartens = JSON.parse(document.getElementById("kindergartens-data").dataset.kindergartens);
+    if (!kindergartens) return;
 
     const script = document.createElement("script");
     const bingKey = "Ao8tSGMxgBHd33tp113veePtzRiaEDhNsNLcDPyKnFzjw1_2AjogMbkwANCcK_dE";
