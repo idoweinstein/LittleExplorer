@@ -8,6 +8,7 @@ from django.db.models import Min, Max, Q
 
 from .geolocation import get_coordinates
 from .models import Kindergarten
+from app.algorithm import main_algo
 
 
 class Value:
@@ -111,7 +112,7 @@ def get_filtered_kindergartens(boundaries, parameters, method, value):
             coords = get_coordinates(value)
             point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
     else:
-        # algo
+        # algo does not contain any filters
         pass
 
     for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", boundaries['min_age_value']),
@@ -136,5 +137,9 @@ def get_filtered_kindergartens(boundaries, parameters, method, value):
     # sort by distance
     if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
+
+    # search by algorithm
+    if method == "advanced":
+        kindergartens = main_algo(kindergartens)
 
     return kindergartens

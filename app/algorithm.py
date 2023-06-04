@@ -8,8 +8,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 nltk.download('punkt', quite=True)
 nltk.download('stopwords', quiet=True)
 
-def main_algo(kindergarten_list):
+
+def main_algo(kindergartens):
+    # need to get all the additional info here
     pass
+
 
 def preprocess_description(description):
     # tokenize the description into separate words
@@ -42,3 +45,9 @@ def tfidf_score(descriptions, user_text_input):
     similarity_scores = cosine_similarity(short_description_vector, document_vectors)
 
     return similarity_scores
+
+def location_score():
+    pass
+
+def connections_bonus():
+    pass
