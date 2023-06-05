@@ -18,6 +18,7 @@ from app.search import get_boundaries_of_fields, get_filtered_kindergartens, Ran
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm, AddKindergartenAdditionalInfoForm
 from .models import Kindergarten, Users, Connections, Kindergartenadditionalinfo, Comment
+from .geolocation import BING_KEY
 
 
 def assert_true(func):
@@ -120,6 +121,7 @@ def search(request):
 
     context = {'results': kindergartens,
                'json_results': serializers.serialize("json", kindergartens),
+               'api_key': BING_KEY,
                'value': Value(value),
                'min_age': RangedValue(boundaries['min_age_value'], boundaries['min_age_min'],
                                       boundaries['min_age_max']),

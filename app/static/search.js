@@ -1,7 +1,8 @@
-var map, clusterLayer, infobox, searchManager;
+let map, infobox;
 let kindergartens;
 
 function GetMap() {
+    let clusterLayer;
     map = new Microsoft.Maps.Map('#myMap', {});
 
     //Add an infobox to the map.
@@ -27,7 +28,7 @@ function getLatLong(geolocation) {
 
 function createCustomPushpins(kindergartens) {
     // Create pins for the kindergartens.
-    const pins = [], locs = [];
+    const pins = [];
 
     for (const kindergarten of kindergartens) {
         let {lat, long} = getLatLong(kindergarten.fields.geolocation);
@@ -39,21 +40,20 @@ function createCustomPushpins(kindergartens) {
         pin.metadata = {'id': kindergarten.pk};
         pin.setOptions({title: kindergarten.fields.name});
         pins.push(pin);
-        locs.push(loc);
     }
 
     return pins;
 }
 
 function createCustomClusterPushpins(cluster) {
-    //Create a title for the cluster.
+    // Create a title for the cluster.
     cluster.setOptions({
         title: cluster.containedPushpins.length + ' גנים'
     });
 }
 
 function pushpinClicked(e) {
-    //Show an infobox when a pushpin is clicked.
+    // Show an infobox when a pushpin is clicked.
     if (!e.target.containedPushpins) {
         // Redirect to the proper page
         window.location.href = `/kindergarten/${e.target.metadata.id}`;
@@ -63,22 +63,21 @@ function pushpinClicked(e) {
 }
 
 function showInfobox(pin) {
-    var description = [];
+    const description = [];
 
     //Check to see if the pushpin is a cluster.
     if (pin.containedPushpins) {
-
-        //Create a list of all pushpins that are in the cluster.
-        for (var i = 0; i < pin.containedPushpins.length; i++) {
+        // Create a list of all pushpins that are in the cluster.
+        for (const subpin of pin.containedPushpins) {
             description.push(
                 `<a style="font-family: arial; color:blue; text-decoration: underline" href="/kindergarten/`+
-                `${pin.containedPushpins[i].metadata.id}">${pin.containedPushpins[i].getTitle()}</a><br>`);
+                `${subpin.metadata.id}">${subpin.getTitle()}</a><br>`);
         }
     } else {
-        description.push(``)
+        description.push('');
     }
 
-    //Display an infobox for the pushpin.
+    // Display an infobox for the pushpin.
     infobox.setOptions({
         title: pin.getTitle(),
         location: pin.getLocation(),
@@ -87,7 +86,7 @@ function showInfobox(pin) {
     });
 }
 
-window.addEventListener("load", async () => {
+window.addEventListener("load", () => {
     // Define filters behavior
     for (const catergory of ["min_age", "max_age", "capacity"]) {
         const value = document.querySelector(`#${catergory}_value`);
@@ -108,8 +107,11 @@ window.addEventListener("load", async () => {
     kindergartens = JSON.parse(document.getElementById("kindergartens-data").dataset.kindergartens);
     if (!kindergartens) return;
 
+    // Get API key
+    const key = document.getElementById("key").dataset.key;
+
+    // Load map
     const script = document.createElement("script");
-    const bingKey = "Ao8tSGMxgBHd33tp113veePtzRiaEDhNsNLcDPyKnFzjw1_2AjogMbkwANCcK_dE";
-    script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=${bingKey}`);
+    script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=${key}`);
     document.body.appendChild(script);
 });
