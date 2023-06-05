@@ -179,11 +179,10 @@ def add_kindergarten(request):
             kindergarten = kindergarten_form.save(commit=False)
             kindergarten.teacher_id = request.user.parent_id
             kindergarten.set_geolocation()
-            kindergarten = kindergarten.save()
+            kindergarten.save()
             kindergarten_additional_info_form.save(kindergarten)
 
-            # TODO: we want to show a response to the user
-            return redirect('/')
+            return redirect(f'/kindergarten/{ kindergarten.kindergarten_id }')
     else:
         kindergarten_form = AddKindergartenForm()
         kindergarten_additional_info_form = AddKindergartenAdditionalInfoForm()
