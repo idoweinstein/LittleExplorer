@@ -1,5 +1,6 @@
 let map, infobox;
 let kindergartens;
+const pushpins = {};
 
 function GetMap() {
     let clusterLayer;
@@ -40,6 +41,8 @@ function createCustomPushpins(kindergartens) {
         pin.metadata = {'id': kindergarten.pk};
         pin.setOptions({title: kindergarten.fields.name});
         pins.push(pin);
+
+        pushpins[kindergarten.pk] = pin;
     }
 
     return pins;
@@ -86,6 +89,60 @@ function showInfobox(pin) {
     });
 }
 
+function stringToTime(dateString) {
+    const [ h, m ] = dateString.split(":");
+    return new Date(0).setHours(h,m);
+}
+
+function isMatching(dataset, min_age, max_age, capacity, open_time, close_time, is_free) {
+    const currentMinAge = +dataset.kindergartenMinAge;
+    const currentMaxAge = +dataset.kindergartenMaxAge;
+    const currentCapacity = +dataset.kindergartenCapacity;
+    const currentOpenTime = stringToTime(dataset.kindergartenOpenTime);
+    const currentCloseTime = stringToTime(dataset.kindergartenCloseTime);
+    const currentIsFree = dataset.kindergartenIsFree == "True";
+
+    return min_age <= currentMinAge && max_age >= currentMaxAge && capacity >= currentCapacity 
+            && open_time >= currentOpenTime && close_time <= currentCloseTime && is_free <= currentIsFree;
+}
+
+function filterKindergartens(event) {
+    const start = new Date();
+    event.preventDefault();
+
+    // TODO: update hidden inputs' values in search form
+
+    // Get filter values
+    const min_age = +this.min_age.value;
+    const max_age = +this.max_age.value;
+    const capacity = +this.capacity.value;
+    const open_time = stringToTime(this.open_time.value);
+    const close_time = stringToTime(this.close_time.value);
+    const is_free = this.is_free.value == "on";
+
+    // Get all kindergarten elements
+    const elements = document.getElementById("kinder-table").children;
+
+    // Decide whether to show them or not based on the filters
+    for (const element of elements) {
+        const pin = pushpins[element.dataset.kindergartenId];
+        const matching = isMatching(element.dataset, min_age, max_age, capacity, open_time, close_time, is_free);
+
+        // Set visibility of pin in map
+        pin.setOptions({visible: matching})
+
+        // Set visibility of item in list
+        if (!isMatching(element.dataset, min_age, max_age, capacity, open_time, close_time, is_free)) {
+            element.setAttribute('hidden', '');
+        } else {
+            element.removeAttribute('hidden');
+        }
+    }
+    const end = new Date();
+    console.log(end - start);
+
+}
+
 window.addEventListener("load", () => {
     // Define filters behavior
     for (const catergory of ["min_age", "max_age", "capacity"]) {
@@ -106,6 +163,9 @@ window.addEventListener("load", () => {
     // Update kindergartens variable
     kindergartens = JSON.parse(document.getElementById("kindergartens-data").dataset.kindergartens);
     if (!kindergartens) return;
+
+    // Register filter form behavior
+    document.forms['filters'].addEventListener('submit', filterKindergartens);
 
     // Get API key
     const key = document.getElementById("key").dataset.key;

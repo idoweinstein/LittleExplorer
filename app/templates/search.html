@@ -35,7 +35,7 @@
     <div class="row justify-content-center align-items-start h-100" style="margin-top: 25px;">
         
         <div class="col-3">
-            <form method="GET" action="/search">
+            <form name="filters">
             
                 <div class="card text-black">
                     <div class="card-body">
@@ -83,7 +83,7 @@
 
                         <div class="text-center">
                             <div class="form-outline-dark mb-2">
-                                <label class="form-label" for="capacity">kindergartens with free places only<output id="is_free"></output></label>
+                                <label class="form-label" for="capacity">kindergartens with free places only</label>
                                 <input type="checkbox" class="range" id="is_free" name="is_free" {% if request.is_free %} checked {% endif %}>
                             </div>
 
@@ -116,9 +116,16 @@
                         <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
                             <!-- List content -->
                             <div class="container">
-                                <div class="card text-dark">
+                                <div id="kinder-table" class="card text-dark">
                                   {% for result in results %}
-                                      <div class="card-body" class="kindergarten">
+                                      <div class="card-body" class="kindergarten" 
+                                        data-kindergarten-id="{{ result.kindergarten_id }}"
+                                        data-kindergarten-min-age="{{ result.min_age }}"
+                                        data-kindergarten-max-age="{{ result.max_age }}"
+                                        data-kindergarten-capacity="{{ result.capacity }}"
+                                        data-kindergarten-open-time="{{ result.get_open_time_display }}"
+                                        data-kindergarten-close-time="{{ result.get_close_time_display }}"
+                                        data-kindergarten-is-free="{{ result.is_free }}">
                                           <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="Click here for more details" style="color: black; text-decoration: none;">
                                               <div class="kindergarten">
                                                   <div class="flex-start" style="text-align: center;">
