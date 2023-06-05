@@ -24,9 +24,16 @@
                       <label class="form-label" for="typePasswordX">סיסמא</label>
                       <input type="password" id="typePasswordX" name="password" class="form-control-lg" />
                     </div>
-      
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">
+                      {{ message }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                     <button class="btn btn-outline-dark btn-lg px-5" type="submit">כניסה</button>
-      
                   <div>
                     <p class="mb-0">אין לך חשבון? <a href="/parent_sign_up" class="text-black-50 fw-bold">הרשמה להורים </a>
                     ,  <a href="/teacher_sign_up" class="text-black-50 fw-bold">הרשמה לגננות </a></p>

@@ -65,7 +65,7 @@ def log_in(request):
             login(request, user)
             return redirect('/')
         else:
-            messages.success(request, ("There Was An Error Logging In, Try Again..."))
+            messages.error(request, ("Login failed. Please re-enter your Email and password."))
             return redirect('login')
 
 
