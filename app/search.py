@@ -74,7 +74,7 @@ def get_boundaries_of_fields(parameters):
     return boundaries
 
 
-def get_filtered_kindergartens(boundaries, parameters, method, value):
+def get_filtered_kindergartens(parameters, method, value):
     # builds the filters list
     filters = list()
     point = None
@@ -91,15 +91,6 @@ def get_filtered_kindergartens(boundaries, parameters, method, value):
         # algo
         pass
 
-    for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", boundaries['min_age_value']),
-                                        "max_age": ("max_age__lte", boundaries['max_age_value']),
-                                        "capacity": ("capacity__lte", boundaries['capacity_value']),
-                                        "open_time": ("open_time__lte", boundaries['open_value']),
-                                        "close_time": ("close_time__gte", boundaries['close_value'])
-                                        }.items():
-        if parameters.get(key):
-            filters.append(Q(**{attr_key: attr_value}))
-
     # filters the kindergartens
     if filters:
         kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
@@ -109,9 +100,5 @@ def get_filtered_kindergartens(boundaries, parameters, method, value):
     # sort by distance
     if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
-
-    # show only kindergartens with left slots
-    if parameters.get('is_free') == 'on':
-        kindergartens = [k for k in kindergartens.iterator() if k.is_free()]
 
     return kindergartens

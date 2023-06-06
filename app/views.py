@@ -117,7 +117,7 @@ def search(request):
         method = "name"
 
     boundaries = get_boundaries_of_fields(parameters)
-    kindergartens = get_filtered_kindergartens(boundaries, parameters, method, value)
+    kindergartens = get_filtered_kindergartens(parameters, method, value)
 
     context = {'results': kindergartens,
                'json_results': serializers.serialize("json", kindergartens),

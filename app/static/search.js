@@ -1,6 +1,13 @@
 let map, infobox;
-let kindergartens;
-const pushpins = {};
+const kindergartens = [];
+
+function hideElement(element) {
+    element.setAttribute('hidden', '');
+}
+
+function showElement(element) {
+    element.removeAttribute('hidden');
+}
 
 function GetMap() {
     let clusterLayer;
@@ -32,17 +39,21 @@ function createCustomPushpins(kindergartens) {
     const pins = [];
 
     for (const kindergarten of kindergartens) {
-        let {lat, long} = getLatLong(kindergarten.fields.geolocation);
+        // Get necessary data
+        const data = kindergarten.data;
+        let {lat, long} = getLatLong(data.fields.geolocation);
         lat = +lat;
         long = +long;
 
+        // Build the pin
         const loc = new Microsoft.Maps.Location(lat, long);
         const pin = new Microsoft.Maps.Pushpin(loc, {text: ''});
-        pin.metadata = {'id': kindergarten.pk};
-        pin.setOptions({title: kindergarten.fields.name});
+        pin.metadata = {'id': data.pk};
+        pin.setOptions({title: data.fields.name});
         pins.push(pin);
 
-        pushpins[kindergarten.pk] = pin;
+        // Assign it to the proper kindergarten object
+        kindergarten.map = pin;
     }
 
     return pins;
@@ -68,7 +79,7 @@ function pushpinClicked(e) {
 function showInfobox(pin) {
     const description = [];
 
-    //Check to see if the pushpin is a cluster.
+    // Check to see if the pushpin is a cluster.
     if (pin.containedPushpins) {
         // Create a list of all pushpins that are in the cluster.
         for (const subpin of pin.containedPushpins) {
@@ -94,53 +105,111 @@ function stringToTime(dateString) {
     return new Date(0).setHours(h,m);
 }
 
-function isMatching(dataset, min_age, max_age, capacity, open_time, close_time, is_free) {
-    const currentMinAge = +dataset.kindergartenMinAge;
-    const currentMaxAge = +dataset.kindergartenMaxAge;
-    const currentCapacity = +dataset.kindergartenCapacity;
-    const currentOpenTime = stringToTime(dataset.kindergartenOpenTime);
-    const currentCloseTime = stringToTime(dataset.kindergartenCloseTime);
-    const currentIsFree = dataset.kindergartenIsFree == "True";
+function isMatching(kindergartenData, min_age, max_age, capacity, open_time, close_time, is_free) {
+    const fields = kindergartenData.fields;
+    const currentMinAge = fields.min_age;
+    const currentMaxAge = fields.max_age;
+    const currentCapacity = fields.capacity;
+    const currentOpenTime = stringToTime(fields.open_time);
+    const currentCloseTime = stringToTime(fields.close_time);
+    const currentIsFree = (fields.capacity > fields.kids_count);
 
     return min_age <= currentMinAge && max_age >= currentMaxAge && capacity >= currentCapacity 
             && open_time >= currentOpenTime && close_time <= currentCloseTime && is_free <= currentIsFree;
 }
 
-function filterKindergartens(event) {
-    const start = new Date();
-    event.preventDefault();
-
-    // TODO: update hidden inputs' values in search form
+function filterKindergartens() {
+    const form = document.forms['filters'];
 
     // Get filter values
-    const min_age = +this.min_age.value;
-    const max_age = +this.max_age.value;
-    const capacity = +this.capacity.value;
-    const open_time = stringToTime(this.open_time.value);
-    const close_time = stringToTime(this.close_time.value);
-    const is_free = this.is_free.value == "on";
+    const min_age = +form.min_age.value;
+    const max_age = +form.max_age.value;
+    const capacity = +form.capacity.value;
+    const open_time = stringToTime(form.open_time.value);
+    const close_time = stringToTime(form.close_time.value);
+    const is_free = form.is_free.value == "on";
 
-    // Get all kindergarten elements
-    const elements = document.getElementById("kinder-table").children;
+    let item_count = 0;
 
     // Decide whether to show them or not based on the filters
-    for (const element of elements) {
-        const pin = pushpins[element.dataset.kindergartenId];
-        const matching = isMatching(element.dataset, min_age, max_age, capacity, open_time, close_time, is_free);
-
-        // Set visibility of pin in map
-        pin.setOptions({visible: matching})
-
-        // Set visibility of item in list
-        if (!isMatching(element.dataset, min_age, max_age, capacity, open_time, close_time, is_free)) {
-            element.setAttribute('hidden', '');
+    for (const kindergarten of kindergartens) {
+        const data = kindergarten.data;
+        if (isMatching(data, min_age, max_age, capacity, open_time, close_time, is_free)) {
+            kindergarten.show();
+            item_count++;
         } else {
-            element.removeAttribute('hidden');
+            kindergarten.hide();
         }
     }
-    const end = new Date();
-    console.log(end - start);
 
+    // Show results or error message based on item count
+    if (item_count > 0) {
+        showElement(document.getElementById("search-results"));
+        hideElement(document.getElementById("empty-results"));
+    } else {
+        showElement(document.getElementById("empty-results"));
+        hideElement(document.getElementById("search-results"));
+    }
+}
+
+function updateFiltersShadowItems(form) {
+    const shadowForm = document.forms['search'];
+    for (const attribute of ['min_age', 'max_age', 'capacity', 'open_time', 'close_time', 'is_free']) {
+        shadowForm[attribute].value = form[attribute].value;
+    }
+}
+
+
+
+/*
+ * The filtering logic is implemented in the front-end to optimize performance.
+ * This decision is driven by the fact that back-end requests can be computationally intensive
+ * and time-consuming, especially considering our utilization of NLP algorithms for data processing.
+ * Hence, we employ a two-step approach: ranking the data in the back-end,
+ * and enabling the user to filter the results on the front-end.
+ *
+ * By allowing the user to filter the results multiple times on the front-end,
+ * we provide a flexible and interactive experience. Users can refine their searches
+ * and explore different combinations of filters without the need for repeated back-end requests.
+ * This not only improves the responsiveness of the application but also reduces the overall load
+ * on the server, leading to a more scalable system.
+*/
+function applyFilters(event) {
+    event.preventDefault();
+    updateFiltersShadowItems(this);
+    filterKindergartens();
+}
+
+function updateKindergartens() {
+    const kindergartensData = JSON.parse(document.getElementById("kindergartens-data").dataset.kindergartens);
+    for (const kindergartenData of kindergartensData) {
+        const item = { data: kindergartenData };
+        
+        const listElement = document.getElementById(`kindergarten_${kindergartenData.pk}`);
+        if (listElement)
+            item.list = listElement;
+
+        item.show = () => {
+            if (item.list) {
+                showElement(item.list);
+            }
+            if (item.map) {
+                item.map.setOptions({visible: true});
+            }
+        }
+
+        item.hide = () => {
+            if (item.list) {
+                hideElement(item.list);
+            }
+            if (item.map) {
+                item.map.setOptions({visible: false});
+            }
+        }
+
+        kindergartens.push(item);
+    }
+    return !!kindergartensData;
 }
 
 window.addEventListener("load", () => {
@@ -161,11 +230,11 @@ window.addEventListener("load", () => {
     }
 
     // Update kindergartens variable
-    kindergartens = JSON.parse(document.getElementById("kindergartens-data").dataset.kindergartens);
-    if (!kindergartens) return;
+    if (updateKindergartens()) filterKindergartens();
+    else return;  // No entries found
 
     // Register filter form behavior
-    document.forms['filters'].addEventListener('submit', filterKindergartens);
+    document.forms['filters'].addEventListener('submit', applyFilters);
 
     // Get API key
     const key = document.getElementById("key").dataset.key;

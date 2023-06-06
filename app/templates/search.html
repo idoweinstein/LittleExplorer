@@ -8,7 +8,7 @@
 <body>
     <input id="kindergartens-data" type="hidden" data-kindergartens="{{ json_results }}">
     <input id="key" type="hidden" data-key="{{ api_key }}">
-    <form method="GET" action="/search">
+    <form name="search" method="GET" action="/search">
         <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
               <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">Search by name</label>
@@ -23,9 +23,7 @@
                         <input type="hidden" name="capacity" value="{{ capacity.value }}">
                         <input type="hidden" name="open_time" value="{{ open_time.value }}">
                         <input type="hidden" name="close_time" value="{{ close_time.value }}">
-                        {% if request.is_free %}
-                        <input type="hidden" name="is_free" value="on">
-                        {% endif %}
+                        <input type="hidden" name="is_free" {% if request.is_free %}value="on"{% endif %}>
                     </form>
                 </div>
            </div>
@@ -102,8 +100,7 @@
         </div>
         <div class="col-8">
             <section>
-                {% if results %}
-                <div class="search_results" class="d-flex align-items-center">
+                <div id="search-results" class="search_results" class="d-flex align-items-center" hidden>
                     <ul class="nav nav-pills mb-3 mx-auto justify-content-center" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
                           <button class="nav-link active" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button" role="tab" aria-controls="pills-list" aria-selected="true">רשימה</button>
@@ -118,14 +115,7 @@
                             <div class="container">
                                 <div id="kinder-table" class="card text-dark">
                                   {% for result in results %}
-                                      <div class="card-body" class="kindergarten" 
-                                        data-kindergarten-id="{{ result.kindergarten_id }}"
-                                        data-kindergarten-min-age="{{ result.min_age }}"
-                                        data-kindergarten-max-age="{{ result.max_age }}"
-                                        data-kindergarten-capacity="{{ result.capacity }}"
-                                        data-kindergarten-open-time="{{ result.get_open_time_display }}"
-                                        data-kindergarten-close-time="{{ result.get_close_time_display }}"
-                                        data-kindergarten-is-free="{{ result.is_free }}">
+                                      <div class="card-body" class="kindergarten" id="kindergarten_{{ result.kindergarten_id }}">
                                           <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="Click here for more details" style="color: black; text-decoration: none;">
                                               <div class="kindergarten">
                                                   <div class="flex-start" style="text-align: center;">
@@ -154,11 +144,9 @@
                         </div>
                     </div>
                 </div>
-                {% else %}
-                <div class="container alert alert-danger" role="alert" style="text-align: center;">
+                <div id="empty-results" class="container alert alert-danger" role="alert" style="text-align: center;" hidden>
                     Sorry, we couldn't find any matching results
                 </div>  
-                {% endif %}
             </section>
         </div>
     </div>
