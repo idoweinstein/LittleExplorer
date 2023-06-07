@@ -115,7 +115,7 @@ def search(request):
         method = "name"
 
     boundaries = get_boundaries_of_fields(parameters)
-    kindergartens = get_filtered_kindergartens(boundaries, parameters, method, value)
+    kindergartens = get_filtered_kindergartens(request, boundaries, parameters, method, value)
 
     context = {'results': kindergartens,
                'value': Value(value),
@@ -271,3 +271,25 @@ def add_connection(request):
             'message': 'Connection added successfully',
         }
         return JsonResponse(response_data)
+
+
+def mytry(request):
+    parent_id = request.user.parent_id
+
+    connectee_ids = Connections.objects.filter(connector__parent_id=parent_id).values_list("connectee", flat=True)
+    # get all their comments about kindergartens
+    kindergarten_scores_id_dict = {1: "b", 130: "b"}
+    related_kindergartens = Comment.objects.filter(parent__parent_id__in=connectee_ids, kindergarten__kindergarten_id__in=kindergarten_scores_id_dict.keys())
+
+
+    # get flatten arrays of the good/bad kindergartens based on the comment grade of the connectors
+    good_kindergartens = related_kindergartens.filter(grade__in=[4, 5]).values_list("kindergarten", flat=True)
+    bad_kindergartens = related_kindergartens.filter(grade__in=[1, 2]).values_list("kindergarten", flat=True)
+
+    return render(request, 'mytry.html', {
+        'connections': connectee_ids,
+        'related_kindergartens': related_kindergartens,
+        'good_kindergartens': good_kindergartens,
+        'bad_kindergartens': bad_kindergartens
+    })
+

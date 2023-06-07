@@ -1,3 +1,6 @@
+from typing import List, Tuple, Dict
+
+import numpy as np
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -5,13 +8,42 @@ from nltk.stem import PorterStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-nltk.download('punkt', quite=True)
+from django.contrib.gis.geos import Point
+from app.geolocation import get_coordinates
+from app.models import Kindergarten, Users, Connections, Comment
+
+
+CONNECTION_BONUS = 0.2
+
+nltk.download('punkt', quiet=True)
 nltk.download('stopwords', quiet=True)
 
 
-def main_algo(kindergartens):
-    # need to get all the additional info here
-    pass
+def main_algo(kindergartens: List[Kindergarten], parent_text_input: str, parent: Users):
+
+    # description is mandatory field and the user input is mandatory field so tfidf_scores must be valid scores for all the list
+    descriptions = [kindergarten.description for kindergarten in kindergartens]
+    tfidf_scores = tfidf_score(descriptions, parent_text_input)[0]  # we want a flat vector
+
+    # get the kindergarten location score
+    location_scores = location_score(kindergartens, parent)
+
+    total_scores = np.array(tfidf_scores) + np.array(location_scores)
+
+    # we make a dict in order to have the kindergarten id as a key
+    # this way, we can easily change the scores in the connections function without searching in the list (not efficient)
+    # but zip will make a list of tuple, which is immutable so we use map to create from it a list of lists
+    kindergarten_scores = list(map(list, zip(kindergartens, total_scores)))
+    kindergarten_scores_id_dict = {ks[0].kindergarten_id: ks for ks in kindergarten_scores}
+
+    add_connections_bonus(kindergarten_scores_id_dict, parent)
+
+    # get the tuples fr
+    kindergarten_scores = list(kindergarten_scores_id_dict.values())
+    # sort the elements by the scores
+    kindergarten_scores.sort(key=lambda x: x[1])
+    # get back just the kindergarten using unzip, in index 0 we will get the tuple of all sorted kindergartens
+    return list(zip(*kindergarten_scores))[0]
 
 
 def preprocess_description(description):
@@ -46,8 +78,62 @@ def tfidf_score(descriptions, user_text_input):
 
     return similarity_scores
 
-def location_score():
-    pass
 
-def connections_bonus():
-    pass
+def location_score(kindergartens: List[Kindergarten], parent: Users):
+    # TODO: need to remember to sacle the results and normalize so it will not shadow over the tfidf scores
+    # if the user do not have a location saved, the score will be 0 for all the kindergartens
+    # when the kindergarten is closer to the locations of the user, the score will be higher
+    kindergartens_pnts = [Kindergarten.geolocation for kindergarten in kindergartens]
+    home_scores = np.zeros(kindergartens_pnts)
+    work_scores = np.zeros(kindergartens_pnts)
+
+    if parent.home_address and parent.home_region:
+        home_distances = get_distances_list_from_location(parent.home_address, parent.home_region, kindergartens_pnts)
+        home_scores = normalize_location_score(home_distances)
+
+    if parent.work_address and parent.work_region:
+        work_distances = get_distances_list_from_location(parent.work_address, parent.work_region, kindergartens_pnts)
+        work_scores = normalize_location_score(work_distances)
+
+    #TODO: maybe math will changed
+    return np.array(home_scores) + np.array(work_scores)
+
+
+def get_distances_list_from_location(address: str, region: str, kindergartens_pnts: List[Point]):
+    # get the pnt from location
+    location = f"{address} {region}"
+    coordinates = get_coordinates(location)
+    pnt = Point(coordinates[1], coordinates[0], srid=4326)
+    # calculate distances of all kindergartens from this pnt
+    return list(map(lambda k: pnt.distance(k), kindergartens_pnts))
+
+
+def normalize_location_score(distances: List[float]):
+    # normalize the distances to be score between 0 and 1
+    # the longest (largest) distance is the lowest (higest) score
+    min_dist = min(distances)
+    max_dist = max(distances)
+
+    # subtract min so min will be 0, and divide by (max-min) to scale
+    # then  we do 1-res in order to have long distances mapped to lower scores
+    return list(map(lambda d: 1 - (d - min_dist)/(max_dist - min_dist), distances))
+
+
+def add_connections_bonus(kindergarten_scores_id_dict: Dict[int, Tuple[Kindergarten, float]], parent: Users):
+    #TODO: exact math maybe will change
+
+    # get all the user ids of the connections of the parent from db
+    connectee_ids = Connections.objects.filter(connector__parent_id=parent.parent_id).values_list("connectee", flat=True)
+    # get all their comments about kindergartens we want to score
+    related_kindergartens = Comment.objects.filter(parent__parent_id__in=connectee_ids, kindergarten__kindergarten_id__in=kindergarten_scores_id_dict.keys())
+
+    # get flatten arrays of the good/bad kindergartens ids based on the comment grade of the connectee
+    good_kindergartens_ids = related_kindergartens.filter(grade__in=[4, 5]).values_list("kindergarten", flat=True)
+    bad_kindergartens_ids = related_kindergartens.filter(grade__in=[1, 2]).values_list("kindergarten", flat=True)
+
+    # if we have the kindergarten in the list, update its score (for good add, for bas subtract)
+    for gk_id in good_kindergartens_ids:
+        kindergarten_scores_id_dict[gk_id][1] += CONNECTION_BONUS
+
+    for bk_id in bad_kindergartens_ids:
+        kindergarten_scores_id_dict[bk_id][1] -= CONNECTION_BONUS

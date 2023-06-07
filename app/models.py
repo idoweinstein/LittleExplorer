@@ -57,6 +57,9 @@ class Kindergarten(models.Model):
     has_parking = models.BooleanField(blank=True, null=True)
     geolocation = PointField(blank=True, null=True, srid=4326)
     teacher = models.ForeignKey(Users, models.DO_NOTHING)
+    phone = models.CharField(max_length=45, blank=True, null=True)
+    mail = models.EmailField(max_length=45, blank=True, null=True)
+    description = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -128,6 +131,7 @@ class Comment(models.Model):
 
 
 class Connections(models.Model):
+    connection_id = models.AutoField(primary_key=True)
     connector = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='outgoing_connections',
                                   db_column='connector')
     connectee = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='incoming_connections',

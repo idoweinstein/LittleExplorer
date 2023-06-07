@@ -98,7 +98,7 @@ def get_boundaries_of_fields(parameters):
     return boundaries
 
 
-def get_filtered_kindergartens(boundaries, parameters, method, value):
+def get_filtered_kindergartens(request, boundaries, parameters, method, value):
     # builds the filters list
     filters = list()
     point = None
@@ -140,6 +140,6 @@ def get_filtered_kindergartens(boundaries, parameters, method, value):
 
     # search by algorithm
     if method == "advanced":
-        kindergartens = main_algo(kindergartens)
+        kindergartens = main_algo(kindergartens, value, request.user)
 
     return kindergartens
