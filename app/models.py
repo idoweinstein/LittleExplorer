@@ -100,6 +100,7 @@ class Kindergarten(models.Model):
     def set_geolocation(self):
         location = f"{self.address} {self.region}"
         coordinates = get_coordinates(location)
+        # TODO: handle the case of coordinates == None (location not found)
         pnt = Point(coordinates[1], coordinates[0], srid=4326)
         self.geolocation = pnt
 

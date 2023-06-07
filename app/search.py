@@ -86,6 +86,9 @@ def get_filtered_kindergartens(parameters, method, value):
             filters.append(Q(region=value))
         else:
             coords = get_coordinates(value)
+            if not coords:
+                # Cannot find location, return empty results
+                return Kindergarten.objects.none()
             point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
     else:
         # algo
