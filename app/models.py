@@ -131,7 +131,6 @@ class Comment(models.Model):
 
 
 class Connections(models.Model):
-    connection_id = models.AutoField(primary_key=True)
     connector = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='outgoing_connections',
                                   db_column='connector')
     connectee = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='incoming_connections',
