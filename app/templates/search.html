@@ -15,7 +15,7 @@
               <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Search by location</label>
               <div class="input-group rounded">
                 <form class="form-inline">
-                        <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search">
+                        <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search" required>
                         <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
 
                         <input type="hidden" name="min_age" value="{{ min_age.value }}">
@@ -86,10 +86,6 @@
                             </div>
 
                         </div>
-
-                        <input type="hidden" name="method" value="{{ request.method }}">
-                        <input type="hidden" name="value" value="{{ request.value }}">
-
 
                         <div class="text-center mb-2" style="margin-top: 10px;">
                             <button class="btn btn-outline-dark btn-sm" type="submit">Filter</button>

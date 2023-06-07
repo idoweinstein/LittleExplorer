@@ -113,6 +113,12 @@ def search(request):
     method = parameters.get("method")
     value = parameters.get("value")
 
+    if not value:
+        # Empty search query is blocked by our frontend.
+        # Therefore, this scenario can only happen by tampering frontend code.
+        # If so, navigate to the index page.
+        return redirect('/')
+
     if method not in ["name", "location", "advanced"]:
         method = "name"
 
