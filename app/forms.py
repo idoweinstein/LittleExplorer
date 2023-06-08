@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Users, Comment, Kindergarten, Kindergartenadditionalinfo
+from .models import Users, Comment, Kindergarten
 
 
 class RegisterParentForm(UserCreationForm):
@@ -13,8 +13,8 @@ class RegisterParentForm(UserCreationForm):
     class Meta:
         model = Users
         fields = ('email', 'first_name', 'last_name',
-                'home_address', 'home_region', 'work_address', 'work_region',
-                'password1', 'password2')
+                  'home_address', 'home_region', 'work_address', 'work_region',
+                  'password1', 'password2')
 
     def save(self, commit=True):
         user = super(RegisterParentForm, self).save(commit=False)
@@ -103,7 +103,8 @@ class AddKindergartenForm(forms.ModelForm):
         kids_count = cleaned_data.get('kids_count')
         capacity = cleaned_data.get('capacity')
         if capacity and kids_count and capacity < kids_count:
-            self.add_error('kids_count', "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
+            self.add_error('kids_count',
+                           "The kindergarten capacity can't be lower from the current number of children in the kindergarten.")
 
         min_age = cleaned_data.get('min_age')
         max_age = cleaned_data.get('max_age')
@@ -116,14 +117,15 @@ class AddKindergartenForm(forms.ModelForm):
         model = Kindergarten
         fields = ['name', 'address', 'region', 'min_age',
                   'max_age', 'capacity', 'kids_count', 'num_of_teachers',
-                  'open_time', 'close_time', 'has_parking']
+                  'open_time', 'close_time', 'has_parking', 'phone', 'mail', 'description']
         PARKING_CHOICES = [(True, 'כן'), (False, 'לא')]
         widgets = {
             'open_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
             'close_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
-            'has_parking': forms.RadioSelect(choices=PARKING_CHOICES)
+            'has_parking': forms.RadioSelect(choices=PARKING_CHOICES),
+            'description': forms.Textarea(attrs={'rows': 5, 'cols': 50, 'placeholder': 'תיאור הגן...'})
         }
-    
+
     def __init__(self, *args, **kwargs):
         super(AddKindergartenForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
@@ -137,6 +139,9 @@ class AddKindergartenForm(forms.ModelForm):
         self.fields['open_time'].widget.attrs['class'] = 'form-control'
         self.fields['close_time'].widget.attrs['class'] = 'form-control'
         self.fields['has_parking'].widget.attrs['class'] = 'form-control'
+        self.fields['phone'].widget.attrs['class'] = 'form-control'
+        self.fields['mail'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
 
         self.fields['has_parking'].required = False
 
@@ -149,31 +154,8 @@ class AddKindergartenForm(forms.ModelForm):
         self.fields['kids_count'].label = 'מספר ילדים רשומים'
         self.fields['num_of_teachers'].label = 'מספר גננות בגן'
         self.fields['open_time'].label = 'שעת פתיחה'
-        self.fields['close_time'].label= 'שעת סגירה'
+        self.fields['close_time'].label = 'שעת סגירה'
         self.fields['has_parking'].label = 'האם יש חניה ליד הגן?'
-
-
-class AddKindergartenAdditionalInfoForm(forms.ModelForm):
-    class Meta:
-        model = Kindergartenadditionalinfo
-        fields = ['phone', 'mail', 'description']
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 5, 'cols': 50, 'placeholder': 'תיאור הגן...'})
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(AddKindergartenAdditionalInfoForm, self).__init__(*args, **kwargs)
-        self.fields['phone'].widget.attrs['class'] = 'form-control'
-        self.fields['mail'].widget.attrs['class'] = 'form-control'
-        self.fields['description'].widget.attrs['class'] = 'form-control'
-
         self.fields['phone'].label = 'טלפון'
         self.fields['mail'].label = 'מייל'
         self.fields['description'].label = 'זה המקום לרשום לנו כמה מילים על הגן שלך!'
-
-    def save(self, kindergarten, commit=True):
-        kindergarten_addition_info = super(AddKindergartenAdditionalInfoForm, self).save(commit=False)
-        kindergarten_addition_info.kindergarten = kindergarten
-        if commit:
-            kindergarten_addition_info.save()
-        return kindergarten_addition_info

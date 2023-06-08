@@ -152,9 +152,9 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="form-outline">
 
-                                        <label class="form-label">{{ kindergarten_additional_info.phone.label_tag }}</label>
-                                        {{ kindergarten_additional_info.phone }}
-                                        {% for error in kindergarten_additional_info.phone.errors %}
+                                        <label class="form-label">{{ kindergarten_form.phone.label_tag }}</label>
+                                        {{ kindergarten_form.phone }}
+                                        {% for error in kindergarten_form.phone.errors %}
                                             <div style="color: red">{{ error }}</p>
                                         {% endfor %}
 
@@ -163,9 +163,9 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="form-outline">
                                         
-                                        <label class="form-label">{{ kindergarten_additional_info.mail.label_tag }}</label>
-                                        {{ kindergarten_additional_info.mail }}
-                                        {% for error in kindergarten_additional_info.mail.errors %}
+                                        <label class="form-label">{{ kindergarten_form.mail.label_tag }}</label>
+                                        {{ kindergarten_form.mail }}
+                                        {% for error in kindergarten_form.mail.errors %}
                                             <div style="color: red">{{ error }}</p>
                                         {% endfor %}
                                         
@@ -175,10 +175,10 @@
                 
                             <div class="row">
                                 <div class="col mb-4">
-                                    <label class="form-label">{{ kindergarten_additional_info.description.label_tag }}</label>
+                                    <label class="form-label">{{ kindergarten_form.description.label_tag }}</label>
                                     <div class="form-outline">
-                                        {{ kindergarten_additional_info.description }}
-                                        {% for error in kindergarten_additional_info.description.errors %}
+                                        {{ kindergarten_form.description }}
+                                        {% for error in kindergarten_form.description.errors %}
                                             <div style="color: red">{{ error }}</p>
                                         {% endfor %}
                                     </div>  

@@ -60,6 +60,9 @@ class Kindergarten(models.Model):
     phone = models.CharField(max_length=45, blank=True, null=True)
     mail = models.EmailField(max_length=45, blank=True, null=True)
     description = models.CharField(max_length=250, blank=True, null=True)
+    phone = models.CharField(max_length=45, blank=True, null=True)
+    mail = models.EmailField(max_length=45, blank=True, null=True)
+    description = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -104,17 +107,6 @@ class Kindergarten(models.Model):
         if self.kids_count < self.capacity:
             return True
         return False
-
-
-class Kindergartenadditionalinfo(models.Model):
-    kindergarten = models.OneToOneField(Kindergarten, models.DO_NOTHING, primary_key=True)
-    phone = models.CharField(max_length=45, blank=True, null=True)
-    mail = models.EmailField(max_length=45, blank=True, null=True)
-    description = models.CharField(max_length=250, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'kindergartenadditionalinfo'
 
 
 class Comment(models.Model):

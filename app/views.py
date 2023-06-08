@@ -15,8 +15,8 @@ from django.contrib.auth.decorators import user_passes_test
 import LittleExplorerApp.settings
 from app.search import get_boundaries_of_fields, get_filtered_kindergartens, RangedValue, Value
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
-    AddKindergartenForm, AddKindergartenAdditionalInfoForm
-from .models import Kindergarten, Users, Connections, Kindergartenadditionalinfo, Comment
+    AddKindergartenForm
+from .models import Users, Connections, Comment, Kindergarten
 
 
 def assert_true(func):
@@ -139,12 +139,10 @@ def search(request):
 
 def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
-    kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
     comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related(
         'parent').all()
     return render(request, 'kindergarten.html',
                   {'kindergarten': kindergarten,
-                   'kindergarten_info': kindergarten_info,
                    'comments_with_parent': comments_with_parent
                    })
 
@@ -174,23 +172,19 @@ def add_comment(request, kindergarten_id):
 def add_kindergarten(request):
     if request.method == "POST":
         kindergarten_form = AddKindergartenForm(request.POST)
-        kindergarten_additional_info_form = AddKindergartenAdditionalInfoForm(request.POST)
-        if kindergarten_form.is_valid() and kindergarten_additional_info_form.is_valid():
+        if kindergarten_form.is_valid():
             kindergarten = kindergarten_form.save(commit=False)
             kindergarten.teacher_id = request.user.parent_id
             kindergarten.set_geolocation()
-            kindergarten = kindergarten.save()
-            kindergarten_additional_info_form.save(kindergarten)
+            kindergarten.save()
 
             # TODO: we want to show a response to the user
             return redirect('/')
     else:
         kindergarten_form = AddKindergartenForm()
-        kindergarten_additional_info_form = AddKindergartenAdditionalInfoForm()
 
     return render(request, 'add_kindergarten.html', {
         'kindergarten_form': kindergarten_form,
-        'kindergarten_additional_info': kindergarten_additional_info_form
     })
 
 
