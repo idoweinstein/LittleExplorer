@@ -31,16 +31,7 @@ def get_boundaries_of_fields(parameters):
         Min('capacity'), Max('capacity'),
         Min('open_time'), Max('open_time'),
         Min('close_time'), Max('close_time'))
-    # default_boundaries = {'min_age_min':  int(l['min_age__min']),
-    #         'min_age_max': int(l['min_age__max']),
-    #         'max_age_min': int(l['max_age__min']),
-    #         'max_age_max': int(l['capacity__min']),
-    #         'min_capacity': int(l['capacity__max']),
-    #         'max_capacity': int(l['max_age__max']),
-    #         'min_open': l['open_time__min'],
-    #         'max_open': l['open_time__max'],
-    #         'min_close': l['close_time__min'],
-    #         'max_close': l['close_time__max']}
+
     (min_age_min, min_age_max, max_age_min, max_age_max, min_capacity, max_capacity, min_open, max_open, min_close,
      max_close) = (
         int(l['min_age__min']), int(l['min_age__max']), int(l['max_age__min']), int(l['max_age__max']),
@@ -49,14 +40,6 @@ def get_boundaries_of_fields(parameters):
     )
 
     # set the boundaries based on default and the user parameters
-    # min_age_value = int(parameters.get("min_age")) if parameters.get("min_age") else default_boundaries['min_age_min']
-    # max_age_value = int(parameters.get("max_age")) if parameters.get("max_age") else default_boundaries['max_age_max']
-    # if min_age_value > max_age_value:
-    #     min_age_value = max_age_value
-    # capacity_value = int(parameters.get("capacity")) if parameters.get("capacity") else default_boundaries['max_capacity']
-    # open_value = parameters.get("open_time") if parameters.get("open_time") else default_boundaries['max_open']
-    # close_value = parameters.get("close_time") if parameters.get("close_time") else default_boundaries['min_close']
-
     min_age_value = int(parameters.get("min_age")) if parameters.get("min_age") else min_age_min
     max_age_value = int(parameters.get("max_age")) if parameters.get("max_age") else max_age_max
     if min_age_value > max_age_value:
@@ -65,20 +48,7 @@ def get_boundaries_of_fields(parameters):
     open_value = parameters.get("open_time") if parameters.get("open_time") else max_open
     close_value = parameters.get("close_time") if parameters.get("close_time") else min_close
 
-    if isinstance(min_open, str):
-        min_open = time.fromisoformat(min_open)
-    if isinstance(max_open, str):
-        max_open = time.fromisoformat(max_open)
-    if isinstance(open_value, str):
-        open_value = time.fromisoformat(open_value)
-
-    if isinstance(min_close, str):
-        min_close = time.fromisoformat(min_close)
-    if isinstance(max_close, str):
-        max_close = time.fromisoformat(max_close)
-    if isinstance(close_value, str):
-        close_value = time.fromisoformat(close_value)
-
+    # put all values in a dictionary
     boundaries = {'min_age_value': min_age_value,
                   'min_age_min': min_age_min,
                   'min_age_max': min_age_max,
@@ -95,10 +65,16 @@ def get_boundaries_of_fields(parameters):
                   'min_close': min_close,
                   'max_close': max_close, }
 
+    # format dates
+    for key in ['min_open', 'max_open', 'open_value',
+                'min_close', 'max_close', 'close_value']:
+        if isinstance(boundaries[key], str):
+            boundaries[key] = time.fromisoformat(boundaries[key])
+
     return boundaries
 
 
-def get_filtered_kindergartens(request, boundaries, parameters, method, value):
+def get_filtered_kindergartens(request, method, value):
     # builds the filters list
     filters = list()
     point = None
@@ -110,33 +86,26 @@ def get_filtered_kindergartens(request, boundaries, parameters, method, value):
             filters.append(Q(region=value))
         else:
             coords = get_coordinates(value)
+            if not coords:
+                # Cannot find location, return empty results
+                return Kindergarten.objects.none()
             point = Point(coords[1], coords[0], srid=4326)  # 4326 stands for (lat, long) coordinates system
     else:
         # algo does not contain any filters
         pass
 
-    for key, (attr_key, attr_value) in {"min_age": ("min_age__gte", boundaries['min_age_value']),
-                                        "max_age": ("max_age__lte", boundaries['max_age_value']),
-                                        "capacity": ("capacity__lte", boundaries['capacity_value']),
-                                        "open_time": ("open_time__lte", boundaries['open_value']),
-                                        "close_time": ("close_time__gte", boundaries['close_value'])
-                                        }.items():
-        if parameters.get(key):
-            filters.append(Q(**{attr_key: attr_value}))
-
-    # filters the kindergartens
+    # filter the kindergartens
     if filters:
         kindergartens = Kindergarten.objects.filter(reduce(operator.and_, filters))
     else:
         kindergartens = Kindergarten.objects.all()
 
-    # show only kindergartens with left slots
-    if parameters.get('is_free') == 'on':
-        kindergartens = [k for k in kindergartens.iterator() if k.is_free()]
-
     # sort by distance
     if method == "location" and not regional_search:
         kindergartens = kindergartens.annotate(distance=Distance('geolocation', point)).order_by("distance")
+
+    # convert the kindergartens into list
+    kindergartens = [k for k in kindergartens.iterator()]
 
     # search by algorithm
     if method == "advanced":

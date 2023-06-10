@@ -60,9 +60,6 @@ class Kindergarten(models.Model):
     phone = models.CharField(max_length=45, blank=True, null=True)
     mail = models.EmailField(max_length=45, blank=True, null=True)
     description = models.CharField(max_length=250, blank=True, null=True)
-    phone = models.CharField(max_length=45, blank=True, null=True)
-    mail = models.EmailField(max_length=45, blank=True, null=True)
-    description = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -97,9 +94,16 @@ class Kindergarten(models.Model):
     def display_ratio_children_teachers(self):
         return str(self.capacity) + ' : ' + str(self.num_of_teachers)
 
+    def get_longitude(self):
+        return self.geolocation.x
+
+    def get_latitude(self):
+        return self.geolocation.y
+
     def set_geolocation(self):
         location = f"{self.address} {self.region}"
         coordinates = get_coordinates(location)
+        # TODO: handle the case of coordinates == None (location not found)
         pnt = Point(coordinates[1], coordinates[0], srid=4326)
         self.geolocation = pnt
 

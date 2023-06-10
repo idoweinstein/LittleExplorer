@@ -13,4 +13,9 @@ def get_coordinates(location):
         "key": BING_KEY
     }
     r = requests.get(url=base_url, params=query_parameters).json()
+
+    if r["resourceSets"][0]["estimatedTotal"] == 0:
+        # No results
+        return None
+
     return tuple(r["resourceSets"][0]["resources"][0]["geocodePoints"][0]["coordinates"])

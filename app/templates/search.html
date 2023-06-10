@@ -1,49 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!--
-    TODO: find a better place for this script tag
--->
-<script>
-    window.onload = () => {
-        for (const catergory of ["min_age", "max_age", "capacity"]) {
-            const value = document.querySelector(`#${catergory}_value`);
-            const input = document.querySelector(`#${catergory}`);
-            value.textContent = input.value;
-            input.addEventListener("input", (event) => {
-              if (document.querySelector("#min_age").value > document.querySelector("#max_age").value) {
-                /* Enfore min <= max */
-                document.querySelector("#min_age").value = document.querySelector("#max_age").value = input.value;
-                document.querySelector("#min_age_value").textContent = document.querySelector("#max_age_value").textContent = input.value;
-              }
-              /* Update value label */
-              value.textContent = event.target.value;
-            });
-        }
-    }
-</script>
+{% load static %}
+<link rel="stylesheet" href="{% static 'search.css' %}">
+<script type="text/javascript" src="{% static 'search.js' %}"></script>
 
 <body>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'search.css' %}">
-    <form method="GET" action="/search">
+    <input id="kindergartens-data" type="hidden" data-kindergartens="{{ json_results }}">
+    <input id="key" type="hidden" data-key="{{ api_key }}">
+    <form name="search" method="GET" action="/search">
         <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
-              <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">חיפוש לפי שם</label>
-              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">חיפוש לפי מקום</label>
+              <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">Search by name</label>
+              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Search by location</label>
               <div class="input-group rounded">
                 <form class="form-inline">
-                        <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search">
-                        <button class="btn btn-outline-dark btn-sm" type="submit">חיפוש</button>
+                        <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search" required>
+                        <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
 
                         <input type="hidden" name="min_age" value="{{ min_age.value }}">
                         <input type="hidden" name="max_age" value="{{ max_age.value }}">
                         <input type="hidden" name="capacity" value="{{ capacity.value }}">
                         <input type="hidden" name="open_time" value="{{ open_time.value }}">
                         <input type="hidden" name="close_time" value="{{ close_time.value }}">
-                        {% if request.is_free %}
-                        <input type="hidden" name="is_free" value="on">
-                        {% endif %}
+                        <input type="hidden" name="is_free" {% if request.is_free %}value="on"{% endif %}>
                     </form>
                 </div>
            </div>
@@ -53,7 +33,7 @@
     <div class="row justify-content-center align-items-start h-100" style="margin-top: 25px;">
         
         <div class="col-3">
-            <form method="GET" action="/search">
+            <form name="filters">
             
                 <div class="card text-black">
                     <div class="card-body">
@@ -94,64 +74,76 @@
                                 from <input type="time" id="open_time" name="open_time" min="{{ open_time.min }}" max="{{ open_time.max }}" value="{{ open_time.value }}">
                             </div>
                             <div class="form-outline-dark mb-2"> 
-                                to  <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
+                                until <input type="time" id="close_time" name="close_time" min="{{ close_time.min }}" max="{{ close_time.max }}" value="{{ close_time.value }}"> 
                             </div>
                              
                         </div>
 
                         <div class="text-center">
                             <div class="form-outline-dark mb-2">
-                                <label class="form-label" for="capacity">kindergartens with free places only<output id="is_free"></output></label>
+                                <label class="form-label" for="capacity">kindergartens with free places only</label>
                                 <input type="checkbox" class="range" id="is_free" name="is_free" {% if request.is_free %} checked {% endif %}>
                             </div>
 
                         </div>
 
-                        <input type="hidden" name="method" value="{{ request.method }}">
-                        <input type="hidden" name="value" value="{{ request.value }}">
-
-
                         <div class="text-center mb-2" style="margin-top: 10px;">
-                            <button class="btn btn-outline-dark btn-sm" type="submit">search</button>
+                            <button class="btn btn-outline-dark btn-sm" type="submit">Filter</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        
         <div class="col-8">
             <section>
-                <div class="container">
-                      <div class="card text-dark">
-                        {% for result in results %}
-                            <div class="card-body" class="kindergarten">
-                                <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="לדף המפורט של הגן לחצו כאן" style="color: black; text-decoration: none;">
-                                    <div class="kindergarten">
-                                        <div class="flex-start" style="text-align: center;">
-                                            <p class="mb-0">
-                                                <h4 class="fw-bold mb-0">{{ result.name }}</h4>
-                                                
-                                            </p>
-                                            <p class="mb-0">
-                                                <h5>כתובת: {{ result.address }}, {{ result.region }}</h5>
-                                            </p>
-                                            <p class="mb-0">
-                                                <h5>גילאים: {{ result.get_min_age_display }} עד {{ result.get_max_age_display }}</h5>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                                    <hr class="my-0" /> 
+                <div id="search-results" class="search_results" class="d-flex align-items-center" hidden>
+                    <ul class="nav nav-tabs mb-3 nav-fill justify-content-center" id="pills-tab" role="tablist" style="margin-left: 12px;margin-right: 12px; text-align: center;">
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link active fw-bold" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button" role="tab" aria-controls="pills-list" aria-selected="true" style=" color: black;">List view</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link fw-bold" id="pills-map-tab" data-bs-toggle="pill" data-bs-target="#pills-map" type="button" role="tab" aria-controls="pills-map" aria-selected="false" style=" color: black;">Map view</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
+                            <!-- List content -->
+                            <div class="container">
+                                <div id="kinder-table" class="card text-dark">
+                                  {% for result in results %}
+                                      <div class="card-body" class="kindergarten" id="kindergarten_{{ result.kindergarten_id }}" style="background-color:#cff1ff;;">
+                                          <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="Click here for more details" style="color: black; text-decoration: none;">
+                                              <div class="kindergarten">
+                                                  <div class="flex-start" style="text-align: center;">
+                                                      <p class="mb-0">
+                                                          <h4 class="fw-bold mb-0">{{ result.name }}</h4>
+                                                          
+                                                      </p>
+                                                      <p class="mb-0">
+                                                          <h5>Address: {{ result.address }}, {{ result.region }}</h5>
+                                                      </p>
+                                                      <p class="mb-0">
+                                                          <h5>Ages: {{ result.get_min_age_display }} to {{ result.get_max_age_display }}</h5>
+                                                      </p>
+                                                  </div>
+                                              </div>
+                                          </a>
+                                              <hr class="my-0" /> 
+                                      </div>
+                                  {% endfor %}
+                                </div>
                             </div>
-                        {% endfor %}
-                      </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
+                            <!-- Map content -->
+                            <div id="myMap" class="side justify-content-center" style="position:relative;width:100%;min-width:290px;height:100%; min-height:80vh;background-color:gray"></div>
+                        </div>
+                    </div>
                 </div>
-                {% if not results %}
-                <div class="alert alert-danger" role="alert" style="text-align: center;">
+                <div id="empty-results" class="container alert alert-danger" role="alert" style="text-align: center;" hidden>
                     Sorry, we couldn't find any matching results
                 </div>  
-                {% endif %}
-              </section>
+            </section>
         </div>
     </div>
    

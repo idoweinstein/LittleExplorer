@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.mail import send_mail
+from django.core import serializers
 from django.core.validators import validate_email
 from django.db import IntegrityError
 from django.http import JsonResponse
@@ -17,6 +18,7 @@ from app.search import get_boundaries_of_fields, get_filtered_kindergartens, Ran
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm
 from .models import Users, Connections, Comment, Kindergarten
+from .geolocation import BING_KEY
 
 
 def assert_true(func):
@@ -65,7 +67,7 @@ def log_in(request):
             login(request, user)
             return redirect('/')
         else:
-            messages.success(request, ("There Was An Error Logging In, Try Again..."))
+            messages.error(request, ("Login failed. Please re-enter your Email and password."))
             return redirect('login')
 
 
@@ -111,13 +113,21 @@ def search(request):
     method = parameters.get("method")
     value = parameters.get("value")
 
+    if not value:
+        # Empty search query is blocked by our frontend.
+        # Therefore, this scenario can only happen by tampering frontend code.
+        # If so, navigate to the index page.
+        return redirect('/')
+
     if method not in ["name", "location", "advanced"]:
         method = "name"
 
     boundaries = get_boundaries_of_fields(parameters)
-    kindergartens = get_filtered_kindergartens(request, boundaries, parameters, method, value)
+    kindergartens = get_filtered_kindergartens(request, method, value)
 
     context = {'results': kindergartens,
+               'json_results': serializers.serialize("json", kindergartens),
+               'api_key': BING_KEY,
                'value': Value(value),
                'min_age': RangedValue(boundaries['min_age_value'], boundaries['min_age_min'],
                                       boundaries['min_age_max']),
@@ -178,8 +188,7 @@ def add_kindergarten(request):
             kindergarten.set_geolocation()
             kindergarten.save()
 
-            # TODO: we want to show a response to the user
-            return redirect('/')
+            return redirect(f'/kindergarten/{ kindergarten.kindergarten_id }')
     else:
         kindergarten_form = AddKindergartenForm()
 
