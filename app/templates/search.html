@@ -97,12 +97,12 @@
         <div class="col-8">
             <section>
                 <div id="search-results" class="search_results" class="d-flex align-items-center" hidden>
-                    <ul class="nav nav-pills mb-3 mx-auto justify-content-center" id="pills-tab" role="tablist">
+                    <ul class="nav nav-tabs mb-3 nav-fill justify-content-center" id="pills-tab" role="tablist" style="margin-left: 12px;margin-right: 12px; text-align: center;">
                         <li class="nav-item" role="presentation">
-                          <button class="nav-link active" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button" role="tab" aria-controls="pills-list" aria-selected="true">רשימה</button>
+                          <button class="nav-link active fw-bold" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button" role="tab" aria-controls="pills-list" aria-selected="true" style=" color: black;">List view</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                          <button class="nav-link" id="pills-map-tab" data-bs-toggle="pill" data-bs-target="#pills-map" type="button" role="tab" aria-controls="pills-map" aria-selected="false">מפה</button>
+                          <button class="nav-link fw-bold" id="pills-map-tab" data-bs-toggle="pill" data-bs-target="#pills-map" type="button" role="tab" aria-controls="pills-map" aria-selected="false" style=" color: black;">Map view</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
@@ -111,7 +111,7 @@
                             <div class="container">
                                 <div id="kinder-table" class="card text-dark">
                                   {% for result in results %}
-                                      <div class="card-body" class="kindergarten" id="kindergarten_{{ result.kindergarten_id }}">
+                                      <div class="card-body" class="kindergarten" id="kindergarten_{{ result.kindergarten_id }}" style="background-color:#cff1ff;;">
                                           <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="Click here for more details" style="color: black; text-decoration: none;">
                                               <div class="kindergarten">
                                                   <div class="flex-start" style="text-align: center;">
