@@ -1,61 +1,80 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-<section class="vh-100 h-custom">
-    <div class="container py-5" dir="rtl">
+
         <div class="d-flex justify-content-center" style="margin-bottom: 20px;">
             <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
         </div>
-        {% if kindergarten_info.description %}
-            <div class="card rounded-3 p-md-5" style="background-color: #b2e6fa; margin-bottom: 20px;">
-                <h5 class="text-center">
-                    <span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
-                </h5>
-            </div>
-        {% endif %}
 
-        <div class="row row-cols-2 g-3 text-center">
-            <div class="col">
-              <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                <h5 class="card-title">יצירת קשר</h5>
-                <p class="card-text">
-                    כתובת:{{ kindergarten.address }}, {{ kindergarten.region }}
-                    {% if kindergarten_info.phone %}
-                    <br>טלפון: {{ kindergarten_info.phone }}
-                    {% endif %}
-                    {% if kindergarten_info.mail %}
-                    <br>מייל: {{ kindergarten_info.mail }}
-                    {% endif %}
-                </p>
-                <h5 class="card-title">שעות הפתיחה של הגן:</h5>
-                    <p class="card-text">
-                        שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
-                        <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
-                    </p> 
-                </div>
-            </div>
-            <div class="col">
-                <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                    <h5 class="card-title">פרטים על הגן</h5>
-                    <p class="card-text">
-                        הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}}
-                        <br>
-                        <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
-                        <br>וכמו כן, מובטח שיש יחס של {{ kindergarten.display_ratio_children_teachers }} ילדים לגננות במקרה שבו הגן
-                        מלא!
-                        <br>
-                        {% if kindergarten.has_parking == 1 %}
-                        <br>לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
-                        {% else %}
-                        <br>לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
+        <ul class="nav nav-tabs mb-3 nav-fill justify-content-center" id="pills-tab" role="tablist" style="margin-left: 50px;margin-right: 50px; text-align: center;" dir="rtl">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active fw-bold" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button" role="tab" aria-controls="pills-list" aria-selected="true" style=" color: black;">מידע</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link fw-bold" id="pills-map-tab" data-bs-toggle="pill" data-bs-target="#pills-map" type="button" role="tab" aria-controls="pills-map" aria-selected="false" style=" color: black;">תגובות</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold" id="pills-map-tab" data-bs-toggle="pill" data-bs-target="#pills-map" type="button" role="tab" aria-controls="pills-map" aria-selected="false" style=" color: black;">הרשמה</button>
+              </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab">
+                <section class="vh-100 h-custom">
+                    <div class="container py-5" dir="rtl">
+                        {% if kindergarten_info.description %}
+                            <div class="card rounded-3 p-md-5" style="background-color: #b2e6fa; margin-bottom: 20px;">
+                                <h5 class="text-center">
+                                    <span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
+                                </h5>
+                            </div>
                         {% endif %}
-                        <br>
-                    </p>
-                </div>
-            </div>
 
-    </div>
-</section>
+                        <div class="row row-cols-2 g-3 text-center">
+                            <div class="col">
+                            <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
+                                <h5 class="card-title">יצירת קשר</h5>
+                                <p class="card-text">
+                                    כתובת:{{ kindergarten.address }}, {{ kindergarten.region }}
+                                    {% if kindergarten_info.phone %}
+                                    <br>טלפון: {{ kindergarten_info.phone }}
+                                    {% endif %}
+                                    {% if kindergarten_info.mail %}
+                                    <br>מייל: {{ kindergarten_info.mail }}
+                                    {% endif %}
+                                </p>
+                                <h5 class="card-title">שעות הפתיחה של הגן:</h5>
+                                    <p class="card-text">
+                                        שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
+                                        <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
+                                    </p> 
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
+                                    <h5 class="card-title">פרטים על הגן</h5>
+                                    <p class="card-text">
+                                        הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}}
+                                        <br>
+                                        <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
+                                        <br>וכמו כן, מובטח שיש יחס של {{ kindergarten.display_ratio_children_teachers }} ילדים לגננות במקרה שבו הגן
+                                        מלא!
+                                        <br>
+                                        {% if kindergarten.has_parking == 1 %}
+                                        <br>לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
+                                        {% else %}
+                                        <br>לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
+                                        {% endif %}
+                                        <br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        
+
+
 
 
 {% if comments_with_parent %}
