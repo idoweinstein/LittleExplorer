@@ -88,12 +88,12 @@ class AddCommentForm(forms.ModelForm):
         model = Comment
         fields = ['comment', 'grade']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'תגובה...'}),
+            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'Comment...'}),
             'grade': forms.HiddenInput()
         }
         labels = {
-            'comment': 'תגובה',
-            'grade': 'ציון- (1 - גרוע מאוד, 5 - מצוין) '
+            'comment': 'Comment',
+            'grade': 'Grade - (1 - Bad, 5 - Excellent) '
         }
 
 

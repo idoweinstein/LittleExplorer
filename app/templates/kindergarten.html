@@ -77,7 +77,7 @@
                                 <span class="badge bg-success"> {{ comment.grade }} Stars</span>
                             {% elif comment.grade == 2 %}
                                 <span class="badge bg-danger"> {{ comment.grade }} Stars</span>
-                            {% else } <!-- One star -->
+                            {% else %} <!-- One star -->
                                 <span class="badge bg-danger"> {{ comment.grade }} Star</span>
                             {% endif %}
                         </p>
@@ -100,7 +100,7 @@
 <div> 
     {% if user.is_parent %}
     <br>
-    <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">Post new comment</button>
+    <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">Post comment</button>
     {% elif not user.is_authenticated %}
     <br>Not registered yet? Sign up to post a comment about this kindergarten.
     {% endif %}

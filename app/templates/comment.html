@@ -62,13 +62,13 @@
 <form method="post">
     {% csrf_token %}
     <div>
-        <label>ציון: </label>
+        <label>Grade: </label>
         <div>
-            <span id="bottle5" value="5" class="grade deactivated">🍼</span>
-            <span id="bottle4" value="4" class="grade deactivated">🍼</span>
-            <span id="bottle3" value="3" class="grade deactivated">🍼</span>
-            <span id="bottle2" value="2" class="grade deactivated">🍼</span>
             <span id="bottle1" value="1" class="grade deactivated">🍼</span>
+            <span id="bottle2" value="2" class="grade deactivated">🍼</span>
+            <span id="bottle3" value="3" class="grade deactivated">🍼</span>
+            <span id="bottle4" value="4" class="grade deactivated">🍼</span>
+            <span id="bottle5" value="5" class="grade deactivated">🍼</span>
         </div>
         {{ form.grade }} <!-- A hidden input, not visible from the UI but holds the value -->
     </div>
@@ -76,6 +76,6 @@
         <label></label>
         {{ form.comment }}
     </div>
-     <input type="submit" value="שמירה">
+     <input type="submit" value="Post">
 </form>
 {% endblock content%}
