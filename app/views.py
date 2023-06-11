@@ -208,13 +208,13 @@ def sign_up_kid_to_kindergarten(request, kindergarten_id):
     if request.method == "POST":
         kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
         kindergarten_name = kindergarten.name  # get kindergarten name
-        subject = f"הרשמה חדשה עבור {kindergarten_name}"
+        subject = f"A new registration for {kindergarten_name}"
 
         parent_email = request.user.email
-        message = f"הוריו של {request.POST['first-name']} {request.POST['last-name']} רשמו אותו לגן" \
-                  f"\n{request.POST['first-name']} מתרגש מאוד להצטרף לגן והוא בן {request.POST['age-months']} חודשים" \
-                  f"\n{parent_email} ליצירת קשר עם ההורים ניתן לשלוח מייל לכתובת הבאה" \
-                  f"\n,בברכה" \
+        message = f"{request.POST['first-name']} {request.POST['last-name']} has just been registered to your kindergarten by the parent." \
+                  f"\n{request.POST['first-name']} is very excited, and is {request.POST['age-months']} months old." \
+                  f"\nTo contact the parent, please use the following Email address: {parent_email}" \
+                  f"\nBest regards," \
                   f"\nLittleExplorer"
 
         teacher_id = kindergarten.teacher_id
