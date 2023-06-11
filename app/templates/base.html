@@ -44,11 +44,12 @@
         </a>
         <form class="navbar-form" onsubmit="return false">
             {% if user.is_authenticated %}
-            ברוך הבא {{ user.first_name }} {{ user.last_name }}
-            <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>התנתק/י</button>
+            Welcome {{ user.first_name }} {{ user.last_name }}
+            
             {% if user.is_teacher %}
-            <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>הוספת גן</button>
+            <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>New kindergarten</button>
             {% endif %}
+            <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>Log out</button> 
 
           {% if user.is_parent %}
           <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
@@ -58,11 +59,11 @@
 
           {% else %}
           <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/parent_sign_up'">
-              <span class="glyphicon glyphicon-user"></span>הרשמה להורים</button>
+              <span class="glyphicon glyphicon-user"></span>Register as a parent</button>
           <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/teacher_sign_up'">
-              <span class="glyphicon glyphicon-user"></span>הרשמה לגננות</button>
+              <span class="glyphicon glyphicon-user"></span>Register as a teacher</button>
           <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/login'">
-              <span class="glyphicon glyphicon-log-in"></span>כניסה</button>
+              <span class="glyphicon glyphicon-log-in"></span>Login</button>
           {% endif %}
       </form>
   </nav>
