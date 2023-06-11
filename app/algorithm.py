@@ -1,4 +1,5 @@
 from typing import List, Tuple, Dict
+import re
 
 import numpy as np
 import nltk
@@ -47,6 +48,9 @@ def main_algo(kindergartens: List[Kindergarten], parent_text_input: str, parent:
 
 
 def preprocess_description(description):
+    # remove punctuation
+    description = re.sub(r"[\&\#\;\.\!\?\`\'\"\-\/\,(\)\>\<\=\[\]\{\}]", '', description)
+
     # tokenize the description into separate words
     tokens = word_tokenize(description.lower())
 
@@ -83,7 +87,7 @@ def location_score(kindergartens: List[Kindergarten], parent: Users):
     # TODO: need to remember to sacle the results and normalize so it will not shadow over the tfidf scores
     # if the user do not have a location saved, the score will be 0 for all the kindergartens
     # when the kindergarten is closer to the locations of the user, the score will be higher
-    kindergartens_pnts = [Kindergarten.geolocation for kindergarten in kindergartens]
+    kindergartens_pnts = [kindergarten.geolocation for kindergarten in kindergartens]
     home_scores = np.zeros(kindergartens_pnts)
     work_scores = np.zeros(kindergartens_pnts)
 
