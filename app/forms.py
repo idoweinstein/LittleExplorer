@@ -38,15 +38,15 @@ class RegisterParentForm(UserCreationForm):
         self.fields['work_address'].required = False
         self.fields['work_region'].required = False
 
-        self.fields['email'].label = "אימייל"
-        self.fields['first_name'].label = "שם פרטי"
-        self.fields['last_name'].label = "שם משפחה"
-        self.fields['home_address'].label = "כתובת מגורים"
-        self.fields['home_region'].label = "עיר מגורים"
-        self.fields['work_address'].label = "כתובת עבודה"
-        self.fields['work_region'].label = "עיר עבודה"
-        self.fields['password1'].label = "סיסמה"
-        self.fields['password2'].label = "חזור על הסיסמה"
+        self.fields['email'].label = "Email"
+        self.fields['first_name'].label = "First name"
+        self.fields['last_name'].label = "Last name"
+        self.fields['home_address'].label = "Home address"
+        self.fields['home_region'].label = "Home city"
+        self.fields['work_address'].label = "Work address"
+        self.fields['work_region'].label = "Work city"
+        self.fields['password1'].label = "Password"
+        self.fields['password2'].label = "Repeat password"
 
         self.user_type = "parent"
 
@@ -74,11 +74,11 @@ class RegisterTeacherForm(UserCreationForm):
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
-        self.fields['email'].label = "אימייל"
-        self.fields['first_name'].label = "שם פרטי"
-        self.fields['last_name'].label = "שם משפחה"
-        self.fields['password1'].label = "סיסמה"
-        self.fields['password2'].label = "חזור על הסיסמה"
+        self.fields['email'].label = "Email"
+        self.fields['first_name'].label = "First name"
+        self.fields['last_name'].label = "Last name"
+        self.fields['password1'].label = "Password"
+        self.fields['password2'].label = "Repeat password"
 
         self.user_type = "teacher"
 
