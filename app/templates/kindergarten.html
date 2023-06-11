@@ -2,7 +2,7 @@
 {% block content %}
 <body>
 <section class="vh-100 h-custom">
-    <div class="container py-5" dir="rtl">
+    <div class="container py-5">
         <div class="d-flex justify-content-center" style="margin-bottom: 20px;">
             <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
         </div>
@@ -17,50 +17,49 @@
         <div class="row row-cols-2 g-3 text-center">
             <div class="col">
               <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                <h5 class="card-title">יצירת קשר</h5>
+                <h5 class="card-title">Contact information</h5>
                 <p class="card-text">
-                    כתובת:{{ kindergarten.address }}, {{ kindergarten.region }}
+                    Address: {{ kindergarten.address }}, {{ kindergarten.region }}
                     {% if kindergarten_info.phone %}
-                    <br>טלפון: {{ kindergarten_info.phone }}
+                    <br>Phone number: {{ kindergarten_info.phone }}
                     {% endif %}
                     {% if kindergarten_info.mail %}
-                    <br>מייל: {{ kindergarten_info.mail }}
+                    <br>Email address: {{ kindergarten_info.mail }}
                     {% endif %}
                 </p>
-                <h5 class="card-title">שעות הפתיחה של הגן:</h5>
+                <h5 class="card-title">Hours of operation:</h5>
                     <p class="card-text">
-                        שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
-                        <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
+                        Opening time: {{ kindergarten.open_time|date:'H:i' }}
+                        <br>Clostng time: {{ kindergarten.close_time|date:'H:i' }}
                     </p> 
                 </div>
             </div>
             <div class="col">
                 <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                    <h5 class="card-title">פרטים על הגן</h5>
+                    <h5 class="card-title">Additional information</h5>
                     <p class="card-text">
-                        הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}}
+                        In this kindergarten, the children's ages range between {{ kindergarten.get_min_age_display}} to {{ kindergarten.get_max_age_display}}.
                         <br>
-                        <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
-                        <br>וכמו כן, מובטח שיש יחס של {{ kindergarten.display_ratio_children_teachers }} ילדים לגננות במקרה שבו הגן
-                        מלא!
+                        <br>The maximum number of children is {{ kindergarten.capacity }} at most.
+                        <br>A ratio of {{ kindergarten.display_ratio_children_teachers }} children to teachers is guaranteed, even when the kindergarten is full.
                         <br>
                         {% if kindergarten.has_parking == 1 %}
-                        <br>לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
+                        <br>For your attention, near the kindergarten there is access to parking for maximum convenience when dropping off and picking up your child.
                         {% else %}
-                        <br>לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
+                        <br>Please note that there is no organized parking near the kindergarten.
                         {% endif %}
                         <br>
                     </p>
                 </div>
             </div>
-
+        </div>
     </div>
 </section>
 
 
 {% if comments_with_parent %}
-<h2 class="fw-bold mb-2 text-uppercase text-center">תגובות</h2>
-<section  dir="rtl">
+<h2 class="fw-bold mb-2 text-uppercase text-center">Comments</h2>
+<section>
     <div class="container my-5 py-5">
       <div class="row d-flex justify-content-center">
         <div class="col-md-12 col-lg-10">
@@ -75,9 +74,11 @@
                         <p class="mb-0">
                             {{ comment.date }}
                             {% if comment.grade > 3 %}
-                                <span class="badge bg-success"> {{ comment.grade }} כוכבים</span>
-                            {% else %}
-                                <span class="badge bg-danger"> {{ comment.grade }} כוכבים</span>
+                                <span class="badge bg-success"> {{ comment.grade }} Stars</span>
+                            {% elif comment.grade == 2 %}
+                                <span class="badge bg-danger"> {{ comment.grade }} Stars</span>
+                            {% else } <!-- One star -->
+                                <span class="badge bg-danger"> {{ comment.grade }} Star</span>
                             {% endif %}
                         </p>
                     </div>
@@ -96,12 +97,12 @@
   </section>
 
 {% endif %}
-<div dir="rtl"> 
+<div> 
     {% if user.is_parent %}
     <br>
-    <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">הוספת תגובה</button>
+    <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">Post new comment</button>
     {% elif not user.is_authenticated %}
-    <br>עדיין לא רשום לאתר? הירשם ותוכל להוסיף תגובות על הגן!
+    <br>Not registered yet? Sign up to post a comment about this kindergarten.
     {% endif %}
 </div>
 
@@ -110,11 +111,9 @@
     {% if user.is_parent %}
         {% if kindergarten.is_free %}
         <br>
-        <button onclick="location.href = '/sign_up_kid_to_kindergarten/{{ kindergarten.kindergarten_id }}'">רשום את הילד שלך
-            לגן
-        </button>
+        <button onclick="location.href = '/sign_up_kid_to_kindergarten/{{ kindergarten.kindergarten_id }}'">Register your child to this kindergarten</button>
         {% else %}
-        הגן מלא ולכן לא ניתן להרשם אליו
+        The kindergarten is full and do not accept new children at the moment.
         {% endif %}
     {% endif %}
 </div>
