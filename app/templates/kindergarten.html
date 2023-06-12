@@ -1,155 +1,213 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'kindergarten.js' %}"></script>
+<link rel="stylesheet" href="{% static 'kindergarten.css' %}">
 <body>
-<section class="vh-100 h-custom">
+
+    <div class="d-flex justify-content-center" style="margin-bottom: 20px; margin-top: 20px;">
+        <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
+    </div>
+
     <div class="container py-5">
+        <ul class="nav nav-tabs nav-fill" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold" id="pills-info-tab" data-bs-toggle="pill" data-bs-target="#pills-info" type="button" role="tab" aria-controls="pills-info" aria-selected="true" style=" color: black;">Info</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold" id="pills-comments-tab" data-bs-toggle="pill" data-bs-target="#pills-comments" type="button" role="tab" aria-controls="pills-comments" aria-selected="false" style=" color: black;">Comments</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab" aria-controls="pills-register" aria-selected="false" style=" color: black;">Register</button>
+            </li>
+        </ul>
+    </div>
 
-        <div class="d-flex justify-content-center" style="margin-bottom: 20px;">
-            <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
-        </div>
-        <div class="row row-cols-2 g-3 text-center">
-            <div class="col">
-              <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                <h5 class="card-title">Contact information</h5>
-                <p class="card-text">
-                    Address: {{ kindergarten.address }}, {{ kindergarten.region }}
-                    {% if kindergarten_info.phone %}
-                    <br>Phone number: {{ kindergarten_info.phone }}
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
+            <section class="vh-100 h-custom">
+                <div class="container">
+                    {% if kindergarten_info.description %}
+                        <div class="card rounded-3 p-md-5" style="background-color: #b2e6fa; margin-bottom: 20px;">
+                            <h5 class="text-center">
+                                <span style="white-space: pre-line">{{ kindergarten_info.description }}</span>
+                            </h5>
+                        </div>
                     {% endif %}
-                    {% if kindergarten_info.mail %}
-                    <br>Email address: {{ kindergarten_info.mail }}
-                    {% endif %}
-                </p>
-                <h5 class="card-title">Hours of operation:</h5>
-                    <p class="card-text">
-                        Opening time: {{ kindergarten.open_time|date:'H:i' }}
-                        <br>Clostng time: {{ kindergarten.close_time|date:'H:i' }}
-                    </p> 
-                </div>
-            </div>
-            <div class="col">
-                <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                    <h5 class="card-title">Additional information</h5>
-                    <p class="card-text">
-                        In this kindergarten, the children's ages range between {{ kindergarten.get_min_age_display}} to {{ kindergarten.get_max_age_display}}.
-                        <br>
-                        <br>The maximum number of children is {{ kindergarten.capacity }} at most.
-                        <br>A ratio of {{ kindergarten.display_ratio_children_teachers }} children to teachers is guaranteed, even when the kindergarten is full.
-                        <br>
-                        {% if kindergarten.has_parking == 1 %}
-                        <br>For your attention, near the kindergarten there is access to parking for maximum convenience when dropping off and picking up your child.
-                        {% else %}
-                        <br>Please note that there is no organized parking near the kindergarten.
-                        {% endif %}
-
-                        <div class="row row-cols-2 g-3 text-center">
-                            <div class="col">
+                    <div class="row row-cols-2 g-3 text-center">
+                        <div class="col">
                             <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                                <h5 class="card-title">יצירת קשר</h5>
+                                <h5 class="card-title">Contact information</h5>
                                 <p class="card-text">
-                                    כתובת:{{ kindergarten.address }}, {{ kindergarten.region }}
+                                    Address: {{ kindergarten.address }}, {{ kindergarten.region }}
                                     {% if kindergarten_info.phone %}
-                                    <br>טלפון: {{ kindergarten_info.phone }}
+                                    <br>Phone number: {{ kindergarten_info.phone }}
                                     {% endif %}
                                     {% if kindergarten_info.mail %}
-                                    <br>מייל: {{ kindergarten_info.mail }}
+                                    <br>Email address: {{ kindergarten_info.mail }}
                                     {% endif %}
                                 </p>
-                                <h5 class="card-title">שעות הפתיחה של הגן:</h5>
-                                    <p class="card-text">
-                                        שעת פתיחה: {{ kindergarten.open_time|date:'H:i' }}
-                                        <br>שעת סגירה: {{ kindergarten.close_time|date:'H:i' }}
-                                    </p> 
-                                </div>
+                                <h5 class="card-title">Hours of operation:</h5>
+                                <p class="card-text">
+                                    Opening time: {{ kindergarten.open_time|date:'H:i' }}
+                                    <br>Clostng time: {{ kindergarten.close_time|date:'H:i' }}
+                                </p> 
                             </div>
-                            <div class="col">
-                                <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
-                                    <h5 class="card-title">פרטים על הגן</h5>
-                                    <p class="card-text">
-                                        הגיל המינימלי של ילדים בגן זה הוא {{ kindergarten.get_min_age_display}}
-                                        <br>
-                                        <br>בגן זה מובטח שכמות הילדים המקסימלית בכל זמן תהיה לכל היותר {{ kindergarten.capacity }}
-                                        <br>וכמו כן, מובטח שיש יחס של {{ kindergarten.display_ratio_children_teachers }} ילדים לגננות במקרה שבו הגן
-                                        מלא!
-                                        <br>
-                                        {% if kindergarten.has_parking == 1 %}
-                                        <br>לתשומת לבכם, בקרבת הגן יש גישה לחניה לנוחות מירבית בהורדה ובאיסוף של ילדכם
-                                        {% else %}
-                                        <br>לתשומת לבכם, חשוב לדעת כי אין חניה מסודרת בקרבת הגן
-                                        {% endif %}
-                                        <br>
-                                    </p>
+                        </div>
+                        <div class="col">
+                            <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
+                                <h5 class="card-title">Additional information</h5>
+                                <p class="card-text">
+                                    In this kindergarten, the children's ages range between {{ kindergarten.get_min_age_display}} to {{ kindergarten.get_max_age_display}}.
+                                    <br>
+                                    <br>The maximum number of children is {{ kindergarten.capacity }} at most.
+                                    <br>A ratio of {{ kindergarten.display_ratio_children_teachers }} children to teachers is guaranteed, even when the kindergarten is full.
+                                    <br>
+                                    {% if kindergarten.has_parking == 1 %}
+                                    <br>For your attention, near the kindergarten there is access to parking for maximum convenience when dropping off and picking up your child.
+                                    {% else %}
+                                    <br>Please note that there is no organized parking near the kindergarten.
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="tab-pane fade" id="pills-comments" role="tabpanel" aria-labelledby="pills-comments-tab">
+            {% if comments_with_parent %}
+                <section>
+                    <div class="container">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-12 col-lg-10">
+                                <div class="card text-dark">
+                                    {% for comment in comments_with_parent %}
+                                        <div class="card-body p-4">
+                            
+                                        <div class="d-flex flex-start">
+                                            <div>
+                                            <h6 class="fw-bold mb-1" style="margin-left: 30px;">{{ comment.parent.get_full_name }}</h6>
+                                            <div class="d-flex align-items-center mb-3" style="margin-left: 30px;">
+                                                <p class="mb-0">
+                                                    {{ comment.date }}
+                                                    {% if comment.grade > 3 %}
+                                                        <span class="badge bg-success"> {{ comment.grade }} Stars</span>
+                                                    {% elif comment.grade == 2 %}
+                                                        <span class="badge bg-danger"> {{ comment.grade }} Stars</span>
+                                                    {% else %} <!-- One star -->
+                                                        <span class="badge bg-danger"> {{ comment.grade }} Star</span>
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                            <p class="mb-0" style="margin-left: 30px;">
+                                                {{ comment.comment }}
+                                            </p>
+                                        </div>
+                                        </div>
+                                        <hr class="my-0" />
+                                    </div>
+                                    {% endfor %}
+                                    {% if user.is_parent %}
+                                        <div class="card-body p-4" style="background-color: white;">
+                                            <div class="d-flex flex-start w-100">
+                                                <div class="form-outline w-100">
+                                                    <form method="post">
+                                                        <label class="form-label fw-bold" for="textAreaExample" style="margin-left: 30px;">Add a Comment</label>
+                                                        <div  style="margin-left: 30px;">
+                                                            <span id="bottle1" value="1" class="grade deactivated">🍼</span>
+                                                            <span id="bottle2" value="2" class="grade deactivated">🍼</span>
+                                                            <span id="bottle3" value="3" class="grade deactivated">🍼</span>
+                                                            <span id="bottle4" value="4" class="grade deactivated">🍼</span>
+                                                            <span id="bottle5" value="5" class="grade deactivated">🍼</span>
+                                                        </div>
+                                                        <textarea class="form-control" id="textAreaExample" rows="4" style="background: white; width: 90%; margin-left: 20px;"></textarea>
+                                                        
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="float-end mt-2 pt-1">
+                                                <button type="button" class="btn btn-dark btn-sm">Post comment</button>
+                                            </div>
+                                            {% elif not user.is_authenticated %}
+                                                <br>Not registered yet? Sign up to post a comment about this kindergarten.
+                                        </div>     
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- <div> 
+                        {% if user.is_parent %}
+                        <br>
+                        <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">Post comment</button>
+                        {% elif not user.is_authenticated %}
+                        <br>Not registered yet? Sign up to post a comment about this kindergarten.
+                        {% endif %}
+                    </div> -->
+                    
                 </section>
-            </div>
+
+            {% endif %}
         </div>
-    </div>
-</section>
-
-
-{% if comments_with_parent %}
-<h2 class="fw-bold mb-2 text-uppercase text-center">Comments</h2>
-<section>
-    <div class="container my-5 py-5">
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-12 col-lg-10">
-          <div class="card text-dark">
-            {% for comment in comments_with_parent %}
-                <div class="card-body p-4">
-    
-                <div class="d-flex flex-start">
-                    <div>
-                    <h6 class="fw-bold mb-1">{{ comment.parent.get_full_name }}</h6>
-                    <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                            {{ comment.date }}
-                            {% if comment.grade > 3 %}
-                                <span class="badge bg-success"> {{ comment.grade }} Stars</span>
-                            {% elif comment.grade == 2 %}
-                                <span class="badge bg-danger"> {{ comment.grade }} Stars</span>
-                            {% else %} <!-- One star -->
-                                <span class="badge bg-danger"> {{ comment.grade }} Star</span>
-                            {% endif %}
-                        </p>
-                    </div>
-                    <p class="mb-0">
-                        {{ comment.comment }}
-                    </p>
+        <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab">
+ 
+            {% if user.is_parent %}
+                {% if kindergarten.is_free %}
+                <section class="vh-100 gradient-custom">
+                    <div class="container">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 col-lg-9 col-xl-7">
+                        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                            <div class="card-body p-4 p-md-5">
+                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" style="text-align: center;">Register your child to this kindergarten</h3>
+                                <form method="POST" novalidate style="text-align: center;">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <label class="form-label">First name</label>
+                                                <input type="name" class="form-control-lg" />   
+                                            </div>
+                    
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                    
+                                            <div class="form-outline">
+                                                <label class="form-label">Last name</label>
+                                                <input type="name" class="form-control-lg" />   
+                                            </div>
+                    
+                                        </div>
+                                    </div>
+            
+                                    <div class="row">
+                                        <div class="col mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label">Age (in month)</label>
+                                                    <input type="number" class="form-control-lg" />   
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-outline-dark btn-m">Sign up</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
-                <hr class="my-0" />
-            </div>
-            {% endfor %}
-          </div>
+                </section>
+                <!-- <br>
+                <button onclick="location.href = '/sign_up_kid_to_kindergarten/{{ kindergarten.kindergarten_id }}'">Register your child to this kindergarten</button> -->
+                {% else %}
+                <div id="empty-results" class="container alert alert-danger" role="alert" style="text-align: center;" hidden>
+                    The kindergarten is full and do not accept new children at the moment.
+                </div>  
+                {% endif %}
+            {% endif %}
         </div>
-      </div>
-    </div>
-  </section>
-
-{% endif %}
-<div> 
-    {% if user.is_parent %}
-    <br>
-    <button onclick="location.href = '/comment/{{ kindergarten.kindergarten_id }}'">Post comment</button>
-    {% elif not user.is_authenticated %}
-    <br>Not registered yet? Sign up to post a comment about this kindergarten.
-    {% endif %}
-</div>
-
-
-<div class="d-flex justify-content-center"> 
-    {% if user.is_parent %}
-        {% if kindergarten.is_free %}
-        <br>
-        <button onclick="location.href = '/sign_up_kid_to_kindergarten/{{ kindergarten.kindergarten_id }}'">Register your child to this kindergarten</button>
-        {% else %}
-        The kindergarten is full and do not accept new children at the moment.
-        {% endif %}
-    {% endif %}
-</div>
+    </div>    
 </body>
 {% endblock content%}
 
