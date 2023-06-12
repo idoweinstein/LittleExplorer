@@ -3,7 +3,7 @@
 {% block content %}
 <body>
   <section>
-    <div class="container py-5 h-100" dir="rtl">
+    <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
           <div class="card text-black" style="border-radius: 1rem; background-color: white">
@@ -11,17 +11,17 @@
   
               <div class="mb-md-5 mt-md-4 pb-5">
   
-                <h2 class="fw-bold mb-2 text-uppercase">כניסה</h2>
-                <p class="text-black mb-5">אנא כתוב/י אימייל וסיסמא</p>
+                <h2 class="fw-bold mb-2 text-uppercase">Sign in</h2>
+                <p class="text-black mb-5">Please enter your Email and password</p>
                 <form action="" method=POST>
                     {% csrf_token %}
                     <div class="form-outline form-black mb-4">
-                      <label class="form-label" for="typeEmailX">אימייל</label>
-                      <input type="email" id="typeEmailX" name="username" class=" form-control-lg" />
+                      <label class="form-label" for="typeEmailX">Email</label>
+                      <input type="email" id="typeEmailX" name="username" class="form-control-lg" />
                     </div>
                       
                     <div class="form-outline mb-4" class="opacity-25">
-                      <label class="form-label" for="typePasswordX">סיסמא</label>
+                      <label class="form-label" for="typePasswordX">Password</label>
                       <input type="password" id="typePasswordX" name="password" class="form-control-lg" />
                     </div>
                     {% if messages %}
@@ -33,10 +33,11 @@
                     {% endif %}
                     {% endfor %}
                     {% endif %}
-                    <button class="btn btn-outline-dark btn-lg px-5" type="submit">כניסה</button>
+                    <button class="btn btn-outline-dark btn-lg px-5" type="submit">Sign in</button>
                   <div>
-                    <p class="mb-0">אין לך חשבון? <a href="/parent_sign_up" class="text-black-50 fw-bold">הרשמה להורים </a>
-                    ,  <a href="/teacher_sign_up" class="text-black-50 fw-bold">הרשמה לגננות </a></p>
+                    <br>
+                    <p class="mb-0">Don't have an account?<br>Register as a <a href="/parent_sign_up" class="text-black-50 fw-bold">Parent</a>
+                    or as a <a href="/teacher_sign_up" class="text-black-50 fw-bold">Teacher </a></p>
                   </div>
                 </form>
 

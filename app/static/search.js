@@ -62,7 +62,7 @@ function createCustomPushpins(kindergartens) {
 function createCustomClusterPushpins(cluster) {
     // Create a title for the cluster.
     cluster.setOptions({
-        title: cluster.containedPushpins.length + ' גנים'
+        title: cluster.containedPushpins.length + ' kindergartens'
     });
 }
 
