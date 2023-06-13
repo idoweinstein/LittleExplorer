@@ -10,7 +10,5 @@ urlpatterns = [
     path('kindergarten/<int:kindergarten_id>', views.get_kindergarten_details, name='kindergartenPage'),
     path('search/', views.search, name='search'),
     path('add_kindergarten/', views.add_kindergarten, name='add_kindergarten'),
-    path('sign_up_kid_to_kindergarten/<int:kindergarten_id>', views.sign_up_kid_to_kindergarten,
-         name='sign_up_kid_to_kindergarten'),
     path('add-connection/', views.add_connection, name='add_connection'),
 ]

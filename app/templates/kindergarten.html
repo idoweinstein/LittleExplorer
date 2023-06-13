@@ -140,9 +140,9 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            {% elif not user.is_authenticated %}
-                                                <br>Not registered yet? Sign up to post a comment about this kindergarten.
-                                        </div>     
+                                        </div>
+                                    {% elif not user.is_authenticated %}
+                                    <br>Not registered yet? Sign up to post a comment about this kindergarten.
                                     {% endif %}
                                 </div>
                             </div>
@@ -162,57 +162,64 @@
             {% endif %}
         </div>
         <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab">
- 
+
             {% if user.is_parent %}
                 {% if kindergarten.is_free %}
                 <section class="vh-100 gradient-custom">
-                    <div class="container">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-lg-9 col-xl-7">
-                        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
-                            <div class="card-body p-4 p-md-5">
-                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" style="text-align: center;">Register your child to this kindergarten</h3>
-                                <form method="POST" novalidate style="text-align: center;">
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label">First name</label>
-                                                <input type="name" class="form-control-lg" />   
-                                            </div>
-                    
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                    
-                                            <div class="form-outline">
-                                                <label class="form-label">Last name</label>
-                                                <input type="name" class="form-control-lg" />   
-                                            </div>
-                    
-                                        </div>
-                                    </div>
-            
-                                    <div class="row">
-                                        <div class="col mb-4">
-                                                <div class="form-outline">
-                                                    <label class="form-label">Age (in month)</label>
-                                                    <input type="number" class="form-control-lg" />   
+                    <div id="register" class="container">
+                        {% if registered_child %}
+                        <div class="container alert alert-success" role="alert" style="text-align: center;">
+                            Your sign up request was registered. Please wait for a staff member to contact you via Email.
+                        </div>
+                        {% endif %}
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-lg-9 col-xl-7">
+                                <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                                    <div class="card-body p-4 p-md-5">
+                                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 text-uppercase" style="text-align: center;">
+                                            <div style="vertical-align: middle">Register {% if registered_child %}another{% else %}your{% endif %} child</div>
+                                        </h3>
+                                        <div class="text-muted bg-light p-3 mb-2 rounded" style="text-align: center;">Please fill in your child's details, and a staff member will contact you via Email as soon as possible.</div>
+                                        <br>
+                                        <form method="POST" novalidate style="text-align: center;">
+                                            <input type="hidden" name="action" value="sign_up_kid_to_kindergarten"/>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-4">
+                                                    <div class="form-outline">
+                                                        <label class="form-label">First name</label>
+                                                        <input type="text" name="first-name" class="form-control form-control-lg" required />   
+                                                    </div>
                                                 </div>
-                                        </div>
+                                                <div class="col-md-6 mb-4">
+                                                    <div class="form-outline">
+                                                        <label class="form-label">Last name</label>
+                                                        <input name="last-name" type="text" class="form-control form-control-lg" required/>   
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col mb-4">
+                                                    <div class="form-outline">
+                                                        <label class="form-label">Age (in months)</label>
+                                                        <input type="number" name="age-months" class="form-control form-control-lg" required/>   
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% csrf_token %}
+                                            <div style="text-align: center;">
+                                                <button type="submit" class="btn btn-outline-dark btn-m">Sign up</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div style="text-align: center;">
-                                        <button type="submit" class="btn btn-outline-dark btn-m">Sign up</button>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                        </div>
                     </div>
-                </div>
                 </section>
                 <!-- <br>
                 <button onclick="location.href = '/sign_up_kid_to_kindergarten/{{ kindergarten.kindergarten_id }}'">Register your child to this kindergarten</button> -->
                 {% else %}
-                <div id="empty-results" class="container alert alert-danger" role="alert" style="text-align: center;" hidden>
+                <div class="container alert alert-danger" role="alert" style="text-align: center;">
                     The kindergarten is full and do not accept new children at the moment.
                 </div>  
                 {% endif %}

@@ -170,6 +170,10 @@ def get_kindergarten_details(request, kindergarten_id):
                 return HttpResponseRedirect(f'/kindergarten/{kindergarten_id}#comment-{comment_id}')
             context['hash'] = 'add_comment'
             context['add_comment_form'] = add_comments_form
+        elif action == 'sign_up_kid_to_kindergarten':
+            sign_up_kid_to_kindergarten(request, kindergarten_id)
+            context['hash'] = 'register'
+            context['registered_child'] = True
 
     return render(request, 'kindergarten.html', context)
 
@@ -216,33 +220,30 @@ def add_kindergarten(request):
     })
 
 
+@require_POST
 @user_passes_test(parent)
 def sign_up_kid_to_kindergarten(request, kindergarten_id):
-    if request.method == "POST":
-        kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
-        kindergarten_name = kindergarten.name  # get kindergarten name
-        subject = f"A new registration for {kindergarten_name}"
+    kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
+    kindergarten_name = kindergarten.name  # get kindergarten name
+    subject = f"A new registration for {kindergarten_name}"
 
-        parent_email = request.user.email
-        message = f"{request.POST['first-name']} {request.POST['last-name']} has just been registered to your kindergarten by the parent." \
-                  f"\n{request.POST['first-name']} is very excited, and is {request.POST['age-months']} months old." \
-                  f"\nTo contact the parent, please use the following Email address: {parent_email}" \
-                  f"\nBest regards," \
-                  f"\nLittleExplorer"
+    parent_email = request.user.email
+    message = f"{request.POST['first-name']} {request.POST['last-name']} has just been registered to your kindergarten by the parent." \
+              f"\n{request.POST['first-name']} is very excited, and is {request.POST['age-months']} months old." \
+              f"\nTo contact the parent, please use the following Email address: {parent_email}" \
+              f"\nBest regards," \
+              f"\nLittleExplorer"
 
-        teacher_id = kindergarten.teacher_id
-        teacher = Users.objects.get(parent_id=teacher_id)
-        recipient = [teacher.email]
+    teacher_id = kindergarten.teacher_id
+    teacher = Users.objects.get(parent_id=teacher_id)
+    recipient = [teacher.email]
 
-        email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
+    email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
 
-        send_mail(subject, message, email_from, recipient)
+    send_mail(subject, message, email_from, recipient)
 
-        kindergarten.kids_count = kindergarten.kids_count + 1
-        kindergarten.save()
-        return redirect('/')
-
-    return render(request, 'payment.html')
+    kindergarten.kids_count = kindergarten.kids_count + 1
+    kindergarten.save()
 
 
 @user_passes_test(authenticated)
