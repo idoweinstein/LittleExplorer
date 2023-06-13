@@ -88,13 +88,17 @@ class AddCommentForm(forms.ModelForm):
         model = Comment
         fields = ['comment', 'grade']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'Comment...'}),
-            'grade': forms.HiddenInput()
+            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Comment...'}),
+            'grade': forms.HiddenInput(attrs={'required':''})
         }
         labels = {
             'comment': 'Comment',
             'grade': 'Grade - (1 - Bad, 5 - Excellent) '
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AddCommentForm, self).__init__(*args, **kwargs)
+        self.fields['comment'].widget.attrs['class'] = 'form-control'
 
 
 class AddKindergartenForm(forms.ModelForm):

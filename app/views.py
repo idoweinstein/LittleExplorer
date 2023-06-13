@@ -7,11 +7,13 @@ from django.core.mail import send_mail
 from django.core import serializers
 from django.core.validators import validate_email
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET
 
 from django.contrib.auth.decorators import user_passes_test
+
+from django.views.decorators.http import require_POST
 
 import LittleExplorerApp.settings
 from app.search import get_boundaries_of_fields, get_filtered_kindergartens, RangedValue, Value
@@ -152,32 +154,43 @@ def get_kindergarten_details(request, kindergarten_id):
     kindergarten_info = get_object_or_404(Kindergartenadditionalinfo, pk=kindergarten_id)
     comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related(
         'parent').all()
-    return render(request, 'kindergarten.html',
-                  {'kindergarten': kindergarten,
-                   'kindergarten_info': kindergarten_info,
-                   'comments_with_parent': comments_with_parent
-                   })
+
+    context = {
+        'kindergarten': kindergarten,
+        'kindergarten_info': kindergarten_info,
+        'comments_with_parent': comments_with_parent,
+        'add_comment_form': AddCommentForm()
+    }
+
+    if request.method == "POST":
+        action = request.POST.get('action')
+        if action == 'add_comment':
+            add_comments_form, comment_id = add_comment(request, kindergarten_id)
+            if comment_id is not None:
+                return HttpResponseRedirect(f'/kindergarten/{kindergarten_id}#comment-{comment_id}')
+            context['hash'] = 'add_comment'
+            context['add_comment_form'] = add_comments_form
+
+    return render(request, 'kindergarten.html', context)
 
 
+@require_POST
 @user_passes_test(parent)
 def add_comment(request, kindergarten_id):
-    if request.method == "POST":
-        form = AddCommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.date = date.today()
-            comment.parent = request.user
-            comment.kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
-            comment.save()
+    form = AddCommentForm(request.POST)
+    comment_id = None
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.date = date.today()
+        comment.parent = request.user
+        comment.kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
+        comment.save()
 
-            # TODO: we want to show a response to the user
-            return redirect('/')
-    else:
-        form = AddCommentForm()
+        # Set the updated comment id
+        comment_id = comment.comment_id
 
-    return render(request, 'comment.html', {
-        'form': form,
-    })
+    return form, comment_id
+
 
 
 @user_passes_test(teacher)

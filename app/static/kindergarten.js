@@ -1,5 +1,4 @@
-
-window.onload = () => {
+function setBottlesEvents() {
     for (let i = 1; i <= 5; ++i) {
         document.getElementById("bottle" + i).onmouseover = (event) => {
             const value = +(event.target.getAttribute("value"));
@@ -35,4 +34,39 @@ window.onload = () => {
             }
         }
     }
+}
+
+// Scroll to an element with a given id
+function scrollTo(elementId) {
+    if ($('.nav-tabs').length <= 0) return; // .nav-tabs doesn't exists
+
+    const element = $(`.tab-pane #${elementId}`);
+    if (!element) return; // element cannot be found inside a tab
+
+    const tab = $("#"+element.parents('.tab-pane').attr('aria-labelledby'));
+    if (tab) tab.tab('show'); // element is inside a tab, show it
+
+    element[0].scrollIntoView(); // scroll to the element
+}
+
+// Replace hash if back-end requests so
+function setHash() {
+    const value = $("#hash").val();
+    if (value) {
+        window.location.hash = value;
+    }
+}
+
+// Scroll to the correct element inside when window.location.hash is passed
+function scrollToHash() {
+    let hashtag = window.location.hash;
+    if (!hashtag) return; // hash was not passed
+
+    scrollTo(hashtag.replace('#', ''));
+}
+
+window.onload = () => {
+    setBottlesEvents();
+    setHash();
+    scrollToHash();
 }

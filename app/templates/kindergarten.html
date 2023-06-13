@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{% static 'kindergarten.js' %}"></script>
 <link rel="stylesheet" href="{% static 'kindergarten.css' %}">
 <body>
-
+    <input type="hidden" id="hash" value="{{ hash }}"/>
     <div class="d-flex justify-content-center" style="margin-bottom: 20px; margin-top: 20px;">
         <h2 class="fw-bold mb-2 text-uppercase text-center">{{ kindergarten.name }}</h2>
     </div>
@@ -83,7 +83,7 @@
                             <div class="col-md-12 col-lg-10">
                                 <div class="card text-dark">
                                     {% for comment in comments_with_parent %}
-                                        <div class="card-body p-4">
+                                        <div class="card-body p-4" id="comment-{{comment.comment_id}}">
                             
                                         <div class="d-flex flex-start">
                                             <div>
@@ -112,7 +112,8 @@
                                         <div class="card-body p-4" style="background-color: white;">
                                             <div class="d-flex flex-start w-100">
                                                 <div class="form-outline w-100">
-                                                    <form method="post">
+                                                    <form id="add_comment" method="post">
+                                                        <input type="hidden" name="action" value="add_comment"/>
                                                         <label class="form-label fw-bold" for="textAreaExample" style="margin-left: 30px;">Add a Comment</label>
                                                         <div  style="margin-left: 30px;">
                                                             <span id="bottle1" value="1" class="grade deactivated">🍼</span>
@@ -120,14 +121,24 @@
                                                             <span id="bottle3" value="3" class="grade deactivated">🍼</span>
                                                             <span id="bottle4" value="4" class="grade deactivated">🍼</span>
                                                             <span id="bottle5" value="5" class="grade deactivated">🍼</span>
+                                                            {{ add_comment_form.grade }}
+                                                            {% for error in add_comment_form.grade.errors %}
+                                                                <p style="color: red">{{ error }}</p>
+                                                            {% endfor %}
                                                         </div>
-                                                        <textarea class="form-control" id="textAreaExample" rows="4" style="background: white; width: 90%; margin-left: 20px;"></textarea>
                                                         
+                                                        <div style="background: white; width: 90%; margin-left: 20px;">
+                                                            {{ add_comment_form.comment }}
+                                                            {% for error in add_comment_form.comment.errors %}
+                                                                <p style="color: red">{{ error }}</p>
+                                                            {% endfor %}
+                                                        </div>
+                                                        {% csrf_token %}
+                                                        <div class="float-end mt-2 pt-1">
+                                                            <input type="submit" class="btn btn-dark btn-sm" value="Post comment">
+                                                        </div>
                                                     </form>
                                                 </div>
-                                            </div>
-                                            <div class="float-end mt-2 pt-1">
-                                                <button type="button" class="btn btn-dark btn-sm">Post comment</button>
                                             </div>
                                             {% elif not user.is_authenticated %}
                                                 <br>Not registered yet? Sign up to post a comment about this kindergarten.
