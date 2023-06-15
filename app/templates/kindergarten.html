@@ -76,15 +76,13 @@
             </section>
         </div>
         <div class="tab-pane fade" id="pills-comments" role="tabpanel" aria-labelledby="pills-comments-tab">
-            {% if comments_with_parent %}
                 <section>
                     <div class="container">
                         <div class="row d-flex justify-content-center">
                             <div class="col-md-12 col-lg-10">
                                 <div class="card text-dark">
                                     {% for comment in comments_with_parent %}
-                                        <div class="card-body p-4" id="comment-{{comment.comment_id}}">
-                            
+                                    <div class="card-body p-4" id="comment-{{comment.comment_id}}">
                                         <div class="d-flex flex-start">
                                             <div>
                                             <h6 class="fw-bold mb-1" style="margin-left: 50px;">{{ comment.parent.get_full_name }}</h6>
@@ -108,6 +106,19 @@
                                         <hr class="my-0" />
                                     </div>
                                     {% endfor %}
+                                    {% if not comments_with_parent %}
+                                    <div class="card-body p-4">
+                                        <div class="d-flex flex-start">
+                                            <div>
+                                                <p class="mb-0" style="margin-left: 50px;">
+                                                    There aren't any comments yet.
+                                                </p>
+                                                <br>
+                                            </div>
+                                        </div>
+                                        <hr class="my-0" />
+                                    </div>
+                                    {% endif %}
                                     {% if user.is_parent %}
                                         <div class="card-body p-4" style="background-color: white;">
                                             <div class="d-flex flex-start w-100">
@@ -143,7 +154,14 @@
                                         </div>
                                         
                                     {% elif not user.is_authenticated %}
-                                    <br>Not registered yet? Sign up to post a comment about this kindergarten.
+                                    <div class="card-body p-4">
+                                        <div class="d-flex flex-start">
+                                                <p class="mb-0">
+                                                    <div class="text-muted bg-light p-3 mb-2 rounded" style="text-align: center; width:100%">Not registered yet? Sign up to post a comment about this kindergarten.</div>
+                                                </p>
+                                                <br>
+                                        </div>
+                                    </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -157,14 +175,11 @@
                         <br>Not registered yet? Sign up to post a comment about this kindergarten.
                         {% endif %}
                     </div> -->
-                    
                 </section>
-
-            {% endif %}
         </div>
         <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab">
 
-            {% if user.is_parent %}
+            
                 {% if kindergarten.is_free %}
                 <section class="vh-100 gradient-custom">
                     <div id="register" class="container">
@@ -180,6 +195,7 @@
                                         <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 text-uppercase" style="text-align: center;">
                                             <div style="vertical-align: middle">Register {% if registered_child %}another{% else %}your{% endif %} child</div>
                                         </h3>
+                                        {% if user.is_parent %}
                                         <div class="text-muted bg-light p-3 mb-2 rounded" style="text-align: center;">Please fill in your child's details, and a staff member will contact you via Email as soon as possible.</div>
                                         <br>
                                         <form method="POST" novalidate style="text-align: center;">
@@ -211,6 +227,9 @@
                                                 <button type="submit" class="btn btn-outline-dark btn-m">Sign up</button>
                                             </div>
                                         </form>
+                                        {% else %}
+                                        <div class="text-muted bg-light p-3 mb-2 rounded" style="text-align: center; width:100%">Not registered yet? Sign up to register your child to this kindergarten.</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +243,7 @@
                     The kindergarten is full and do not accept new children at the moment.
                 </div>  
                 {% endif %}
-            {% endif %}
+            
         </div>
     </div>    
 </body>

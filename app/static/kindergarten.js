@@ -1,4 +1,5 @@
-function setBottlesEvents() {
+function setStarsEvents() {
+    if (!document.getElementById("star" + 1)) return;
     for (let i = 1; i <= 5; ++i) {
         document.getElementById("star" + i).onmouseover = (event) => {
             const value = +(event.target.getAttribute("value"));
@@ -66,7 +67,7 @@ function scrollToHash() {
 }
 
 window.onload = () => {
-    setBottlesEvents();
+    setStarsEvents();
     setHash();
     scrollToHash();
 }
