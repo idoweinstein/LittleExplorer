@@ -1,6 +1,6 @@
 function setBottlesEvents() {
     for (let i = 1; i <= 5; ++i) {
-        document.getElementById("bottle" + i).onmouseover = (event) => {
+        document.getElementById("star" + i).onmouseover = (event) => {
             const value = +(event.target.getAttribute("value"));
             for (let j = 1; j <= 5; ++j) {
                 const element = document.getElementById("star" + j);
@@ -11,10 +11,10 @@ function setBottlesEvents() {
             }
         }
 
-        document.getElementById("bottle" + i).onmouseleave = (event) => {
+        document.getElementById("star" + i).onmouseleave = (event) => {
             const value = +(document.getElementsByName('grade')[0].value);
             for (let j = 1; j <= 5; ++j) {
-                const element = document.getElementById("bottle" + j);
+                const element = document.getElementById("star" + j);
                 element.classList.remove('deactivated');
                 element.classList.remove('pending');
                 element.classList.remove('chosen');
@@ -22,11 +22,11 @@ function setBottlesEvents() {
             }
         }
 
-        document.getElementById("bottle" + i).onclick = (event) => {
+        document.getElementById("star" + i).onclick = (event) => {
             const value = +(event.target.getAttribute("value"));
             document.getElementsByName('grade')[0].value = value;
             for (let j = 1; j <= 5; ++j) {
-                const element = document.getElementById("bottle" + j);
+                const element = document.getElementById("star" + j);
                 element.classList.remove('deactivated');
                 element.classList.remove('pending');
                 element.classList.remove('chosen');
