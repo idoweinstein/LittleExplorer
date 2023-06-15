@@ -1,39 +1,50 @@
+/* On hover, set selected stars class as 'pending'. */
+function starHover(event) {
+    const value = +(event.target.getAttribute("value"));
+    for (let j = 1; j <= 5; ++j) {
+        const element = document.getElementById("star" + j);
+        element.classList.remove('deactivated');
+        element.classList.remove('pending');
+        element.classList.remove('chosen');
+        void element.offsetWidth; // Force animation restart
+        element.classList.add(j <= value ? 'pending' : 'deactivated');
+    }
+}
+
+/* On leave, set selected stars class as 'chosen'. */
+function starLeave(event) {
+    const value = +(document.getElementsByName('grade')[0].value);
+    for (let j = 1; j <= 5; ++j) {
+        const element = document.getElementById("star" + j);
+        element.classList.remove('deactivated');
+        element.classList.remove('pending');
+        element.classList.remove('chosen');
+        void element.offsetWidth; // Force animation restart
+        element.classList.add(j <= value ? 'chosen' : 'deactivated');
+    }
+}
+
+/* On click, set selected stars class as 'chosen'. */
+function starClick(event) {
+    const value = +(event.target.getAttribute("value"));
+    document.getElementsByName('grade')[0].value = value;
+    for (let j = 1; j <= 5; ++j) {
+        const element = document.getElementById("star" + j);
+        element.classList.remove('deactivated');
+        element.classList.remove('pending');
+        element.classList.remove('chosen');
+        void element.offsetWidth; // Force animation restart
+        element.classList.add(j <= value ? 'chosen' : 'deactivated');
+    }
+}
+
+/* Register star events */
 function setStarsEvents() {
     if (!document.getElementById("star" + 1)) return;
     for (let i = 1; i <= 5; ++i) {
-        document.getElementById("star" + i).onmouseover = (event) => {
-            const value = +(event.target.getAttribute("value"));
-            for (let j = 1; j <= 5; ++j) {
-                const element = document.getElementById("star" + j);
-                element.classList.remove('deactivated');
-                element.classList.remove('pending');
-                element.classList.remove('chosen');
-                element.classList.add(j <= value ? 'pending' : 'deactivated');
-            }
-        }
-
-        document.getElementById("star" + i).onmouseleave = (event) => {
-            const value = +(document.getElementsByName('grade')[0].value);
-            for (let j = 1; j <= 5; ++j) {
-                const element = document.getElementById("star" + j);
-                element.classList.remove('deactivated');
-                element.classList.remove('pending');
-                element.classList.remove('chosen');
-                element.classList.add(j <= value ? 'chosen' : 'deactivated');
-            }
-        }
-
-        document.getElementById("star" + i).onclick = (event) => {
-            const value = +(event.target.getAttribute("value"));
-            document.getElementsByName('grade')[0].value = value;
-            for (let j = 1; j <= 5; ++j) {
-                const element = document.getElementById("star" + j);
-                element.classList.remove('deactivated');
-                element.classList.remove('pending');
-                element.classList.remove('chosen');
-                element.classList.add(j <= value ? 'chosen' : 'deactivated');
-            }
-        }
+        document.getElementById("star" + i).onmouseover = starHover;
+        document.getElementById("star" + i).onmouseleave = starLeave;
+        document.getElementById("star" + i).onclick = starClick;
     }
 }
 
