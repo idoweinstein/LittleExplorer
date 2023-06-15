@@ -36,7 +36,7 @@
                     {% endif %}
                     <div class="row row-cols-2 g-3 text-center">
                         <div class="col">
-                            <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
+                            <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;height: 345px;">
                                 <h5 class="card-title">Contact information</h5>
                                 <p class="card-text">
                                     Address: {{ kindergarten.address }}, {{ kindergarten.region }}
@@ -47,7 +47,7 @@
                                     <br>Email address: {{ kindergarten_info.mail }}
                                     {% endif %}
                                 </p>
-                                <h5 class="card-title">Hours of operation:</h5>
+                                <h5 class="card-title">Opening Hours:</h5>
                                 <p class="card-text">
                                     Opening time: {{ kindergarten.open_time|date:'H:i' }}
                                     <br>Clostng time: {{ kindergarten.close_time|date:'H:i' }}
@@ -55,13 +55,13 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="card rounded-3 p-md-5" style="background-color: #c9f0c9;">
+                            <div class="card rounded-3 p-md-5" class="info" style="background-color: #c9f0c9;height: 345px;">
                                 <h5 class="card-title">Additional information</h5>
                                 <p class="card-text">
-                                    In this kindergarten, the children's ages range between {{ kindergarten.get_min_age_display}} to {{ kindergarten.get_max_age_display}}.
+                                    At our kindergarten, we cater to children between the ages of {{ kindergarten.get_min_age_display}} and {{ kindergarten.get_max_age_display}}.
                                     <br>
-                                    <br>The maximum number of children is {{ kindergarten.capacity }} at most.
-                                    <br>A ratio of {{ kindergarten.display_ratio_children_teachers }} children to teachers is guaranteed, even when the kindergarten is full.
+                                    <br>Our kindergarten can accommodate a maximum of {{ kindergarten.capacity }} children.
+                                    <br>We maintain a {{ kindergarten.display_ratio_children_teachers }} ratio of children to teachers.
                                     <br>
                                     {% if kindergarten.has_parking == 1 %}
                                     <br>For your attention, near the kindergarten there is access to parking for maximum convenience when dropping off and picking up your child.
@@ -87,8 +87,8 @@
                             
                                         <div class="d-flex flex-start">
                                             <div>
-                                            <h6 class="fw-bold mb-1" style="margin-left: 30px;">{{ comment.parent.get_full_name }}</h6>
-                                            <div class="d-flex align-items-center mb-3" style="margin-left: 30px;">
+                                            <h6 class="fw-bold mb-1" style="margin-left: 50px;">{{ comment.parent.get_full_name }}</h6>
+                                            <div class="d-flex align-items-center mb-3" style="margin-left: 50px;">
                                                 <p class="mb-0">
                                                     {{ comment.date }}
                                                     {% if comment.grade > 3 %}
@@ -100,7 +100,7 @@
                                                     {% endif %}
                                                 </p>
                                             </div>
-                                            <p class="mb-0" style="margin-left: 30px;">
+                                            <p class="mb-0" style="margin-left: 50px;">
                                                 {{ comment.comment }}
                                             </p>
                                         </div>
@@ -114,33 +114,34 @@
                                                 <div class="form-outline w-100">
                                                     <form id="add_comment" method="post">
                                                         <input type="hidden" name="action" value="add_comment"/>
-                                                        <label class="form-label fw-bold" for="textAreaExample" style="margin-left: 30px;">Add a Comment</label>
-                                                        <div  style="margin-left: 30px;">
-                                                            <span id="bottle1" value="1" class="grade deactivated">🍼</span>
-                                                            <span id="bottle2" value="2" class="grade deactivated">🍼</span>
-                                                            <span id="bottle3" value="3" class="grade deactivated">🍼</span>
-                                                            <span id="bottle4" value="4" class="grade deactivated">🍼</span>
-                                                            <span id="bottle5" value="5" class="grade deactivated">🍼</span>
+                                                        <label class="form-label fw-bold" for="textAreaExample" style="margin-left: 50px;">Add a Comment</label>
+                                                        <div  style="margin-left: 50px;">
+                                                            <span id="star1" value="1" class="grade deactivated">☆</span>
+                                                            <span id="star2" value="2" class="grade deactivated">☆</span>
+                                                            <span id="star3" value="3" class="grade deactivated">☆</span>
+                                                            <span id="star4" value="4" class="grade deactivated">☆</span>
+                                                            <span id="star5" value="5" class="grade deactivated">☆</span>
                                                             {{ add_comment_form.grade }}
                                                             {% for error in add_comment_form.grade.errors %}
                                                                 <p style="color: red">{{ error }}</p>
                                                             {% endfor %}
                                                         </div>
                                                         
-                                                        <div style="background: white; width: 90%; margin-left: 20px;">
+                                                        <div style="background: white; width: 90%; margin-left: 40px;">
                                                             {{ add_comment_form.comment }}
                                                             {% for error in add_comment_form.comment.errors %}
                                                                 <p style="color: red">{{ error }}</p>
                                                             {% endfor %}
                                                         </div>
                                                         {% csrf_token %}
-                                                        <div class="float-end mt-2 pt-1">
+                                                        <div class="float-end mt-2 pt-1" style="margin-right: 50px;">
                                                             <input type="submit" class="btn btn-dark btn-sm" value="Post comment">
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                     {% elif not user.is_authenticated %}
                                     <br>Not registered yet? Sign up to post a comment about this kindergarten.
                                     {% endif %}

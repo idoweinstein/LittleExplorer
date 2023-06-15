@@ -3,7 +3,7 @@ function setBottlesEvents() {
         document.getElementById("bottle" + i).onmouseover = (event) => {
             const value = +(event.target.getAttribute("value"));
             for (let j = 1; j <= 5; ++j) {
-                const element = document.getElementById("bottle" + j);
+                const element = document.getElementById("star" + j);
                 element.classList.remove('deactivated');
                 element.classList.remove('pending');
                 element.classList.remove('chosen');
