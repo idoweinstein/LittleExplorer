@@ -88,7 +88,7 @@ class AddCommentForm(forms.ModelForm):
         model = Comment
         fields = ['comment', 'grade']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Comment...'}),
+            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Review...'}),
             'grade': forms.HiddenInput(attrs={'required':''})
         }
         labels = {
