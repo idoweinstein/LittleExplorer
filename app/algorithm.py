@@ -21,6 +21,7 @@ nltk.download('stopwords', quiet=True)
 
 
 def main_algo(kindergartens: List[Kindergarten], parent_text_input: str, parent: Users):
+    #print(kindergartens)
 
     # description is mandatory field and the user input is mandatory field so tfidf_scores must be valid scores for all the list
     descriptions = [kindergarten.description for kindergarten in kindergartens]
@@ -41,8 +42,8 @@ def main_algo(kindergartens: List[Kindergarten], parent_text_input: str, parent:
 
     # get the tuples fr
     kindergarten_scores = list(kindergarten_scores_id_dict.values())
-    # sort the elements by the scores
-    kindergarten_scores.sort(key=lambda x: x[1])
+    # sort the elements by the scores, in descending order
+    kindergarten_scores.sort(key=lambda x: x[1], reverse=True)
     # get back just the kindergarten using unzip, in index 0 we will get the tuple of all sorted kindergartens
     return list(zip(*kindergarten_scores))[0]
 
@@ -88,8 +89,8 @@ def location_score(kindergartens: List[Kindergarten], parent: Users):
     # if the user do not have a location saved, the score will be 0 for all the kindergartens
     # when the kindergarten is closer to the locations of the user, the score will be higher
     kindergartens_pnts = [kindergarten.geolocation for kindergarten in kindergartens]
-    home_scores = np.zeros(kindergartens_pnts)
-    work_scores = np.zeros(kindergartens_pnts)
+    home_scores = np.zeros(len(kindergartens_pnts))
+    work_scores = np.zeros(len(kindergartens_pnts))
 
     if parent.home_address and parent.home_region:
         home_distances = get_distances_list_from_location(parent.home_address, parent.home_region, kindergartens_pnts)
@@ -100,6 +101,8 @@ def location_score(kindergartens: List[Kindergarten], parent: Users):
         work_scores = normalize_location_score(work_distances)
 
     #TODO: maybe math will changed
+    # print((np.array(home_scores) + np.array(work_scores))[35])
+    # print((np.array(home_scores) + np.array(work_scores))[3])
     return np.array(home_scores) + np.array(work_scores)
 
 
@@ -109,6 +112,7 @@ def get_distances_list_from_location(address: str, region: str, kindergartens_pn
     coordinates = get_coordinates(location)
     pnt = Point(coordinates[1], coordinates[0], srid=4326)
     # calculate distances of all kindergartens from this pnt
+    print(list(map(lambda k: pnt.distance(k), kindergartens_pnts)))
     return list(map(lambda k: pnt.distance(k), kindergartens_pnts))
 
 
@@ -116,11 +120,13 @@ def normalize_location_score(distances: List[float]):
     # normalize the distances to be score between 0 and 1
     # the longest (largest) distance is the lowest (higest) score
     min_dist = min(distances)
+    #print(min_dist)
     max_dist = max(distances)
+    #print(max_dist)
 
     # subtract min so min will be 0, and divide by (max-min) to scale
     # then  we do 1-res in order to have long distances mapped to lower scores
-    return list(map(lambda d: 1 - (d - min_dist)/(max_dist - min_dist), distances))
+    return list(map(lambda d: 1 - ((d - min_dist)/(max_dist - min_dist)), distances))
 
 
 def add_connections_bonus(kindergarten_scores_id_dict: Dict[int, Tuple[Kindergarten, float]], parent: Users):

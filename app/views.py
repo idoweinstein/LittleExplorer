@@ -2,6 +2,7 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.mail import send_mail
 from django.core import serializers
@@ -18,7 +19,7 @@ from app.search import get_boundaries_of_fields, get_filtered_kindergartens, Ran
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm
 from .models import Users, Connections, Comment, Kindergarten
-from .geolocation import BING_KEY
+from .geolocation import BING_KEY, get_coordinates
 
 
 def assert_true(func):
@@ -277,6 +278,50 @@ def add_connection(request):
 
 
 def mytry(request):
+    # doris = Kindergarten.objects.get(kindergarten_id=37)
+    # nemashim = Kindergarten.objects.get(kindergarten_id=4)
+    # pnt_doris = doris.geolocation
+    # pnt_nemashim = nemashim.geolocation
+    #
+    trygan = Kindergarten.objects.get(kindergarten_id=34)
+    pnt_trygan = trygan.geolocation
+    #
+    # #
+    location1 = "Wiezman St 22 Giv'atayim"
+    location2 = "Arlozorov St 20 Givatayim"
+    coordinates1 = get_coordinates(location1)
+    pnt1 = Point(coordinates1[1], coordinates1[0], srid=4326)
+    coordinates2 = get_coordinates(location2)
+    pnt2 = Point(coordinates2[1], coordinates2[0], srid=4326)
+
+    # doris = "Ha-Te'ena St 3 Kfar Saba"
+    # coordinates3 = get_coordinates(doris)
+    # pnt_doris = Point(coordinates3[1], coordinates3[0], srid=4326)
+
+    # nemshim = "Golomb St 10 Giv'atayim"
+    # coordinates4 = get_coordinates(nemshim)
+    # pnt_nemashim = Point(coordinates4[1], coordinates4[0], srid=4326)
+
+    # dist_doris = pnt1.distance(pnt_doris) + pnt2.distance(pnt_doris)
+    # dist_nemashim = pnt1.distance(pnt_nemashim) + pnt2.distance(pnt_nemashim)
+    disttry = pnt1.distance(pnt_trygan) + pnt2.distance(pnt_trygan)
+    # print("doris is ",dist_doris)
+    # print("nemahim is ", dist_nemashim)
+    print("try 1 is ", pnt1.distance(pnt_trygan))
+    print("try 2 is ", pnt2.distance(pnt_trygan))
+
+
+
+
+    #
+    # for kindergarten in Kindergarten.objects.all():
+    #     location = f"{kindergarten.address} {kindergarten.region}"
+    #     coordinates = get_coordinates(location)
+    #     pnt = Point(coordinates[1], coordinates[0], srid=4326)
+    #     kindergarten.geolocation = pnt
+    #     kindergarten.save()
+    #
+
     parent_id = request.user.parent_id
 
     connectee_ids = Connections.objects.filter(connector__parent_id=parent_id).values_list("connectee", flat=True)

@@ -1,4 +1,17 @@
--- insert into littleexplorer.kindergarten 
+-- insert into littleexplorer.kindergarten
+-- new version
+LOAD DATA LOCAL INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\kindergarten_english_new_kindergarten.csv'
+INTO TABLE littleexplorer.kindergarten
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(kindergarten_id, name, address, region, min_age, max_age, capacity, kids_count, num_of_teachers, open_time, close_time, has_parking, teacher_id, phone, mail, description);
+
+
+
+
+-- insert into littleexplorer.kindergarten
 LOAD DATA LOCAL INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\kindergarten.csv' 
 INTO TABLE littleexplorer.kindergarten 
 FIELDS TERMINATED BY ','  
