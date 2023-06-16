@@ -20,14 +20,18 @@
             </div>
          </form>
       </div>-->
-      <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="d-flex justify-content-center align-items-center" style="position: relative; top: 85px">
          <div class="text-white">
            <h1 class="mb-3" style="text-shadow: black 1px 0 1px;">Explore your child's future</h1>
             <div class="d-flex justify-content-center">
                <form method="GET" action="/search">
                   <div>
-                     <input type="radio" name="method" value="name" id="name" checked><label for="name" style="text-shadow: black 1px 0 2px;">Search by name</label>
-                     <input type="radio" name="method" value="location" id="location"><label for="location" style="text-shadow: black 1px 0 2px;">Search by location</label>
+                     <div>
+                        <span style="text-shadow: black 1px 0 2px;">Search by: </span>
+                        <span style="padding:5px"><input type="radio" name="method" value="name" id="name" checked><label for="name" style="text-shadow: black 1px 0 2px;">Name</label></span>
+                        <span style="padding:5px"><input type="radio" name="method" value="location" id="location"><label for="location" style="text-shadow: black 1px 0 2px;">Location</label></span>
+                        <span style="padding:5px"><input type="radio" name="method" value="location" id="location"><label for="location" style="text-shadow: black 1px 0 2px;">Algorithm</label></span>
+                     </div>
                      <div class="input-group rounded">
                         <form class="form-inline">
                            <input class="form-control mr-sm-2" name="value" type="search" aria-label="Search" required>
