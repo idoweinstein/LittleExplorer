@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<body>
    {% load static %}
    <link rel="stylesheet" href="{% static 'index.css' %}">
-   <div class="bg-image" style="background-image: url('https://www.deccanherald.com/sites/dh/files/gallery_images/istock-478403308.jpg'); height: 90vh;">
+   <div class="bg-image text-center" style="background-size: cover; display: block; overflow: auto; height:100%; background-image: url('https://www.deccanherald.com/sites/dh/files/gallery_images/istock-478403308.jpg');">
+      <div style="background-color: rgba(0,0,0,0.2); height:100%;">
+      <!--<h1 class="text-white">Little Explorer</h1>
+      <h3 class="text-white">Explore your child's future</h3>
       <div class="d-flex justify-content-center">
          <form method="GET" action="/search">
             <div  style="margin-top: 100px;">
@@ -17,7 +19,26 @@
             </div>
             </div>
          </form>
+      </div>-->
+      <div class="d-flex justify-content-center align-items-center h-100">
+         <div class="text-white">
+           <h1 class="mb-3" style="text-shadow: black 1px 0 1px;">Explore your child's future</h1>
+            <div class="d-flex justify-content-center">
+               <form method="GET" action="/search">
+                  <div>
+                     <input type="radio" name="method" value="name" id="name" checked><label for="name" style="text-shadow: black 1px 0 2px;">Search by name</label>
+                     <input type="radio" name="method" value="location" id="location"><label for="location" style="text-shadow: black 1px 0 2px;">Search by location</label>
+                     <div class="input-group rounded">
+                        <form class="form-inline">
+                           <input class="form-control mr-sm-2" name="value" type="search" aria-label="Search" required>
+                           <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
+                        </form>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
       </div>
    </div>
-</body>
 {% endblock content%}
