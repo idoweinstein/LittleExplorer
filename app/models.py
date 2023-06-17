@@ -71,10 +71,10 @@ class Kindergarten(models.Model):
         months = months % 12
         text = []
         if years > 0:
-            text.append("שנה" if years == 1 else f"{years} שנים")
+            text.append(f"{years} year{'s' if years > 1 else ''}")
         if months > 0:
-            text.append("חודש" if months == 1 else f"{months} חודשים")
-        return " ו-".join(text).replace("ו-חודש", "וחודש")
+            text.append(f"{months} month{'s' if months > 1 else ''}")
+        return " and ".join(text)
 
     def get_min_age_display(self):
         return Kindergarten._months_to_display(self.min_age)
@@ -103,7 +103,6 @@ class Kindergarten(models.Model):
     def set_geolocation(self):
         location = f"{self.address} {self.region}"
         coordinates = get_coordinates(location)
-        # TODO: handle the case of coordinates == None (location not found)
         pnt = Point(coordinates[1], coordinates[0], srid=4326)
         self.geolocation = pnt
 

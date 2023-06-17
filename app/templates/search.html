@@ -13,6 +13,7 @@
            <div  style="margin-top: 50px;">
               <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">Search by name</label>
               <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Search by location</label>
+               <!-- TODO: add smart search button with advanced value -->
               <div class="input-group rounded">
                 <form class="form-inline">
                         <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search" required>
@@ -37,7 +38,7 @@
             
                 <div class="card text-black">
                     <div class="card-body">
-                        <h5 class="card-title mb-2 text-center">Advance Search</h5>
+                        <h5 class="card-title mb-2 text-center">Filter Results</h5>
 
                         <div class="text-center">
                             <label class="form-label" for="min_age">minimum age (in month): <output id="min_age_value"></output></label>
@@ -88,7 +89,7 @@
                         </div>
 
                         <div class="text-center mb-2" style="margin-top: 10px;">
-                            <button class="btn btn-outline-dark btn-sm" type="submit">Filter</button>
+                            <button class="btn btn-outline-dark btn-sm" type="submit">Apply</button>
                         </div>
                     </div>
                 </div>

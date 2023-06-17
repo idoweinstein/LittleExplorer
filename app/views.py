@@ -2,24 +2,25 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.mail import send_mail
 from django.core import serializers
 from django.core.validators import validate_email
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET
 
 from django.contrib.auth.decorators import user_passes_test
+
+from django.views.decorators.http import require_POST
 
 import LittleExplorerApp.settings
 from app.search import get_boundaries_of_fields, get_filtered_kindergartens, RangedValue, Value
 from .forms import RegisterParentForm, AddCommentForm, RegisterTeacherForm, \
     AddKindergartenForm
 from .models import Users, Connections, Comment, Kindergarten
-from .geolocation import BING_KEY, get_coordinates
+from .geolocation import BING_KEY
 
 
 def assert_true(func):
@@ -152,31 +153,46 @@ def get_kindergarten_details(request, kindergarten_id):
     kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
     comments_with_parent = Comment.objects.filter(kindergarten_id=kindergarten_id).order_by('-date').select_related(
         'parent').all()
-    return render(request, 'kindergarten.html',
-                  {'kindergarten': kindergarten,
-                   'comments_with_parent': comments_with_parent
-                   })
+
+    context = {
+        'kindergarten': kindergarten,
+        'comments_with_parent': comments_with_parent,
+        'add_comment_form': AddCommentForm()
+    }
+
+    if request.method == "POST":
+        action = request.POST.get('action')
+        if action == 'add_comment':
+            add_comments_form, comment_id = add_comment(request, kindergarten_id)
+            if comment_id is not None:
+                return HttpResponseRedirect(f'/kindergarten/{kindergarten_id}#comment-{comment_id}')
+            context['hash'] = 'add_comment'
+            context['add_comment_form'] = add_comments_form
+        elif action == 'sign_up_kid_to_kindergarten':
+            sign_up_kid_to_kindergarten(request, kindergarten_id)
+            context['hash'] = 'register'
+            context['registered_child'] = True
+
+    return render(request, 'kindergarten.html', context)
 
 
+@require_POST
 @user_passes_test(parent)
 def add_comment(request, kindergarten_id):
-    if request.method == "POST":
-        form = AddCommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.date = date.today()
-            comment.parent = request.user
-            comment.kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
-            comment.save()
+    form = AddCommentForm(request.POST)
+    comment_id = None
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.date = date.today()
+        comment.parent = request.user
+        comment.kindergarten = get_object_or_404(Kindergarten, pk=kindergarten_id)
+        comment.save()
 
-            # TODO: we want to show a response to the user
-            return redirect('/')
-    else:
-        form = AddCommentForm()
+        # Set the updated comment id
+        comment_id = comment.comment_id
 
-    return render(request, 'comment.html', {
-        'form': form,
-    })
+    return form, comment_id
+
 
 
 @user_passes_test(teacher)
@@ -198,33 +214,30 @@ def add_kindergarten(request):
     })
 
 
+@require_POST
 @user_passes_test(parent)
 def sign_up_kid_to_kindergarten(request, kindergarten_id):
-    if request.method == "POST":
-        kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
-        kindergarten_name = kindergarten.name  # get kindergarten name
-        subject = f"הרשמה חדשה עבור {kindergarten_name}"
+    kindergarten = Kindergarten.objects.get(kindergarten_id=kindergarten_id)
+    kindergarten_name = kindergarten.name  # get kindergarten name
+    subject = f"A new registration for {kindergarten_name}"
 
-        parent_email = request.user.email
-        message = f"הוריו של {request.POST['first-name']} {request.POST['last-name']} רשמו אותו לגן" \
-                  f"\n{request.POST['first-name']} מתרגש מאוד להצטרף לגן והוא בן {request.POST['age-months']} חודשים" \
-                  f"\n{parent_email} ליצירת קשר עם ההורים ניתן לשלוח מייל לכתובת הבאה" \
-                  f"\n,בברכה" \
-                  f"\nLittleExplorer"
+    parent_email = request.user.email
+    message = f"{request.POST['first-name']} {request.POST['last-name']} has just been registered to your kindergarten by the parent." \
+              f"\n{request.POST['first-name']} is very excited, and is {request.POST['age-months']} months old." \
+              f"\nTo contact the parent, please use the following Email address: {parent_email}" \
+              f"\nBest regards," \
+              f"\nLittleExplorer"
 
-        teacher_id = kindergarten.teacher_id
-        teacher = Users.objects.get(parent_id=teacher_id)
-        recipient = [teacher.email]
+    teacher_id = kindergarten.teacher_id
+    teacher = Users.objects.get(parent_id=teacher_id)
+    recipient = [teacher.email]
 
-        email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
+    email_from = LittleExplorerApp.settings.EMAIL_HOST_USER
 
-        send_mail(subject, message, email_from, recipient)
+    send_mail(subject, message, email_from, recipient)
 
-        kindergarten.kids_count = kindergarten.kids_count + 1
-        kindergarten.save()
-        return redirect('/')
-
-    return render(request, 'payment.html')
+    kindergarten.kids_count = kindergarten.kids_count + 1
+    kindergarten.save()
 
 
 @user_passes_test(authenticated)

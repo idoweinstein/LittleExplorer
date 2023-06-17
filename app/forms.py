@@ -38,15 +38,15 @@ class RegisterParentForm(UserCreationForm):
         self.fields['work_address'].required = False
         self.fields['work_region'].required = False
 
-        self.fields['email'].label = "אימייל"
-        self.fields['first_name'].label = "שם פרטי"
-        self.fields['last_name'].label = "שם משפחה"
-        self.fields['home_address'].label = "כתובת מגורים"
-        self.fields['home_region'].label = "עיר מגורים"
-        self.fields['work_address'].label = "כתובת עבודה"
-        self.fields['work_region'].label = "עיר עבודה"
-        self.fields['password1'].label = "סיסמה"
-        self.fields['password2'].label = "חזור על הסיסמה"
+        self.fields['email'].label = "Email"
+        self.fields['first_name'].label = "First name"
+        self.fields['last_name'].label = "Last name"
+        self.fields['home_address'].label = "Home address"
+        self.fields['home_region'].label = "Home city"
+        self.fields['work_address'].label = "Work address"
+        self.fields['work_region'].label = "Work city"
+        self.fields['password1'].label = "Password"
+        self.fields['password2'].label = "Repeat password"
 
         self.user_type = "parent"
 
@@ -74,11 +74,11 @@ class RegisterTeacherForm(UserCreationForm):
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
-        self.fields['email'].label = "אימייל"
-        self.fields['first_name'].label = "שם פרטי"
-        self.fields['last_name'].label = "שם משפחה"
-        self.fields['password1'].label = "סיסמה"
-        self.fields['password2'].label = "חזור על הסיסמה"
+        self.fields['email'].label = "Email"
+        self.fields['first_name'].label = "First name"
+        self.fields['last_name'].label = "Last name"
+        self.fields['password1'].label = "Password"
+        self.fields['password2'].label = "Repeat password"
 
         self.user_type = "teacher"
 
@@ -88,13 +88,17 @@ class AddCommentForm(forms.ModelForm):
         model = Comment
         fields = ['comment', 'grade']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 10, 'cols': 50, 'placeholder': 'תגובה...'}),
-            'grade': forms.HiddenInput()
+            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Review...'}),
+            'grade': forms.HiddenInput(attrs={'required':''})
         }
         labels = {
-            'comment': 'תגובה',
-            'grade': 'ציון- (1 - גרוע מאוד, 5 - מצוין) '
+            'comment': 'Comment',
+            'grade': 'Grade - (1 - Bad, 5 - Excellent) '
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AddCommentForm, self).__init__(*args, **kwargs)
+        self.fields['comment'].widget.attrs['class'] = 'form-control'
 
 
 class AddKindergartenForm(forms.ModelForm):
@@ -118,12 +122,12 @@ class AddKindergartenForm(forms.ModelForm):
         fields = ['name', 'address', 'region', 'min_age',
                   'max_age', 'capacity', 'kids_count', 'num_of_teachers',
                   'open_time', 'close_time', 'has_parking', 'phone', 'mail', 'description']
-        PARKING_CHOICES = [(True, 'כן'), (False, 'לא')]
+        PARKING_CHOICES = [(True, 'Yes'), (False, 'No')]
         widgets = {
             'open_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
             'close_time': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M:%S'),
             'has_parking': forms.RadioSelect(choices=PARKING_CHOICES),
-            'description': forms.Textarea(attrs={'rows': 5, 'cols': 50, 'placeholder': 'תיאור הגן...'})
+            'description': forms.Textarea(attrs={'rows': 5, 'cols': 50, 'placeholder': 'Description about the kindergarten...'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -138,24 +142,24 @@ class AddKindergartenForm(forms.ModelForm):
         self.fields['num_of_teachers'].widget.attrs['class'] = 'form-control'
         self.fields['open_time'].widget.attrs['class'] = 'form-control'
         self.fields['close_time'].widget.attrs['class'] = 'form-control'
-        self.fields['has_parking'].widget.attrs['class'] = 'form-control'
+        self.fields['has_parking'].widget.attrs['class'] = 'form-check-input'
         self.fields['phone'].widget.attrs['class'] = 'form-control'
         self.fields['mail'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['class'] = 'form-control'
 
         self.fields['has_parking'].required = False
 
-        self.fields['name'].label = 'שם הגן'
-        self.fields['address'].label = 'כתובת (רחוב ומספר)'
-        self.fields['region'].label = 'עיר'
-        self.fields['min_age'].label = 'גיל מינימלי לילדים בגן (בחודשים)'
-        self.fields['max_age'].label = 'גיל מקסימלי לילדים בגן (בחודשים)'
-        self.fields['capacity'].label = 'מספר מקומות בגן'
-        self.fields['kids_count'].label = 'מספר ילדים רשומים'
-        self.fields['num_of_teachers'].label = 'מספר גננות בגן'
-        self.fields['open_time'].label = 'שעת פתיחה'
-        self.fields['close_time'].label = 'שעת סגירה'
-        self.fields['has_parking'].label = 'האם יש חניה ליד הגן?'
-        self.fields['phone'].label = 'טלפון'
-        self.fields['mail'].label = 'מייל'
-        self.fields['description'].label = 'זה המקום לרשום לנו כמה מילים על הגן שלך!'
+        self.fields['name'].label = 'Name'
+        self.fields['address'].label = 'Address (street name and number)'
+        self.fields['region'].label = 'City'
+        self.fields['min_age'].label = 'Minimal age (in months)'
+        self.fields['max_age'].label = 'Maximal age (im months)'
+        self.fields['capacity'].label = 'Maximum number of children'
+        self.fields['kids_count'].label = 'Current number of children'
+        self.fields['num_of_teachers'].label = 'Number of teachers'
+        self.fields['open_time'].label = 'Opening hour'
+        self.fields['close_time'].label= 'Closing hour'
+        self.fields['has_parking'].label = 'Is parking available nearby?'
+        self.fields['phone'].label = 'Phone number'
+        self.fields['mail'].label = 'Email address'
+        self.fields['description'].label = 'This is your place to write a few words about your kindergarden!'
