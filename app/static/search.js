@@ -127,12 +127,13 @@ function filterKindergartens() {
     const capacity = +form.capacity.value;
     const open_time = stringToTime(form.open_time.value);
     const close_time = stringToTime(form.close_time.value);
-    const is_free = form.is_free.value == "on";
+    const is_free = form.is_free.checked;
 
     let item_count = 0;
 
     // Decide whether to show them or not based on the filters
     for (const kindergarten of kindergartens) {
+        console.log(kindergarten.data.fields.name);
         const data = kindergarten.data;
         if (isMatching(data, min_age, max_age, capacity, open_time, close_time, is_free)) {
             kindergarten.show();
@@ -154,12 +155,11 @@ function filterKindergartens() {
 
 function updateFiltersShadowItems(form) {
     const shadowForm = document.forms['search'];
-    for (const attribute of ['min_age', 'max_age', 'capacity', 'open_time', 'close_time', 'is_free']) {
+    for (const attribute of ['min_age', 'max_age', 'capacity', 'open_time', 'close_time']) {
         shadowForm[attribute].value = form[attribute].value;
     }
+    shadowForm['is_free'].value = form['is_free'].checked ? 'on' : '';
 }
-
-
 
 /*
  * The filtering logic is implemented in the front-end to optimize performance.
