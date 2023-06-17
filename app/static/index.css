@@ -13,3 +13,7 @@
 nav {
   position: fixed !important;
 }
+
+.btn.disabled {
+  pointer-events: auto;
+}

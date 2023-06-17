@@ -115,14 +115,18 @@ def search(request):
     method = parameters.get("method")
     value = parameters.get("value")
 
-    if not value:
-        # Empty search query is blocked by our frontend.
+    # Make searching by name our default method
+    if method not in ["name", "location", "advanced"]:
+        method = "name"
+
+    if (not value) or (method == 'advanced' and not request.user.is_authenticated):
+        # The following scenarios are blocked by our frontend:
+        # 1. Empty search query
+        # 2. Advanced (smart) search of unregistered users
+        #
         # Therefore, this scenario can only happen by tampering frontend code.
         # If so, navigate to the index page.
         return redirect('/')
-
-    if method not in ["name", "location", "advanced"]:
-        method = "name"
 
     boundaries = get_boundaries_of_fields(parameters)
     kindergartens = get_filtered_kindergartens(request, method, value)

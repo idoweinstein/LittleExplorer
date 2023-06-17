@@ -11,9 +11,10 @@
     <form name="search" method="GET" action="/search">
         <div class="d-flex justify-content-center">
            <div  style="margin-top: 50px;">
-              <input type="radio" name="method" value="name" id="name"  {% if not request.method or request.method != 'location' %} checked {% endif %}><label for="name">Search by name</label>
-              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Search by location</label>
-               <!-- TODO: add smart search button with advanced value -->
+              Search by:
+              <input type="radio" name="method" value="name" id="name"  {% if request.method != 'location' and request.method != 'advanced' %} checked {% endif %}><label for="name">Name</label>
+              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Location</label>
+              <input type="radio" name="method" value="advanced" id="advanced"  {% if request.method and request.method == 'advanced' %} checked {% endif %} {% if not user.is_authenticated %} disabled {% endif %}><label for="advanced" {% if not user.is_authenticated %} data-toggle="tooltip" data-placement="bottom" title="Sign in to use smart search"{% endif %}>Smart search</label>
               <div class="input-group rounded">
                 <form class="form-inline">
                         <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search" required>
