@@ -46,7 +46,7 @@
     </script>
 </head>
 <body style="background-color: #d1d5d3; height:100%; min-height: 100%;">
-    <nav class="navbar navbar-left navbar-light bg-white justify-content-between shadow-lg w-100" style="position: fixed; z-index: 10000;">
+    <nav class="navbar navbar-left navbar-light justify-content-between shadow-lg w-100" style="z-index: 5; background-color: rgba(201, 240, 201, 0.5);">
         <a class="navbar-brand" href="/" style="margin-left: 20px;">
             <img src="{% static 'imges/logo_img3.svg' %}" width="35" height="35" class="d-inline-block align-top" alt="">
             LittleExplorer
@@ -55,23 +55,23 @@
             {% if user.is_authenticated %}
             Welcome {{ user.first_name }} {{ user.last_name }}
             {% if user.is_teacher %}
-            <button type="button" class="btn btn-outline-primary btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>הוספת גן</button>
+            <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/add_kindergarten'"><span class="glyphicon glyphicon-log-out"></span>New kindergarten</button>
             {% endif %}
             {% else %}
-            <button type="button" class="btn btn-outline-primary  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/parent_sign_up'">
+            <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/parent_sign_up'">
                 <span class="glyphicon glyphicon-user"></span>Register as a parent</button>
-            <button type="button" class="btn btn-outline-primary  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/teacher_sign_up'">
+            <button type="button" class="btn btn-outline-dark  btn-sm" class="glyphicon glyphicon-user" type="submit" onclick="location.href = '/teacher_sign_up'">
                 <span class="glyphicon glyphicon-user"></span>Register as a teacher</button>
-            <button type="button" class="btn btn-outline-primary btn-sm" type="submit" onclick="location.href = '/login'">
+            <button type="button" class="btn btn-outline-dark btn-sm" type="submit" onclick="location.href = '/login'">
                 <span class="glyphicon glyphicon-log-in"></span>Login</button>
             {% endif %}
             {% if user.is_authenticated %}
             <div class="dropdown d-inline-block">
                 {% if user.is_parent %}
-                <button class="btn btn-outline-primary dropdown-toggle btn-sm" type="button" id="signupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-outline-dark dropdown-toggle btn-sm" type="button" id="signupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-fill-add"></i>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-lg-end bg-dark" aria-labelledby="signupDropdown" style="text-align: center;background-color: #f8f9fa;">
+                <ul class="dropdown-menu dropdown-menu-lg-end bg-dark" aria-labelledby="signupDropdown" style="text-align: center;background-color: rgba(0, 0, 0, 0.5) !important;">
                     <div class="px-2 py-2" style="width: 200px;">
                         <div class="mb-2 d-flex justify-content-center">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
@@ -79,13 +79,13 @@
                         </div>
                         <div class="btn-group d-flex" role="group" aria-label="Basic example">
                             <button id="info" data-toggle="tooltip" data-placement="left" class="btn btn-dark btn-outline-light btn-sm flex-shrink-1" title="Get search results based on this user preferences" style="display:inline-block"><i class="bi bi-info-circle"></i></button>
-                            <button type="submit" class="btn btn-dark btn-outline-light btn-sm w-100" id="search-button">Add Connection</button>
+                            <button type="submit" class="btn btn-dark btn-outline-light btn-light btn-sm w-100" id="search-button">Add Connection</button>
                           </div>
                         </form>
                     </div>
                 </ul>
                 {% endif %}
-                <button type="button" class="btn btn-outline-primary  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>Log out</button> 
+                <button type="button" class="btn btn-outline-dark  btn-sm" type="submit" onclick="location.href = '/logout'"><span class="glyphicon glyphicon-log-out"></span>Log out</button> 
             </div>
             {% endif %}
         </form>

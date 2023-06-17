@@ -2,8 +2,8 @@
 {% block content %}
    {% load static %}
    <link rel="stylesheet" href="{% static 'index.css' %}">
-   <div class="bg-image text-center" style="background-size: cover; display: block; overflow: auto; height:100%; background-image: url('https://www.deccanherald.com/sites/dh/files/gallery_images/istock-478403308.jpg');">
-      <div style="background-color: rgba(0,0,0,0.2); height:100%;">
+   <div class="bg-image text-center">
+      <div class="vh-100" style="height:100%; background: linear-gradient(to top,rgba(48, 207, 208, 0) 0,rgba(51, 8, 103, 0.4) 100%)">
       <!--<h1 class="text-white">Little Explorer</h1>
       <h3 class="text-white">Explore your child's future</h3>
       <div class="d-flex justify-content-center">
@@ -20,22 +20,28 @@
             </div>
          </form>
       </div>-->
-      <div class="d-flex justify-content-center align-items-center" style="position: relative; top: 85px">
-         <div class="text-white">
+      <div class="d-flex justify-content-center align-items-center" style="position: relative; top: 85px;">
+         <div class="text-white p-3 rounded">
            <h1 class="mb-3" style="text-shadow: black 1px 0 1px;">Explore your child's future</h1>
             <div class="d-flex justify-content-center">
                <form method="GET" action="/search">
                   <div>
-                     <div>
-                        <span style="text-shadow: black 1px 0 2px;">Search by: </span>
-                        <span style="padding:5px"><input type="radio" name="method" value="name" id="name" checked><label for="name" style="text-shadow: black 1px 0 2px;">Name</label></span>
-                        <span style="padding:5px"><input type="radio" name="method" value="location" id="location"><label for="location" style="text-shadow: black 1px 0 2px;">Location</label></span>
-                        <span style="padding:5px"><input type="radio" name="method" value="location" id="location"><label for="location" style="text-shadow: black 1px 0 2px;">Algorithm</label></span>
+                     <div class="mb-3 text-white align-middle align-items-center">
+                        <h4 class="align-middle pe-3" style="text-shadow: black 1px 0 20px; display: inline-block;">Search by: </h4>
+                        <div class="btn-group btn-group-toggle align-middle" data-toggle="buttons">
+                           <!--<input type="radio" name="method" value="name" id="name" class="btn-check" checked><label for="name" class="btn btn-outline-light" >Name</label>
+                           <input type="radio" name="method" value="location" id="location" class="btn-check"><label for="location" class="btn btn-outline-light">Location</label>
+                           <input type="radio" name="method" value="algorithm" id="algorithm" class="btn-check"><label for="algorithm" class="btn btn-outline-light">Algorithm</label>-->
+                           
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="name" id="name" class="form-check-input pe-1" checked><label for="name" class="form-check-label ps-1 pe-3 label-style" >Name</label></div>
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="location" id="location" class="form-check-input pe-1"><label for="location" class="form-check-label ps-1 pe-3 label-style" >Location</label></div>
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="algorithm" id="algorithm" class="form-check-input pe-1"><label for="algorithm" class="form-check-label ps-1 pe-3 label-style">Algorithm</label></div>
+                        </div>
                      </div>
                      <div class="input-group rounded">
                         <form class="form-inline">
-                           <input class="form-control mr-sm-2" name="value" type="search" aria-label="Search" required>
-                           <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
+                           <input class="form-control btn-outline-light mr-sm-2" name="value" type="search" aria-label="Search" placeholder="Search..." required>
+                           <button class="btn btn-outline-light btn-sm" type="submit"><i class="bi bi-search"></i></button>
                         </form>
                      </div>
                   </div>
