@@ -95,7 +95,7 @@ def location_score(kindergartens: List[Kindergarten], parent: Users):
         work_distances = get_distances_list_from_location(parent.work_address, parent.work_region, kindergartens_pnts)
         work_scores = normalize_location_score(work_distances)
 
-    return np.array(home_scores) + np.array(work_scores)
+    return (np.array(home_scores) + np.array(work_scores))/2
 
 
 def get_distances_list_from_location(address: str, region: str, kindergartens_pnts: List[Point]):
