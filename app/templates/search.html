@@ -8,30 +8,34 @@
 <body>
     <input id="kindergartens-data" type="hidden" data-kindergartens="{{ json_results }}">
     <input id="key" type="hidden" data-key="{{ api_key }}">
-    <form name="search" method="GET" action="/search">
-        <div class="d-flex justify-content-center">
-           <div  style="margin-top: 50px;">
-              Search by:
-              <input type="radio" name="method" value="name" id="name"  {% if request.method != 'location' and request.method != 'advanced' %} checked {% endif %}><label for="name">Name</label>
-              <input type="radio" name="method" value="location" id="location"  {% if request.method and request.method == 'location' %} checked {% endif %} ><label for="location">Location</label>
-              <input type="radio" name="method" value="advanced" id="advanced"  {% if request.method and request.method == 'advanced' %} checked {% endif %} {% if not user.is_authenticated %} disabled {% endif %}><label for="advanced" {% if not user.is_authenticated %} data-toggle="tooltip" data-placement="bottom" title="Sign in to use smart search"{% endif %}>Smart search</label>
-              <div class="input-group rounded">
-                <form class="form-inline">
-                        <input class="form-control mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search" required>
-                        <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
+    <form method="GET" action="/search" class="row" name="search">
+        <div class="w-100" style="height:50px"></div>
+        <div class="col-5"></div>
+        <div class="align-middle align-items-center col-3">
+           <div class="mb-3 align-middle align-items-center">
+              <h5 class="align-middle pe-3" style="display: inline-block;">Search by: </h5>
+              <div class="btn-group btn-group-toggle align-middle" data-toggle="buttons">
+                 <div class="align-middle" style="font-size: 1.25rem;"><input type="radio" name="method" value="name" id="name" class="form-check-input pe-1" {% if request.method != 'location' and request.method != 'advanced' %} checked {% endif %}><label for="name" class="form-check-label ps-1 pe-3 label-style" >Name</label></div>
+                 <div class="align-middle" style="font-size: 1.25rem;"><input type="radio" name="method" value="location" id="location" class="form-check-input pe-1" {% if request.method and request.method == 'location' %} checked {% endif %}><label for="location" class="form-check-label ps-1 pe-3 label-style">Location</label></div>
+                 <div class="align-middle" style="font-size: 1.25rem;"><input type="radio" name="method" value="advanced" id="advanced" class="form-check-input pe-1" {% if request.method and request.method == 'advanced' %} checked {% endif %} {% if not user.is_authenticated %} disabled {% endif %}><label for="advanced" class="form-check-label ps-1 pe-3 label-style"{% if not user.is_authenticated %} data-toggle="tooltip" data-placement="bottom" title="Sign in to use smart search"{% endif %}>Smart search</label></div>
+              </div>
+           </div>
+           <div class="input-group rounded">
+              <form class="form-inline">
+                 <input class="form-control btn-outline-dark mr-sm-2" name="value" value="{{ request.value }}" type="search" aria-label="Search" placeholder="Search..." required>
+                 <button class="btn btn-outline-dark btn-sm rounded" type="submit"><i class="bi bi-search"></i></button>
 
-                        <input type="hidden" name="min_age" value="{{ min_age.value }}">
-                        <input type="hidden" name="max_age" value="{{ max_age.value }}">
-                        <input type="hidden" name="capacity" value="{{ capacity.value }}">
-                        <input type="hidden" name="open_time" value="{{ open_time.value }}">
-                        <input type="hidden" name="close_time" value="{{ close_time.value }}">
-                        <input type="hidden" name="is_free" {% if request.is_free %}value="on"{% endif %}>
-                    </form>
-                </div>
+                 <input type="hidden" name="min_age" value="{{ min_age.value }}">
+                 <input type="hidden" name="max_age" value="{{ max_age.value }}">
+                 <input type="hidden" name="capacity" value="{{ capacity.value }}">
+                 <input type="hidden" name="open_time" value="{{ open_time.value }}">
+                 <input type="hidden" name="close_time" value="{{ close_time.value }}">
+                 <input type="hidden" name="is_free" {% if request.is_free %}value="on"{% endif %}>
+              </form>
            </div>
         </div>
-    </form> 
-    
+        <div class="col-4"></div>
+     </form>
     <div class="row justify-content-center align-items-start h-100" style="margin-top: 25px;">
         
         <div class="col-3">
@@ -113,7 +117,7 @@
                             <div class="container">
                                 <div id="kinder-table" class="card text-dark">
                                   {% for result in results %}
-                                      <div class="card-body" class="kindergarten" id="kindergarten_{{ result.kindergarten_id }}" style="background-color:#cff1ff;;">
+                                      <div class="card-body" class="kindergarten" id="kindergarten_{{ result.kindergarten_id }}">
                                           <a href="/kindergarten/{{ result.kindergarten_id }}" data-hover="Click here for more details" style="color: black; text-decoration: none;">
                                               <div class="kindergarten">
                                                   <div class="flex-start" style="text-align: center;">
