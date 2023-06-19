@@ -13,7 +13,6 @@ $(document).ready(function() {
             },
             success: function(response) {
                 // Handle the response from the Django endpoint
-                console.log(response);
                 alert(response.message);
             },
             error: function(xhr) {

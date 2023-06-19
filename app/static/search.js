@@ -133,7 +133,6 @@ function filterKindergartens() {
 
     // Decide whether to show them or not based on the filters
     for (const kindergarten of kindergartens) {
-        console.log(kindergarten.data.fields.name);
         const data = kindergarten.data;
         if (isMatching(data, min_age, max_age, capacity, open_time, close_time, is_free)) {
             kindergarten.show();
