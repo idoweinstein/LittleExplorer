@@ -26,9 +26,11 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link fw-bold" id="pills-comments-tab" data-bs-toggle="pill" data-bs-target="#pills-comments" type="button" role="tab" aria-controls="pills-comments" aria-selected="false" style=" color: black;">Reviews</button>
             </li>
+            {% if not user.is_teacher %}
             <li class="nav-item" role="presentation">
                 <button class="nav-link fw-bold" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab" aria-controls="pills-register" aria-selected="false" style=" color: black;">Register</button>
             </li>
+            {% endif %}
         </ul>
     </div>
 
@@ -178,6 +180,7 @@
                     </div>
                 </section>
         </div>
+        {% if not user.is_teacher %}
         <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab">
 
 
@@ -244,6 +247,7 @@
                 {% endif %}
 
         </div>
+        {% endif %}
     </div>
 </body>
 {% endblock content%}

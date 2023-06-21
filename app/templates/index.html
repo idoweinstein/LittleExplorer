@@ -15,7 +15,7 @@
                         <div class="btn-group btn-group-toggle align-middle" data-toggle="buttons">
                            <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="name" id="name" class="form-check-input pe-1" checked><label for="name" class="form-check-label ps-1 pe-3 label-style" >Name</label></div>
                            <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="location" id="location" class="form-check-input pe-1"><label for="location" class="form-check-label ps-1 pe-3 label-style" >Location</label></div>
-                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="advanced" id="advanced" class="form-check-input pe-1" {% if not user.is_authenticated %} disabled {% endif %}><label for="advanced" class="form-check-label ps-1 pe-3 label-style"{% if not user.is_authenticated %} data-toggle="tooltip" data-placement="bottom" title="Sign in to use smart search"{% endif %}>Smart search</label></div>
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="advanced" id="advanced" class="form-check-input pe-1" {% if not user.is_authenticated or user.is_teacher %} disabled {% endif %}><label for="advanced" class="form-check-label ps-1 pe-3 label-style"{% if not user.is_authenticated %} data-toggle="tooltip" data-placement="bottom" title="Sign in to use smart search"{% endif %}>Smart search</label></div>
                         </div>
                      </div>
                      <div class="input-group rounded">
