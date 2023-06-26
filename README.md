@@ -64,18 +64,23 @@ $ python3 manage.py runserver
 
 ## Project structure
 
-The main portion of the code can be found under `app package`:
+The main portion of the code can be found under `app` package:
 
-- Under `static` folder all the css, and js code can be found. In addition, all the images that are used across the
-  website can be found under `static/images` folder.
-- Under `templates` folder all the html templates can be found
-- In `algorithm.py` you can find the code used for the smart search option.
-- In `forms.py` you can find the different forms that we added inside the web app ( for instance new comment form)
-- In `models.py` you can find the different [django models](https://docs.djangoproject.com/en/4.2/topics/db/models/)
+- Under `app/static` folder all the CSS and JS code can be found. While most of it is fairly straightforward, there is one file worth noting: 
+  `app/static/search.js`. This file specifically handles the search filters and map view controls.
+  In addition, all the images that are used across the
+  website can be found under `app/static/images` folder.
+- Under `app/templates` folder all the html templates can be found.
+- In `app/algorithm.py` you can find the code used for the smart search option.
+- In `app/forms.py` you can find the different forms that we added inside the web app ( for instance new comment form).
+- In `app/models.py` you can find the different [django models](https://docs.djangoproject.com/en/4.2/topics/db/models/)
   used within the web app.
-- In `search.py` you can find the code that is used for the search by name and search by location features
-- In `urls.py` you can see all the different enpoints that are used in our web app
-- In `views.py` you can see all the [django views](https://docs.djangoproject.com/en/4.2/topics/http/views/) that are used in the app
+- In `app/search.py` you can find the code that is used for the search by name and search by location features.
+- In `app/urls.py` you can see all the different enpoints that are used in our web app.
+- In `app/views.py` you can see all the [django views](https://docs.djangoproject.com/en/4.2/topics/http/views/) that are used in the app.
+
+In the root folder:
+- `db.sql` is a dump of our database. 
 
 ## Deep dive into the Smart Search Feature
 
