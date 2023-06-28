@@ -92,7 +92,7 @@ The higher the proximity, the higher the score of the kindergarten.
 If a kindergarten got a "good" rating from a connection it will get a small score boost and if it got a "bad" rating it will receive a small penalty to its score.
 
 ### Technical explanation
-Flow of the smart search feature is as follows:
+The flow of the smart search feature is as follows:
 - User enters a search query, chooses the smart search option and hits the search button.
 - Backend receives the search request and calls `search` function in `app/views.py`.
 - Then `get_boundaries_of_fields` in `app/search.py` is called, and sets the desired values of the front-end filters (minimum, maximum and chosen value).
