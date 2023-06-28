@@ -106,9 +106,9 @@ Flow of the smart search feature is as follows:
 - Backend receives the search request and calls `search` function in `app/views.py`.
 - Then `get_boundaries_of_fields` in `app/search.py` is called, and sets the desired values of the front-end filters (minimum, maximum and chosen value).
 - `get_filtered_kindergartens` in `app/search.py` is then called and:
-  - sets required back-end filters for our search option. For smart search, no filters are required.
-  - fetches the data from our DB.
-  - sorts the results by relevance. The relevance score of smart search results is calculated by `main_algo` in `app/algorithm.py`.
+  - Sets required back-end filters for our search option. For smart search, no filters are required.
+  - Fetches the data from our DB.
+  - In the location and smart search options - sorts the results by relevance. The relevance score of smart search results is calculated by `main_algo` in `app/algorithm.py`.
 - The `main_algo` function receives the list of the kindergartens and make 3 function calls to get the scores of the 3 aspects we mentioned:
   - First, it constructs a list of all the kindergartens' description and send them to the `tfidf_score` function in the same python file.
 `tfidf_score` calculates the TF-IDF score and the cosine similarity of the user input and all the kindergartens' descriptions.
