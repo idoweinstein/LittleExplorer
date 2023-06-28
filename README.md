@@ -36,34 +36,25 @@ shir will send me
 
 In order to get the app running, follow the instructions below:
 
-1. Open a terminal and run the following command:
-
-```bash
-$ pip install -r requirements.txt
-```
-
-2. Create a local DB:
+1. Create a local DB:
     - install [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) by following the appropriate installation instructions for
       your operating system.
     - Create a new user and grant permissions in MySQL by following the instruction
       in [this link](https://phoenixnap.com/kb/how-to-create-new-mysql-user-account-grant-privileges).
-    - open a terminal and run the following commands, replace `<user>` by the user that was added in the previous step:
 
-```bash
-$ mysqladmin -u <user> -p create LittleExplorer
-$ mysql -u <user> -p LittleExplorer < db.sql
-```
-
-3. Install GDAL by following [this guide](https://mapscaping.com/installing-gdal-for-beginners/)
-4. In your working directory run:
+2. Install GDAL by following [this guide](https://mapscaping.com/installing-gdal-for-beginners/)
+3. In your working directory run (replace `<user>` by the user that was added in step 2):
 
 ```bash
 $ git clone https://github.com/idoweinstein/LittleExplorer.git
 $ cd LittleExplorer
+$ pip install -r requirements.txt
+$ mysqladmin -u <user> -p create LittleExplorer
+$ mysql -u <user> -p LittleExplorer < db.sql
 $ python3 manage.py runserver
 ```
 
-5. Access http://127.0.0.1:8000/ and enjoy
+4. Access http://127.0.0.1:8000/ and enjoy
 
 ## Project structure
 
