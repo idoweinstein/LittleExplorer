@@ -43,7 +43,7 @@ In order to get the app running, follow the instructions below:
       in [this link](https://phoenixnap.com/kb/how-to-create-new-mysql-user-account-grant-privileges).
 
 2. Install GDAL by following [this guide](https://mapscaping.com/installing-gdal-for-beginners/)
-3. In your working directory run (replace `<user>` by the user that was added in step 2):
+3. In your working directory run (replace `<user>` by the user that was added in step 1):
 
 ```bash
 $ git clone https://github.com/idoweinstein/LittleExplorer.git
