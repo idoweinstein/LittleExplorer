@@ -1,6 +1,6 @@
 # Welcome to LittleExplorer 👋
 
-##Team Members
+Team Members:
 Shir Naiberg, Almog Altman, Daniel Jaffe, Ido Weinstein
 
 [//]: # (# Description)
