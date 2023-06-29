@@ -3,6 +3,17 @@
 Team Members:
 Shir Naiberg, Almog Altman, Daniel Jaffe, Ido Weinstein
 
+## Table of contents
+  * [LittleExplorer in a nutshell](#littleexplorer-in-a-nutshell)
+  * [What you can do](#what-you-can-do)
+  * [Demo of the basic functionality within the app](#demo-of-the-basic-functionality-within-the-app)
+  * [Installation](#installation)
+  * [Project structure](#project-structure)
+  * [Deep dive into the Smart Search Feature](#deep-dive-into-the-smart-search-feature)
+    + [Technical explanation](#technical-explanation)
+  * [Demo of the smart search algorithm](#demo-of-the-smart-search-algorithm)
+  * [Front-end filtering](#front-end-filtering)
+
 [//]: # (# Description)
 
 ## LittleExplorer in a nutshell
@@ -100,10 +111,10 @@ The flow of the smart search feature is as follows:
   - Sets required back-end filters for our search option. For smart search, no filters are required.
   - Fetches the data from our DB.
   - In the location and smart search options - sorts the results by relevance. The relevance score of smart search results is calculated by `main_algo` in `app/algorithm.py`.
-- The `main_algo` function receives the list of the kindergartens and make 3 function calls to get the scores of the 3 aspects we mentioned:
-  - First, it constructs a list of all the kindergartens' description and send them to the `tfidf_score` function in the same python file.
+- The `main_algo` function receives the list of the kindergartens and makes 3 function calls to get the scores of the 3 aspects we mentioned:
+  - First, it constructs a list of all the kindergartens' descriptions and send them to the `tfidf_score` function in the same python file.
 `tfidf_score` calculates the TF-IDF score and the cosine similarity of the user input and all the kindergartens' descriptions.
-It uses the `preprocess_description` function which performs the stemming and removes stop words.
+It uses the `preprocess_description` function in the same file, which performs the stemming and removes stop words.
   - The next function in the `main_algo` is `location_score` which calculates the distances from the home and work addresses of the user and normalizes it to be a score from 0 to 1.
   - Finally, we have the `add_connection_bonus` function, also in the same file, which gets all the user's connection from the DB. Then, it checks if they rated the kindergarten and change its score accordingly.
 
