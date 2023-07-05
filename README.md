@@ -17,7 +17,14 @@ Shir Naiberg, Almog Altman, Daniel Jaffe, Ido Weinstein
 [//]: # (# Description)
 
 ## LittleExplorer in a nutshell
-**A faster and improved web app to find the best kindergarten for your kid**
+**LittleExplorer is a web application designed to simplify the process of finding the best kindergarten for your child**
+It addresses the challenges parents face when searching for kindergartens:
+
+- Limited online presence: Most kindergartens are small businesses that do not have a website or are not listed on platforms like Google Maps.
+- Lack of information: It is challenging for parents to find comprehensive details about kindergartens in their area.
+- Lack of reviews: Parents rely on feedback from other parents to make informed decisions about choosing a kindergarten.
+
+Additionally, LittleExplorer offers a comprehensive solution for kindergartens to boost their online visibility and simplify their enrollment procedures.
 
 shir will send me
 
