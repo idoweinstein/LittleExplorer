@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+          <div class="row justify-content-center h-100">
+            <div class="col-12 col-lg-9 col-xl-7">
+              <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                <div class="card-body p-4 p-md-5">
+                  <h2 class="mb-4 pb-2 pb-md-0 mb-md-5 text-uppercase" style="text-align: center;">Teacher sign up</h2>
+                  <form method="POST" novalidate style="text-align: center;">
+                        {% csrf_token %}
+
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <label class="form-label">{{ form.first_name.label_tag }}</label>
+                        <div class="form-outline">
+                                {{ form.first_name }}
+                                {% for error in form.first_name.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                        </div>
+
+                      </div>
+                      <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                                <label class="form-label">{{ form.last_name.label_tag }}</label>
+                                {{ form.last_name }}
+                                {% for error in form.last_name.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-4">
+                                <div class="form-outline">
+                                        <label class="form-label">{{ form.email.label_tag }}</label>
+                                        {{ form.email }}
+
+                                        {% for error in form.email.errors %}
+                                                <p style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+
+                          <div class="form-outline datepicker w-100">
+                                <label class="form-label">{{ form.password1.label_tag }}</label>
+                                {{ form.password1 }}
+
+                                {% for error in form.password1.errors %}
+                                <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                          </div>
+
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <div class="form-outline datepicker w-100">
+                                <label class="form-label">{{ form.password2.label_tag }}</label>
+                                {{ form.password2 }}
+
+                                {% for error in form.password2.errors %}
+                                <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                        </div>
+                      </div>
+
+                    <div style="text-align: center;">
+                      <button type="submit" class="btn btn-green btn-m px-5">Sign up</button>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</body>
+
+
+
+{% endblock content%}

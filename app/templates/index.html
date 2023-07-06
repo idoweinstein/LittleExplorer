@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+   {% load static %}
+   <link rel="stylesheet" href="{% static 'index.css' %}">
+   <div class="bg-image text-center">
+      <div class="vh-100" style="height:100%; background: linear-gradient(to top,rgba(48, 207, 208, 0) 0,rgba(51, 8, 103, 0.4) 100%)">
+      <div class="d-flex justify-content-center align-items-center" style="position: relative; top: 85px;">
+         <div class="text-white p-3 rounded">
+           <h1 class="mb-3" style="text-shadow: black 1px 0 1px;">Explore your child's future</h1>
+            <div class="d-flex justify-content-center">
+               <form method="GET" action="/search">
+                  <div>
+                     <div class="mb-3 text-white align-middle align-items-center">
+                        <h4 class="align-middle pe-3" style="text-shadow: black 1px 0 20px; display: inline-block;">Search by: </h4>
+                        <div class="btn-group btn-group-toggle align-middle" data-toggle="buttons">
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="name" id="name" class="form-check-input pe-1" checked><label for="name" class="form-check-label ps-1 pe-3 label-style" >Name</label></div>
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="location" id="location" class="form-check-input pe-1"><label for="location" class="form-check-label ps-1 pe-3 label-style" >Location</label></div>
+                           <div class="align-middle" style="font-size: 1.5rem;"><input type="radio" name="method" value="advanced" id="advanced" class="form-check-input pe-1" {% if not user.is_authenticated or user.is_teacher %} disabled {% endif %}><label for="advanced" class="form-check-label ps-1 pe-3 label-style"{% if not user.is_authenticated %} data-toggle="tooltip" data-placement="bottom" title="Sign in to use smart search"{% endif %}>Smart search</label></div>
+                        </div>
+                     </div>
+                     <div class="input-group rounded">
+                        <form class="form-inline">
+                           <input class="form-control btn-outline-light mr-sm-2" name="value" type="search" aria-label="Search" placeholder="Search..." required>
+                           <button class="btn btn-outline-light btn-sm" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock content%}

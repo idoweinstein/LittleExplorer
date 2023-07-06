@@ -1,0 +1,20 @@
+.bg-image {
+  /*background-size: auto, 110%;*/
+  background-repeat:no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: block;
+  overflow: auto;
+  height:100%;
+  background-image: url('https://www.deccanherald.com/sites/dh/files/gallery_images/istock-478403308.jpg');
+  z-index: -1;
+}
+
+nav {
+  position: fixed !important;
+  background-color: rgba(201, 240, 201, 0.5) !important;
+}
+
+.btn.disabled {
+  pointer-events: auto;
+}
